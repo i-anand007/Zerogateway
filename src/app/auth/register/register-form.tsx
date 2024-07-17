@@ -15,7 +15,6 @@ const initialValues = {
   fullName: '',
   email: '',
   password: '',
-  isAgreed: false,
 };
 
 export default function RegisterForm() {
@@ -25,15 +24,18 @@ export default function RegisterForm() {
     console.log(data);
     const email = data.email
     const name = data.name
+    const phone = `+91${data.number.toString()}`
     const password = data.password
     const response = await appwriteService.createUserAccount({ email, password, name })
     await console.log(response)
-    if (response?.id) {
+    if (response.$id) {
+      const updatePhonne = await appwriteService.updatePhonne({ phone, password})
+      await console.log(updatePhonne)
       toast.success('Account Created')
-    } else if (!response.id) {
+    } else if (!response.$id) {
       toast.error('Account Not Created')
     }
-    // setReset({ ...initialValues, isAgreed: false });
+    setReset({ ...initialValues});
   };
 
   return (
@@ -65,6 +67,15 @@ export default function RegisterForm() {
               className="[&>label>span]:font-medium"
               {...register('email')}
               error={errors.email?.message}
+            />
+            <Input
+              type="number"
+              size={isMedium ? 'lg' : 'xl'}
+              label="Mobile Number"
+              placeholder="Enter your Mobile Number"
+              className="[&>label>span]:font-medium"
+              {...register('number')}
+              error={errors.number?.message}
             />
             <Password
               label="Password"
@@ -109,9 +120,9 @@ export default function RegisterForm() {
         )}
       </Form>
       <Text className="mt-6 text-center text-[15px] leading-loose text-gray-500 md:mt-7 lg:mt-9 lg:text-base">
-        Don’t have an account?{' '}
+        Already have an account?{' '}
         <Link
-          href={routes.auth.signIn4}
+          href={"/auth/login"}
           className="font-semibold text-gray-700 transition-colors hover:text-primary"
         >
           Sign In

@@ -105,14 +105,14 @@ export default function RoleCard({
       
         
       </div>
-      <ModalButton
+      {/* <ModalButton
         customSize="700px"
         variant="outline"
         label="Edit Role"
         icon={<UserCog className="h-5 w-5" />}
         view={<EditRole />}
         className="items-center gap-1 text-gray-800 @lg:w-full lg:mt-6"
-      />
+      /> */}
     </div>
   );
 }

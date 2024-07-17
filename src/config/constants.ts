@@ -1,7 +1,7 @@
-export const CART_KEY = 'isomorphic-cart';
-export const POS_CART_KEY = 'isomorphic-pos-cart';
-export const DUMMY_ID = 'FC6723757651DB74';
-export const CHECKOUT = 'isomorphic-checkout';
+// export const CART_KEY = 'isomorphic-cart';
+// export const POS_CART_KEY = 'isomorphic-pos-cart';
+// export const DUMMY_ID = 'FC6723757651DB74';
+// export const CHECKOUT = 'isomorphic-checkout';
 export const CURRENCY_CODE = 'USD';
 export const LOCALE = 'en';
 export const CURRENCY_OPTIONS = {
@@ -30,11 +30,11 @@ export const ROW_PER_PAGE_OPTIONS = [
 
 export const ROLES = {
   Administrator: 'Administrator',
-  Manager: 'Manager',
-  Sales: 'Sales',
-  Support: 'Support',
-  Developer: 'Developer',
-  HRD: 'HR Department',
-  RestrictedUser: 'Restricted User',
+  // Manager: 'Manager',
+  // Sales: 'Sales',
+  // Support: 'Support',
+  // Developer: 'Developer',
+  // HRD: 'HR Department',
+  // RestrictedUser: 'Restricted User',
   Customer: 'Customer',
 } as const;

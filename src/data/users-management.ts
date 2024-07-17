@@ -53,39 +53,39 @@ export const rolesList = [
     color: '#2465FF',
     users: 3,
   },
-  {
-    name: ROLES.Manager,
-    color: '#F5A623',
-    users: 3,
-  },
-  {
-    name: ROLES.Sales,
-    color: '#FF1A1A',
-    users: 3,
-  },
-  {
-    name: ROLES.Support,
-    color: '#8A63D2',
-    users: 3,
-  },
-  {
-    name: ROLES.Developer,
-    color: '#FF1A1A',
-    users: 3,
-  },
-  {
-    name: ROLES.HRD,
-    color: '#11A849',
-    users: 3,
-  },
-  {
-    name: ROLES.RestrictedUser,
-    color: '#4E36F5',
-    users: 3,
-  },
+  // {
+  //   name: ROLES.Manager,
+  //   color: '#F5A623',
+  //   users: 3,
+  // },
+  // {
+  //   name: ROLES.Sales,
+  //   color: '#FF1A1A',
+  //   users: 3,
+  // },
+  // {
+  //   name: ROLES.Support,
+  //   color: '#8A63D2',
+  //   users: 3,
+  // },
+  // {
+  //   name: ROLES.Developer,
+  //   color: '#FF1A1A',
+  //   users: 3,
+  // },
+  // {
+  //   name: ROLES.HRD,
+  //   color: '#11A849',
+  //   users: 3,
+  // },
+  // {
+  //   name: ROLES.RestrictedUser,
+  //   color: '#4E36F5',
+  //   users: 3,
+  // },
   {
     name: ROLES.Customer,
-    color: '#0070F3',
+    color: '#11A849',
     users: 3,
   },
 ];

@@ -25,9 +25,9 @@ export default function Logic({
         if (Cookies.get("user_name") == "" || !Cookies.get("user_name")) {
             const getUser = async () => {
                 const response:any = await appwriteService.getCurrentUser()
-                console.log(response)
                 Cookies.set("user_loggedIn", "true")
                 Cookies.set("user_name", response?.name)
+                Cookies.set("user_email", response?.email)
                 Cookies.set("user_labels", response?.labels)
             }
             getUser()

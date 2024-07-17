@@ -3,6 +3,8 @@ import "@/app/globals.css";
 import Logic from "./logic";
 import Cookies from "js-cookie";
 import { usePathname } from 'next/navigation'
+import { useEffect } from "react";
+import appwriteService from "../appwrite";
 
 export const metadata: Metadata = {
   title: "App Name",
@@ -14,9 +16,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
-    
-
   return (
     <html>
       <body>

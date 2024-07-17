@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { number, string, z } from 'zod';
 import { messages } from '@/config/messages';
 
 export const fileSchema = z.object({

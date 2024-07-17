@@ -1,7 +1,7 @@
 'use client';
 
 import { STATUSES, type User } from '@/data/users-data';
-import { Text, Badge, Tooltip, Checkbox, ActionIcon } from 'rizzui';
+import { Text, Badge, Tooltip, Checkbox, ActionIcon, Button } from 'rizzui';
 import { HeaderCell } from '@/components/ui/table';
 import EyeIcon from '@/components/icons/eye';
 import PencilIcon from '@/components/icons/pencil';
@@ -9,6 +9,9 @@ import AvatarCard from '@/components/ui/avatar-card';
 import DateCell from '@/components/ui/date-cell';
 import DeletePopover from '@/app/shared/delete-popover';
 import CompanyCard from '@/components/ui/user-company-card';
+import EditUser from '../edit-user';
+import ModalButton from '../../modal-button';
+import ModalButtonIcon from '../../modal-button-icon';
 
 function getStatusBadge(status: User['status']) {
   switch (status) {
@@ -27,13 +30,6 @@ function getStatusBadge(status: User['status']) {
           <Text className="ms-2 font-medium text-green-dark">{status}</Text>
         </div>
       );
-    case STATUSES.Pending:
-      return (
-        <div className="flex items-center">
-          <Badge renderAsDot className="bg-gray-400" />
-          <Text className="ms-2 font-medium text-gray-600">{status}</Text>
-        </div>
-      );
     default:
       return (
         <div className="flex items-center">
@@ -50,6 +46,7 @@ type Columns = {
   handleSelectAll: any;
   checkedItems: string[];
   onDeleteItem: (id: string) => void;
+  onEditItem: (id: string) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
 };
@@ -63,130 +60,173 @@ export const getColumns = ({
   handleSelectAll,
   onChecked,
 }: Columns) => [
-  // {
-  //   title: (
-  //     <div className="flex items-center gap-3 whitespace-nowrap ps-3">
-  //       <Checkbox
-  //         title={'Select All'}
-  //         onChange={handleSelectAll}
-  //         checked={checkedItems.length === data.length}
-  //         className="cursor-pointer"
-  //       />
-  //       User ID
-  //     </div>
-  //   ),
-  //   dataIndex: 'checked',
-  //   key: 'checked',
-  //   width: 30,
-  //   render: (_: any, row: User) => (
-  //     <div className="inline-flex ps-3">
-  //       <Checkbox
-  //         className="cursor-pointer"
-  //         checked={checkedItems.includes(row.id)}
-  //         {...(onChecked && { onChange: () => onChecked(row.id) })}
-  //         label={`#${row.id}`}
-  //       />
-  //     </div>
-  //   ),
-  // },
-  {
-    title: <HeaderCell title="Name" />,
-    dataIndex: 'fullName',
-    key: 'fullName',
-    width: 250,
-    render: (_: string, user: User) => (
-      <AvatarCard
-        src={user.avatar}
-        name={user.fullName}
-        description={user.email}
-      />
-    ),
-  },
-  {
-    title: (
-      <HeaderCell
-        title="Role"
-        sortable
-        ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick('role'),
-    dataIndex: 'role',
-    key: 'role',
-    width: 50,
-    render: (role: string) => role,
-  },
+    // {
+    //   title: (
+    //     <div className="flex items-center gap-3 whitespace-nowrap ps-3">
+    //       <Checkbox
+    //         title={'Select All'}
+    //         onChange={handleSelectAll}
+    //         checked={checkedItems.length === data.length}
+    //         className="cursor-pointer"
+    //       />
+    //       User ID
+    //     </div>
+    //   ),
+    //   dataIndex: 'checked',
+    //   key: 'checked',
+    //   width: 30,
+    //   render: (_: any, row: User) => (
+    //     <div className="inline-flex ps-3">
+    //       <Checkbox
+    //         className="cursor-pointer"
+    //         checked={checkedItems.includes(row.id)}
+    //         {...(onChecked && { onChange: () => onChecked(row.id) })}
+    //         label={`#${row.id}`}
+    //       />
+    //     </div>
+    //   ),
+    // },
+    {
+      title: <HeaderCell title="Name" />,
+      dataIndex: 'fullName',
+      key: 'fullName',
+      width: 250,
+      render: (_: string, user: User) => (
+        <AvatarCard
+          src={user.avatar}
+          name={user.fullName}
+          description={user.email}
+        />
+      ),
+    },
+    {
+      title: (
+        <HeaderCell
+          title="Phone"
+        />
+      ),
+      dataIndex: 'phone',
+      key: 'fullName',
+      width: 100,
+      render: (role: string) => role,
+    },
 
-  {
-    title: <HeaderCell title="Company Name" />,
-    dataIndex: 'companyName',
-    key: 'fullName',
-    width: 200,
-    render: (_: string, user: User) => (
-      <CompanyCard
-        name={user.companyName}
-        description={user.companyEmail}/>
-    ),
-  },
+    {
+      title: (
+        <HeaderCell
+          title="Role"
+          sortable
+          ascending={
+            sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
+          }
+        />
+      ),
+      onHeaderCell: () => onHeaderCellClick('role'),
+      dataIndex: 'role',
+      key: 'role',
+      width: 100,
+      render: (role: string) => role,
+    },
 
-  {
-    title: (
-      <HeaderCell
-        title="Created"
+    // {
+    //   title: <HeaderCell title="Company Name" />,
+    //   dataIndex: 'companyName',
+    //   key: 'fullName',
+    //   width: 200,
+    //   render: (_: string, user: User) => (
+    //     <CompanyCard
+    //       name={user.companyName}
+    //       description={user.companyEmail} />
+    //   ),
+    // },
+
+    {
+      title: (
+        <HeaderCell
+          title="Created"
+          sortable
+          ascending={
+            sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
+          }
+        />
+      ),
+      onHeaderCell: () => onHeaderCellClick('createdAt'),
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width: 100,
+      render: (value: Date) => <DateCell date={value} />,
+    },
+
+
+    // {
+    //   title: <HeaderCell title="Permissions" />,
+    //   dataIndex: 'permissions',
+    //   key: 'permissions',
+    //   width: 200,
+    //   render: (permissions: User['permissions'][]) => (
+    //     <div className="flex items-center gap-2">
+    //       {permissions.map((permission) => (
+    //         <Badge
+    //           key={permission}
+    //           rounded="lg"
+    //           variant="outline"
+    //           className="border-muted font-normal text-gray-500"
+    //         >
+    //           {permission}
+    //         </Badge>
+    //       ))}
+    //     </div>
+    //   ),
+    // },
+
+
+    {
+      title: <HeaderCell
+        title="Status"
         sortable
         ascending={
           sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
         }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick('createdAt'),
-    dataIndex: 'createdAt',
-    key: 'createdAt',
-    width: 200,
-    render: (value: Date) => <DateCell date={value} />,
-  },
-
-
-  // {
-  //   title: <HeaderCell title="Permissions" />,
-  //   dataIndex: 'permissions',
-  //   key: 'permissions',
-  //   width: 200,
-  //   render: (permissions: User['permissions'][]) => (
-  //     <div className="flex items-center gap-2">
-  //       {permissions.map((permission) => (
-  //         <Badge
-  //           key={permission}
-  //           rounded="lg"
-  //           variant="outline"
-  //           className="border-muted font-normal text-gray-500"
-  //         >
-  //           {permission}
-  //         </Badge>
-  //       ))}
-  //     </div>
-  //   ),
-  // },
-
-  
-  {
-    title: <HeaderCell title="Status" />,
-    dataIndex: 'status',
-    key: 'status',
-    width: 120,
-    render: (status: User['status']) => getStatusBadge(status),
-  },
-  {
-    title: <></>,
-    dataIndex: 'action',
-    key: 'action',
-    width: 140,
-    render: (_: string, user: User) => (
-      <div className="flex items-center justify-end gap-3 pe-3">
-        <Tooltip size="sm" content={'Edit User'} placement="top" color="invert">
-          <ActionIcon
+      />,
+      onHeaderCell: () => onHeaderCellClick('status'),
+      dataIndex: 'status',
+      key: 'status',
+      width: 100,
+      render: (status: User['status']) => getStatusBadge(status),
+    },
+    {
+      title: <></>,
+      dataIndex: 'action',
+      key: 'action',
+      width: 100,
+      render: (_: string, user: User) => (
+        <div className="flex items-center justify-end gap-3 pe-3">
+          <Tooltip size="sm" content={'Edit User'} placement="top" color="invert">
+            <ActionIcon
+              as="span"
+              size="sm"
+              variant="outline"
+              className="hover:!border-gray-900 hover:text-gray-700"
+              onClick={() => {
+                
+              }}
+            >
+              <PencilIcon className="h-4 w-4" />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip size="sm" content={'View User'} placement="top" color="invert">
+            <ActionIcon
+              as="span"
+              size="sm"
+              variant="outline"
+              className="hover:!border-gray-900 hover:text-gray-700"
+            >
+              <EyeIcon className="h-4 w-4" />
+            </ActionIcon>
+          </Tooltip>
+          {/* <EditUser /> */}
+          <ModalButtonIcon
+            icon=<ActionIcon
             as="span"
             size="sm"
             variant="outline"
@@ -194,23 +234,16 @@ export const getColumns = ({
           >
             <PencilIcon className="h-4 w-4" />
           </ActionIcon>
-        </Tooltip>
-        <Tooltip size="sm" content={'View User'} placement="top" color="invert">
-          <ActionIcon
-            as="span"
-            size="sm"
-            variant="outline"
-            className="hover:!border-gray-900 hover:text-gray-700"
-          >
-            <EyeIcon className="h-4 w-4" />
-          </ActionIcon>
-        </Tooltip>
-        <DeletePopover
-          title={`Delete this user`}
-          description={`Are you sure you want to delete this #${user.id} user?`}
-          onDelete={() => onDeleteItem(user.id)}
-        />
-      </div>
-    ),
-  },
-];
+            view=<EditUser/>
+            customSize="600px"
+            className="mt-0"
+          />
+          <DeletePopover
+            title={`Delete this user`}
+            description={`Are you sure you want to delete user - ${user.fullName} ?`}
+            onDelete={() => onDeleteItem(user.id)}
+          />
+        </div>
+      ),
+    },
+  ];

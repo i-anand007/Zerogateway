@@ -12,6 +12,7 @@ import OrSeparation from '@/app/shared/auth-layout/or-separation';
 import { siteConfig } from '@/config/site.config';
 import { BsFacebook } from 'react-icons/bs';
 import appwriteService from '@/app/appwrite';
+import Cookies from 'js-cookie';
 
 function AuthNavLink({
   href,
@@ -59,6 +60,11 @@ export default function AuthWrapper({
     const isLoggedIn = await appwriteService.isLoggedIn()
     if (isLoggedIn) {
       router.push('/');
+      const response: any = await appwriteService.getCurrentUser()
+      Cookies.set("user_loggedIn", "true")
+      Cookies.set("user_name", response?.name)
+      Cookies.set("user_email", response?.email)
+      Cookies.set("user_labels", response?.labels)
     }
   }
   isLoggedInUser()
@@ -85,7 +91,7 @@ export default function AuthWrapper({
           {isSocialLoginActive && (
             <>
               <div className="flex flex-col gap-4 pb-6 md:flex-row md:gap-6 xl:pb-7">
-                <Button variant="outline" className="h-11 w-full">
+                <Button variant="outline" className="h-11 w-full" onClick={() => appwriteService.googleLogin()}>
                   <FcGoogle className="me-2 h-4 w-4 shrink-0" />
                   <span className="truncate">Signin with Google</span>
                 </Button>

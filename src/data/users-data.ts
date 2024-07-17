@@ -22,7 +22,6 @@ export const PERMISSIONS = {
 } as const;
 
 export const STATUSES = {
-  Pending: 'Pending',
   Active: 'Active',
   Deactivated: 'Deactivated',
 } as const;
@@ -31,73 +30,143 @@ export const
 
 usersData = [
   {
-        id: '668ce6ef5e1bcff1f521',
-        avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
-          avatarIds
-        )}.webp`,
-        fullName: 'Anand Mishra',
-        email: 'anandm.primex@gmail.com',
-        role: ROLES.Manager,
-        createdAt: '2029-10-14T16:01:40.021Z',
-        permissions: [PERMISSIONS.Read],
-      },
-      {
-        id: '6177',
-        avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
-          avatarIds
-        )}.webp`,
-        fullName: 'Joshua Green',
-        email: 'ayla_schuster28@yahoo.com',
-        role: ROLES.Support,
-        createdAt: '2027-11-01T13:23:52.903Z',
-        permissions: [PERMISSIONS.Write],
-        status: STATUSES.Pending,
-        companyName: `Meri Company`,
-        companyEmail: `anandddm.primex@gmail.com`
-      },
-      {
-        id: '5456',
-        avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
-          avatarIds
-        )}.webp`,
-        fullName: 'Wendy Ankunding',
-        email: 'lorine66@gmail.com',
-        role: ROLES.Support,
-        createdAt: '2024-12-29T08:37:13.101Z',
-        permissions: [PERMISSIONS.Delete, PERMISSIONS.Write, PERMISSIONS.Read],
-        status: STATUSES.Active,
-        companyName: `Meri Company`,
-        companyEmail: `anandddm.primex@gmail.com`
-      },
-      {
-        id: '6370',
-        avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
-          avatarIds
-        )}.webp`,
-        fullName: 'Daryl Wilderman',
-        email: 'kane_anderson@gmail.com',
-        role: ROLES.RestrictedUser,
-        createdAt: '2027-09-01T14:14:54.439Z',
-        permissions: [PERMISSIONS.Write, PERMISSIONS.Delete],
-        status: STATUSES.Deactivated,
-        companyName: `Meri Company`,
-        companyEmail: `anandddm.primex@gmail.com`
-      },
-      {
-        id: '8681',
-        avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
-          avatarIds
-        )}.webp`,
-        fullName: 'Antonia Ankunding Jr.',
-        email: 'forest_aufderhar76@gmail.com',
-        role: ROLES.RestrictedUser,
-        createdAt: '2029-08-25T22:39:48.166Z',
-        permissions: [PERMISSIONS.Read, PERMISSIONS.Write, PERMISSIONS.Delete],
-        status: STATUSES.Pending,
-        companyName: `Meri Company`,
-        companyEmail: `anandddm.primex@gmail.com`
-      },
+      "id": "669632a9369394b79312",
+      "fullName": "Anand Mishra",
+      "email": "anandkmishra007@gmail.com",
+      "role": "Administrator",
+      "createdAt": "2024-07-16T08:43:21.224+00:00",
+      "status": "Active"
+  },
+  {
+      "id": "66966347000939f75b9f",
+      "fullName": "Anand Mishra",
+      "email": "hi@anandmishra.in",
+      "role": "Customer",
+      "createdAt": "2024-07-16T12:10:50.139+00:00",
+      "status": "Active"
+  },
+  {
+      "id": "66975dff34fdabafb874",
+      "fullName": "dfs@gmail.com",
+      "email": "dfs@gmail.com",
+      "role": "Customer",
+      "createdAt": "2024-07-17T06:00:31.971+00:00",
+      "status": "Active"
+  }
 ]
+
+
+// [
+//   {
+//         id: '668ce6ef5e1bcff1f521',
+//         avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+//           avatarIds
+//         )}.webp`,
+//         fullName: 'Anand Mishra',
+//         email: 'anandm.primex@gmail.com',
+//         role: 'Administrator',
+//         phone: "+918114552277",
+//         status: STATUSES.Deactivated,
+//         createdAt: '2024-07-16T12:10:50.139+00:00',
+//       },
+
+
+
+
+//     //   {
+//     //     "$id": "66966347000939f75b9f",
+//     //     "$createdAt": "2024-07-16T12:10:50.139+00:00",
+//     //     "$updatedAt": "2024-07-16T12:16:02.875+00:00",
+//     //     "name": "Anand Mishra",
+//     //     "password": "$argon2id$v=19$m=65536,t=4,p=3$UC9YaVIxMTdRUXBWZ0VPaA$28NU3glq3xeEgTPj5TYf4LMvmGhfNv+T2C81Kpr/o98",
+//     //     "hash": "argon2",
+//     //     "hashOptions": {
+//     //         "type": "argon2",
+//     //         "memoryCost": 2048,
+//     //         "timeCost": 4,
+//     //         "threads": 3
+//     //     },
+//     //     "registration": "2024-07-16T12:10:50.110+00:00",
+//     //     "status": true,
+//     //     "labels": [],
+//     //     "passwordUpdate": "2024-07-16T12:10:50.110+00:00",
+//     //     "email": "hi@anandmishra.in",
+//     //     "phone": "+8114552277",
+//     //     "emailVerification": false,
+//     //     "phoneVerification": false,
+//     //     "mfa": false,
+//     //     "prefs": {},
+//     //     "targets": [
+//     //         {
+//     //             "$id": "6696634a3dc04068fd11",
+//     //             "$createdAt": "2024-07-16T12:10:50.252+00:00",
+//     //             "$updatedAt": "2024-07-16T12:10:50.252+00:00",
+//     //             "name": "",
+//     //             "userId": "66966347000939f75b9f",
+//     //             "providerId": null,
+//     //             "providerType": "email",
+//     //             "identifier": "hi@anandmishra.in"
+//     //         }
+//     //     ],
+//     //     "accessedAt": "2024-07-16T12:10:50.110+00:00"
+//     // },
+//       {
+//         id: '6177',
+//         avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+//           avatarIds
+//         )}.webp`,
+//         fullName: 'Joshua Green',
+//         email: 'ayla_schuster28@yahoo.com',
+//         role: 'Administrator',
+//         createdAt: '2027-11-01T13:23:52.903Z',
+//         permissions: [PERMISSIONS.Write],
+//         status: STATUSES.Deactivated,
+//         companyName: `Meri Company`,
+//         companyEmail: `anandddm.primex@gmail.com`
+//       },
+//       {
+//         id: '5456',
+//         avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+//           avatarIds
+//         )}.webp`,
+//         fullName: 'Wendy Ankunding',
+//         email: 'lorine66@gmail.com',
+//         role: 'Administrator',
+//         createdAt: '2024-12-29T08:37:13.101Z',
+//         permissions: [PERMISSIONS.Delete, PERMISSIONS.Write, PERMISSIONS.Read],
+//         status: STATUSES.Active,
+//         companyName: `Meri Company`,
+//         companyEmail: `anandddm.primex@gmail.com`
+//       },
+//       {
+//         id: '6370',
+//         avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+//           avatarIds
+//         )}.webp`,
+//         fullName: 'Daryl Wilderman',
+//         email: 'kane_anderson@gmail.com',
+//         role: 'Customer',
+//         createdAt: '2027-09-01T14:14:54.439Z',
+//         permissions: [PERMISSIONS.Write, PERMISSIONS.Delete],
+//         status: STATUSES.Deactivated,
+//         companyName: `Meri Company`,
+//         companyEmail: `anandddm.primex@gmail.com`
+//       },
+//       {
+//         id: '8681',
+//         avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+//           avatarIds
+//         )}.webp`,
+//         fullName: 'Antonia Ankunding Jr.',
+//         email: 'forest_aufderhar76@gmail.com',
+//         role: 'Customer',
+//         createdAt: '2029-08-25T22:39:48.166Z',
+//         permissions: [PERMISSIONS.Read, PERMISSIONS.Write, PERMISSIONS.Delete],
+//         status: STATUSES.Deactivated,
+//         companyName: `Meri Company`,
+//         companyEmail: `anandddm.primex@gmail.com`
+//       },
+// ]
 
 // usersData = [
 //   {

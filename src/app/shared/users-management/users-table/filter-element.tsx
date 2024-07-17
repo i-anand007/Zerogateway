@@ -8,21 +8,6 @@ import { rolesList } from '@/data/users-management';
 import ModalButton from '@/app/shared/modal-button';
 import CreateUser from '@/app/shared/users-management/create-user';
 
-const statusOptions = [
-  {
-    value: STATUSES.Active,
-    label: STATUSES.Active,
-  },
-  {
-    value: STATUSES.Deactivated,
-    label: STATUSES.Deactivated,
-  },
-  {
-    value: STATUSES.Pending,
-    label: STATUSES.Pending,
-  },
-];
-
 type FilterElementProps = {
   isFiltered: boolean;
   filters: { [key: string]: any };
@@ -51,24 +36,6 @@ export default function FilterElement({
         <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
           All Users
         </Title>
-
-        <StatusField
-          className=" -order-3 w-full @[25rem]:w-[calc(calc(100%_-_10px)_/_2)] @4xl:-order-5 @4xl:w-auto"
-          options={statusOptions}
-          dropdownClassName="!z-10"
-          value={filters['status']}
-          onChange={(value: string) => {
-            updateFilter('status', value);
-          }}
-          placeholder="Filter by Status"
-          getOptionValue={(option: { value: any }) => option.value}
-          getOptionDisplayValue={(option: { value: any }) =>
-            renderOptionDisplayValue(option.value as string)
-          }
-          displayValue={(selected: string) =>
-            renderOptionDisplayValue(selected)
-          }
-        />
 
         <StatusField
           options={roles}

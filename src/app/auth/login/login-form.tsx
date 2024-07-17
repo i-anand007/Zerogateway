@@ -53,7 +53,7 @@ export default function SignInForm() {
               size={isMedium ? 'lg' : 'xl'}
               label="Email"
               placeholder="Enter your email"
-              className="[&>label>span]:font-medium"
+              className="[&>label>span]:font-medium .placeholder-black::placeholder"
               {...register('email')}
               error={errors.email?.message}
             />
@@ -87,7 +87,7 @@ export default function SignInForm() {
       <Text className="mt-6 text-center text-[15px] leading-loose text-gray-500 md:mt-7 lg:mt-9 lg:text-base">
         Don’t have an account?{' '}
         <Link
-          href={routes.auth.signUp4}
+          href={'/auth/register'}
           className="font-semibold text-gray-700 transition-colors hover:text-primary"
         >
           Sign Up

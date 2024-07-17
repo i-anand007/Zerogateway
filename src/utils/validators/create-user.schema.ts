@@ -6,8 +6,11 @@ import { validateEmail } from '@/utils/validators/common-rules';
 export const createUserSchema = z.object({
   fullName: z.string().min(1, { message: messages.fullNameIsRequired }),
   email: validateEmail,
+  phone: z
+  .string()
+  .min(10, { message: "Minimum 10 Digits"})
+  .max(10, { message: "Maximum 10 Digits"}),
   role: z.string().min(1, { message: messages.roleIsRequired }),
-  permissions: z.string().min(1, { message: messages.permissionIsRequired }),
   status: z.string().min(1, { message: messages.statusIsRequired }),
 });
 

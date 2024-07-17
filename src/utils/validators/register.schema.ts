@@ -10,6 +10,10 @@ import {
 export const registerSchema = z.object({
   name: z.string().min(1, { message: messages.nameIsRequired }),
   email: validateEmail,
+  number: z
+  .string()
+  .min(10, { message: "Minimum 10 Digits"})
+  .max(10, { message: "Maximum 10 Digits"}),
   password: validatePassword,
 });
 

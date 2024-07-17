@@ -4,7 +4,7 @@ const appwriteApiClient = new Client()
 
 appwriteApiClient
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '66891c1700100c0a7591')
-    .setKey(process.env.NEXT_PUBLIC_APPWRITE_ADMIN_APIKEY || "7a7d17c5e2be9b4e8b8454764f108060e3aa3c8d531cfc5f1b28a33356cd45958870c8d6a8e17a65e7701f4e7b325b28a3dc23a2ead8a0c593719efb184bc3f12da9c146fffee009dda06d59baf8bca263aff95671dc1ec9ede9520c00d2602353fdd0a904303132356e72daaab19f022f5f9cd432065502cd773cad864bc268");
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '669519590004b6369e2e')
+    .setKey(process.env.NEXT_PUBLIC_APPWRITE_ADMIN_APIKEY || "de3d57f7b3198c21e142104106a61f3554eacf1b078e33834892e49fd6ddc411d239963a35bb20f221b6e596cdcb0c68e5c409b9d623cf5f1315641c774a44ee500099cc68dca43ca8c5f560cb3906ad2b2efd1c1fe258e687309bd886966fb19b06b0bd26c66e3d802ec0e4c37db25ed06921042bce33a4e961091282768ff1");
 
 export const AppwriteUsersApi = new Users(appwriteApiClient);

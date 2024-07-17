@@ -94,7 +94,7 @@ function DropdownMenu() {
     Cookies.set("user_id", "")
     Cookies.set("user_name", "")
     Cookies.set("user_email", "")
-    Cookies.set("user_label", "")
+    Cookies.set("user_labels", [])
     toast.success('Logged Out')
     router.push('/auth/login');
   }
