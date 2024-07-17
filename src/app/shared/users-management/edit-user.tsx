@@ -14,7 +14,7 @@ import {
   roles,
   statuses,
 } from '@/app/shared/users-management/utils';
-export default function EditUser(user: string) {
+export default function EditUser(id: string) {
   const { closeModal } = useModal();
   const [reset, setReset] = useState({});
   const [isLoading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ export default function EditUser(user: string) {
           <>
             <div className="col-span-full flex items-center justify-between">
               <Title as="h4" className="font-semibold">
-                Update User
+                Update User - ${id}
               </Title>
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />

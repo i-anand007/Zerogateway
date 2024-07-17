@@ -12,6 +12,7 @@ import CompanyCard from '@/components/ui/user-company-card';
 import EditUser from '../edit-user';
 import ModalButton from '../../modal-button';
 import ModalButtonIcon from '../../modal-button-icon';
+import { useModal } from '../../modal-views/use-modal';
 
 function getStatusBadge(status: User['status']) {
   switch (status) {
@@ -50,6 +51,10 @@ type Columns = {
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
 };
+
+const editUser = async (id: string) => {
+  console.log(id)
+}
 
 export const getColumns = ({
   data,
@@ -207,9 +212,7 @@ export const getColumns = ({
               size="sm"
               variant="outline"
               className="hover:!border-gray-900 hover:text-gray-700"
-              onClick={() => {
-                
-              }}
+              onClick={(e) => editUser(user.id)}
             >
               <PencilIcon className="h-4 w-4" />
             </ActionIcon>
@@ -225,19 +228,22 @@ export const getColumns = ({
             </ActionIcon>
           </Tooltip>
           {/* <EditUser /> */}
-          <ModalButtonIcon
+          {/* <ModalButtonIcon
             icon=<ActionIcon
-            as="span"
-            size="sm"
-            variant="outline"
-            className="hover:!border-gray-900 hover:text-gray-700"
-          >
-            <PencilIcon className="h-4 w-4" />
-          </ActionIcon>
-            view=<EditUser/>
+              as="span"
+              size="sm"
+              variant="outline"
+              className="hover:!border-gray-900 hover:text-gray-700"
+            >
+              <PencilIcon className="h-4 w-4" />
+            </ActionIcon>
+            view=<EditUser (user.id) />
             customSize="600px"
             className="mt-0"
-          />
+          /> */}
+
+
+
           <DeletePopover
             title={`Delete this user`}
             description={`Are you sure you want to delete user - ${user.fullName} ?`}
