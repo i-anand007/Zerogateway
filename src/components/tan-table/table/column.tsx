@@ -140,6 +140,13 @@ export const defaultColumns = [
     header: 'Status',
     cell: (info) => getStatusBadge(info.renderValue()!),
   }),
+  columnHelper.accessor('status', {
+    id: 'status',
+    size: 120,
+    header: 'Status',
+    cell: (info) => getStatusBadge(info.renderValue()!),
+  }),
+  
   columnHelper.accessor('userName', {
     id: 'userName',
     size: 160,
@@ -194,13 +201,13 @@ export const defaultColumns = [
               </ActionIcon>
             </Link>
           </Tooltip>
-          <DeletePopover
+          {/* <DeletePopover
             title={`Delete the invoice`}
             description={`Are you sure you want to delete this #${row.id} invoice?`}
             onDelete={() =>
               meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
             }
-          />
+          /> */}
         </div>
       </>
     ),

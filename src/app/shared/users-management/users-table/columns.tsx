@@ -1,7 +1,7 @@
 'use client';
 
 import { STATUSES, type User } from '@/data/users-data';
-import { Text, Badge, Tooltip, Checkbox, ActionIcon, Button } from 'rizzui';
+import { Text, Badge, Tooltip, Checkbox, ActionIcon, Button, Select } from 'rizzui';
 import { HeaderCell } from '@/components/ui/table';
 import EyeIcon from '@/components/icons/eye';
 import PencilIcon from '@/components/icons/pencil';
@@ -13,10 +13,13 @@ import EditUser from '../edit-user';
 import ModalButton from '../../modal-button';
 import ModalButtonIcon from '../../modal-button-icon';
 import { useModal } from '../../modal-views/use-modal';
+import { PiCheckCircleBold, PiClockBold, PiXCircleBold } from 'react-icons/pi';
+import { useState } from 'react';
+import axios from 'axios';
 
 function getStatusBadge(status: User['status']) {
   switch (status) {
-    case STATUSES.Deactivated:
+    case STATUSES.Deactivate:
       return (
         <div className="flex items-center">
           <Badge color="danger" renderAsDot />
@@ -55,6 +58,12 @@ type Columns = {
 const editUser = async (id: string) => {
   console.log(id)
 }
+
+const statusOptions = [
+  { label: 'Active', value: 'Active' },
+  { label: 'Deactivate', value: 'Deactivate' },
+];
+
 
 export const getColumns = ({
   data,
@@ -185,19 +194,38 @@ export const getColumns = ({
     // },
 
 
+    // {
+    //   title: <HeaderCell
+    //     title="Status"
+    //     sortable
+    //     ascending={
+    //       sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
+    //     }
+    //   />,
+    //   onHeaderCell: () => onHeaderCellClick('status'),
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   width: 100,
+    //   render: (status: User['status']) => getStatusBadge(status),
+    // },
     {
-      title: <HeaderCell
-        title="Status"
-        sortable
-        ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
-        }
-      />,
-      onHeaderCell: () => onHeaderCellClick('status'),
+      title: (
+        <HeaderCell
+          title="Status"
+          sortable
+          ascending={
+            sortConfig?.direction === 'asc' && sortConfig?.key === 'status'
+          }
+        />
+      ),
       dataIndex: 'status',
       key: 'status',
-      width: 100,
-      render: (status: User['status']) => getStatusBadge(status),
+      width: 50,
+      onHeaderCell: () => onHeaderCellClick('status'),
+      render: (status: string, user: User) => {
+
+        return <StatusSelect selectItem={status} userId={user.id} />;
+      },
     },
     {
       title: <></>,
@@ -206,6 +234,8 @@ export const getColumns = ({
       width: 100,
       render: (_: string, user: User) => (
         <div className="flex items-center justify-end gap-3 pe-3">
+
+
           <Tooltip size="sm" content={'Edit User'} placement="top" color="invert">
             <ActionIcon
               as="span"
@@ -217,6 +247,7 @@ export const getColumns = ({
               <PencilIcon className="h-4 w-4" />
             </ActionIcon>
           </Tooltip>
+
           <Tooltip size="sm" content={'View User'} placement="top" color="invert">
             <ActionIcon
               as="span"
@@ -253,3 +284,67 @@ export const getColumns = ({
       ),
     },
   ];
+
+function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: string }) {
+  const selectItemValue = statusOptions.find(
+    (option: { label: string | undefined; }) => option.label === selectItem
+  );
+  const [value, setValue] = useState(selectItemValue);
+  const userStatusChange = async (data: any) => {
+    setValue(data)
+    console.log(userId)
+    if (data.value == 'Active') {
+      axios.post('/api/v1/users/update/status',
+        {
+          "id": userId,
+          "status": true
+        }
+      )
+    } else {
+      axios.post('/api/v1/users/update/status',
+        {
+          "id": userId,
+          "status": false
+        }
+      )
+    }
+  }
+  return (
+    <Select
+      dropdownClassName="!z-10"
+      className="min-w-[140px]"
+      inPortal={false}
+      placeholder="Select Status"
+      options={statusOptions}
+      value={value}
+      onChange={(e) => userStatusChange(e)}
+      displayValue={(option: { value: any }) =>
+        renderOptionDisplayValue(option.value as string)
+      }
+    />
+  );
+}
+
+
+function renderOptionDisplayValue(value: string) {
+  switch (value) {
+    case 'Deactivate':
+      return (
+        <div className="flex items-center">
+          <PiXCircleBold className="shrink-0 fill-red-dark  text-base" />
+          <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
+            {value}
+          </Text>
+        </div>
+      );
+    default:
+      return (
+        <div className="flex items-center">
+          <PiCheckCircleBold className="shrink-0 fill-green-dark text-base" />
+          <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
+            {value}
+          </Text>
+        </div>
+      );
+  }
+}

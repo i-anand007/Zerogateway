@@ -23,7 +23,7 @@ export const PERMISSIONS = {
 
 export const STATUSES = {
   Active: 'Active',
-  Deactivated: 'Deactivated',
+  Deactivate: 'Deactivate',
 } as const;
 
 export const 

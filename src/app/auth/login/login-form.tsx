@@ -8,7 +8,7 @@ import { Form } from '@/components/ui/form';
 import { routes } from '@/config/routes';
 import { loginSchema, LoginSchema } from '@/utils/validators/login.schema';
 import appwriteService from '@/app/appwrite';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -35,6 +35,20 @@ export default function SignInForm() {
       router.push('/');
     }
   };
+
+  useEffect(() => {
+
+    const isLoggedIn = async () => {
+      const response = await appwriteService.isLoggedIn()
+      console.log(response)
+      if (response) {
+        router.push('/');
+      }
+    }
+
+    isLoggedIn()
+  }, []);
+
 
   return (
     <>

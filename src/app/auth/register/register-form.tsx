@@ -10,6 +10,7 @@ import { routes } from '@/config/routes';
 import { RegisterSchema, registerSchema } from '@/utils/validators/register.schema';
 import appwriteService from '@/app/appwrite';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const initialValues = {
   fullName: '',
@@ -19,6 +20,7 @@ const initialValues = {
 
 export default function RegisterForm() {
   const isMedium = useMedia('(max-width: 1200px)', false);
+  const router = useRouter();
   const [reset, setReset] = useState({});
   const onSubmit: SubmitHandler<RegisterSchema> = async (data) => {
     console.log(data);
@@ -32,6 +34,7 @@ export default function RegisterForm() {
       const updatePhonne = await appwriteService.updatePhonne({ phone, password})
       await console.log(updatePhonne)
       toast.success('Account Created')
+      router.push('/');
     } else if (!response.$id) {
       toast.error('Account Not Created')
     }

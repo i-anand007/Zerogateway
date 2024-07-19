@@ -1,4 +1,4 @@
-import { Client, Account, ID, OAuthProvider, Databases, Models } from 'appwrite';
+import { Client, Account, ID, OAuthProvider, Databases, Storage } from 'appwrite';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 
@@ -7,17 +7,14 @@ type CreateUserAccount = {
     password: string,
     name: string,
 }
-
 type LoginUserAccount = {
     email: string,
     password: string,
 }
-
 type UpdateUserPassword = {
     phone: string,
     password: string,
 }
-
 type CreateDocument = {
     data: object,
 }
@@ -30,11 +27,18 @@ appwriteClient
 
 export const account = new Account(appwriteClient)
 export const databases = new Databases(appwriteClient)
+export const storage = new Storage(appwriteClient);
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '66951bb9001d5c90ec32'
 const PLAN_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '66951bb9001d5c90ec32'
+const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || '669a0ea7002f1eec3604'
+
+
 
 export class AppwriteService {
+    createDocument(arg0: { plan_name: string; plan_base_price: number; plan_discount: number; plan_price: number; validity: number; status: boolean; }) {
+      throw new Error("Method not implemented.");
+    }
     async createUserAccount({ email, password, name }: CreateUserAccount) {
         try {
             const userAccount = await account.create(ID.unique(), email, password, name)
@@ -86,8 +90,8 @@ export class AppwriteService {
         try {
             const data = await this.getCurrentUser();
             return Boolean(data)
-        } catch (error) { }
-
+        } catch (error) { 
+        }
         return false
     }
 
@@ -95,8 +99,7 @@ export class AppwriteService {
         try {
             return account.get()
         } catch (error) {
-            console.log("getcurrentUser error: " + error)
-
+            
         }
 
         return null
@@ -107,7 +110,6 @@ export class AppwriteService {
             return account.updatePhone(phone, password)
         } catch (error) {
             console.log("getcurrentUser error: " + error)
-
         }
 
         return null
@@ -130,6 +132,22 @@ export class AppwriteService {
                 data
             );
             console.log(createDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
+    async uploadFile(file: any) {
+        try {
+            const uploadFile = await storage.createFile(
+                BUCKET_ID,
+                ID.unique(),
+                file
+            );
+            console.log(uploadFile)
+            return uploadFile
         } catch (error: any) {
             let response = error.toString();
             toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')

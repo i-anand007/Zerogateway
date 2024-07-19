@@ -15,7 +15,10 @@ const nextConfig = {
         ]
     },
     images: {
-        domains: ['isomorphic-furyroad.s3.amazonaws.com'],
+        domains: [
+            'isomorphic-furyroad.s3.amazonaws.com', 
+            'w7.pngwing.com'
+        ],
     },
 }
 

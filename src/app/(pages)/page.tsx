@@ -1,8 +1,6 @@
 'use client'
-import Loading from "@/components/loading";
 import { Title } from "rizzui";
 import appwriteService, { account } from "../appwrite";
-import axios from "axios";
 
 
 

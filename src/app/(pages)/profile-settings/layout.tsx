@@ -1,20 +1,16 @@
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-// import ProfileSettingsNav from '@/app/shared/account-settings/navigation';
+import ProfileSettingsNav from '@/app/shared/account-settings/navigation';
 
 const pageHeader = {
-  title: 'Account Settings',
+  title: 'Profile Settings',
   breadcrumb: [
     {
       href: '/',
       name: 'Home',
     },
     {
-      href: routes.forms.profileSettings,
-      name: 'Form',
-    },
-    {
-      name: 'Account Settings',
+      name: 'Profile Settings',
     },
   ],
 };
@@ -27,7 +23,7 @@ export default function ProfileSettingsLayout({
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
-      {/* <ProfileSettingsNav /> */}
+      <ProfileSettingsNav />
       {children}
     </>
   );

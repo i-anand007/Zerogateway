@@ -272,7 +272,7 @@ export const lithiumMenuItems: LithiumMenuItem = {
     type: 'link',
     dropdownItems: [
       {
-        name: 'Account Settings',
+        name: 'Profile Settings',
         href: routes.forms.profileSettings,
         icon: 'UserSettingsIcon',
       },

@@ -21,7 +21,7 @@ export default function Logic({
         if (!localStorage.getItem("theme")) {
             localStorage.setItem("theme", "light")
         }
-
+        
         if (Cookies.get("user_name") == "" || !Cookies.get("user_name")) {
             const getUser = async () => {
                 const response:any = await appwriteService.getCurrentUser()

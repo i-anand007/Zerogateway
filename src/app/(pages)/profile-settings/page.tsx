@@ -6,5 +6,6 @@ export const metadata = {
 };
 
 export default function ProfileSettingsFormPage() {
-  return <PersonalInfoView />;
+  const id = "a321";
+  return <PersonalInfoView $id={id}  />;
 }

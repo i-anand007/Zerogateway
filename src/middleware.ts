@@ -10,6 +10,10 @@ export function middleware(request: NextRequest) {
     if (url.pathname.startsWith("/api")) {
       return NextResponse.next()
     }
+    
+    if (url.pathname.startsWith("/checkout")) {
+      return NextResponse.next()
+    }
 
     if (isLoggedIn !== 'true' && !url.pathname.startsWith("/auth")) {
         return NextResponse.redirect(new URL('/auth/login', request.url))
