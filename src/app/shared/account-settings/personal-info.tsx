@@ -7,7 +7,6 @@ import { PiClock, PiEnvelopeSimple, PiPassword } from 'react-icons/pi';
 import { Form } from '@/components/ui/form';
 import { Loader, Text, Input, Button } from 'rizzui';
 import FormGroup from '@/app/shared/form-group';
-import { CldUploadWidget } from 'next-cloudinary';
 // import FormFooter from '@/components/form-footer';
 import {
   defaultValues,

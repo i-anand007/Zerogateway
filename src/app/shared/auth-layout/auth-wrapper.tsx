@@ -56,29 +56,32 @@ export default function AuthWrapper({
   className?: string;
 }) {
 
+  
+  const router = useRouter();
+
   useEffect(() => {
     if (!localStorage.getItem("theme")) {
       localStorage.setItem("theme", "light")
     }
 
     if (Cookies.get("user_name") == "" || !Cookies.get("user_name")) {
-
       const isLoggedIn = async () => {
         const response: boolean = await appwriteService.isLoggedIn()
-        //   if (response == true) {
-        //     const response: any = await appwriteService.getCurrentUser()
-        //     Cookies.set("user_loggedIn", "true")
-        //     Cookies.set("user_name", response?.name)
-        //     Cookies.set("user_email", response?.email)
-        //     Cookies.set("user_labels", response?.labels)
-        // }
-        console.log(response)
+          if (response == true) {
+            const response: any = await appwriteService.getCurrentUser()
+            Cookies.set("user_loggedIn", "true")
+            Cookies.set("user_name", response?.name)
+            Cookies.set("user_email", response?.email)
+            Cookies.set("user_labels", response?.labels)
+            router.push('/');
+        }
       }
       isLoggedIn()
+    } else {
+      router.push('/');
     }
 
   }, []);
-
 
 
   return (

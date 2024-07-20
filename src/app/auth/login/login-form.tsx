@@ -36,18 +36,7 @@ export default function SignInForm() {
     }
   };
 
-  useEffect(() => {
 
-    const isLoggedIn = async () => {
-      const response = await appwriteService.isLoggedIn()
-      console.log(response)
-      if (response) {
-        router.push('/');
-      }
-    }
-
-    isLoggedIn()
-  }, []);
 
 
   return (
