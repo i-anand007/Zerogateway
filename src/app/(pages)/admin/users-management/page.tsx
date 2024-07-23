@@ -21,13 +21,13 @@ const pageHeader = {
 
 
 
-export default function BlankPage() {
+export default function UsersManagement() {
   
   const [Data, setData] = useState(null)
   useEffect(() => {
     async function getUser() {
       try {
-        const response = await axios.get('/api/v1/users');
+        const response = await axios.get('/api/v1/admin/users');
         if (response) {
           setData(response.data);
         }

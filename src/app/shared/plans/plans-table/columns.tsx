@@ -1,6 +1,5 @@
 'use client';
 
-import { STATUSES, type User } from '@/data/users-data';
 import { Text, Badge, Tooltip, Checkbox, ActionIcon, Button, Select } from 'rizzui';
 import { HeaderCell } from '@/components/ui/table';
 import EyeIcon from '@/components/icons/eye';
@@ -9,15 +8,27 @@ import AvatarCard from '@/components/ui/avatar-card';
 import DateCell from '@/components/ui/date-cell';
 import DeletePopover from '@/app/shared/delete-popover';
 import CompanyCard from '@/components/ui/user-company-card';
-import EditUser from '../edit-user';
 import ModalButton from '../../modal-button';
 import ModalButtonIcon from '../../modal-button-icon';
 import { useModal } from '../../modal-views/use-modal';
 import { PiCheckCircleBold, PiClockBold, PiXCircleBold } from 'react-icons/pi';
 import { useState } from 'react';
 import axios from 'axios';
+import appwriteService from '@/app/appwrite';
+import { STATUSES } from '@/data/users-data';
+import toast from 'react-hot-toast';
 
-function getStatusBadge(status: User['status']) {
+export type Plan = {
+  id: string;
+  plan_name: string;
+  plan_base_price: string;
+  plan_discount: string;
+  plan_price: string;
+  validity: string;
+  status: string;
+};
+
+function getStatusBadge(status: Plan['status']) {
   switch (status) {
     case STATUSES.Blocked:
       return (
@@ -100,47 +111,94 @@ export const getColumns = ({
     //     </div>
     //   ),
     // },
-    {
-      title: <HeaderCell title="Name" />,
-      dataIndex: 'fullName',
-      key: 'fullName',
-      width: 250,
-      render: (_: string, user: User) => (
-        <AvatarCard
-          src={user.avatar}
-          name={user.fullName}
-          description={user.email}
-        />
-      ),
-    },
+    // {
+    //   title: <HeaderCell title="Name" />,
+    //   dataIndex: 'fullName',
+    //   key: 'fullName',
+    //   width: 250,
+    //   render: (_: string, user: User) => (
+    //     <AvatarCard
+    //       src={user.avatar}
+    //       name={user.fullName}
+    //       description={user.email}
+    //     />
+    //   ),
+    // },
     {
       title: (
         <HeaderCell
-          title="Phone"
+          title="Name"
         />
       ),
-      dataIndex: 'phone',
-      key: 'fullName',
+      dataIndex: 'plan_name',
+      key: 'id',
       width: 100,
-      render: (role: string) => role,
     },
 
     {
       title: (
         <HeaderCell
-          title="Role"
-          sortable
-          ascending={
-            sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
-          }
+          title="Base Price"
         />
       ),
-      onHeaderCell: () => onHeaderCellClick('role'),
-      dataIndex: 'role',
-      key: 'role',
+      dataIndex: 'plan_base_price',
+      key: 'id',
       width: 100,
-      render: (role: string) => role,
+      render: (plan_base_price: string) => `₹ ${plan_base_price}`
     },
+
+    {
+      title: (
+        <HeaderCell
+          title="Discount"
+        />
+      ),
+      dataIndex: 'plan_discount',
+      key: 'id',
+      width: 100,
+      render: (plan_discount: string) => `${plan_discount} %`
+    },
+
+    {
+      title: (
+        <HeaderCell
+          title="Price"
+        />
+      ),
+      dataIndex: 'plan_price',
+      key: 'id',
+      width: 100,
+      render: (plan_price: string) => `₹ ${plan_price}`
+    },
+
+    {
+      title: (
+        <HeaderCell
+          title="Validity"
+        />
+      ),
+      dataIndex: 'validity',
+      key: 'id',
+      width: 100,
+      render: (validity: string) => `${validity} Days`
+    },
+
+    // {
+    //   title: (
+    //     <HeaderCell
+    //       title="Role"
+    //       sortable
+    //       ascending={
+    //         sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
+    //       }
+    //     />
+    //   ),
+    //   onHeaderCell: () => onHeaderCellClick('role'),
+    //   dataIndex: 'role',
+    //   key: 'role',
+    //   width: 100,
+    //   render: (role: string) => role,
+    // },
 
     // {
     //   title: <HeaderCell title="Company Name" />,
@@ -222,9 +280,9 @@ export const getColumns = ({
       key: 'status',
       width: 50,
       onHeaderCell: () => onHeaderCellClick('status'),
-      render: (status: string, user: User) => {
+      render: (status: string, plan: Plan) => {
 
-        return <StatusSelect selectItem={status} userId={user.id} />;
+        return <StatusSelect selectItem={status} userId={plan.id} />;
       },
     },
     {
@@ -232,53 +290,13 @@ export const getColumns = ({
       dataIndex: 'action',
       key: 'action',
       width: 100,
-      render: (_: string, user: User) => (
+      render: (_: string, plan: Plan) => (
         <div className="flex items-center justify-end gap-3 pe-3">
-
-
-          <Tooltip size="sm" content={'Edit User'} placement="top" color="invert">
-            <ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              className="hover:!border-gray-900 hover:text-gray-700"
-              onClick={(e) => editUser(user.id)}
-            >
-              <PencilIcon className="h-4 w-4" />
-            </ActionIcon>
-          </Tooltip>
-
-          <Tooltip size="sm" content={'View User'} placement="top" color="invert">
-            <ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              className="hover:!border-gray-900 hover:text-gray-700"
-            >
-              <EyeIcon className="h-4 w-4" />
-            </ActionIcon>
-          </Tooltip>
-          {/* <EditUser /> */}
-          {/* <ModalButtonIcon
-            icon=<ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              className="hover:!border-gray-900 hover:text-gray-700"
-            >
-              <PencilIcon className="h-4 w-4" />
-            </ActionIcon>
-            view=<EditUser (user.id) />
-            customSize="600px"
-            className="mt-0"
-          /> */}
-
-
 
           <DeletePopover
             title={`Delete this user`}
-            description={`Are you sure you want to delete user - ${user.fullName} ?`}
-            onDelete={() => onDeleteItem(user.id)}
+            description={`Are you sure you want to delete Plan ?`}
+            onDelete={() => appwriteService.deletePlan(plan.id)}
           />
         </div>
       ),
@@ -292,37 +310,46 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
   const [value, setValue] = useState(selectItemValue);
   const userStatusChange = async (data: any) => {
     setValue(data)
-    console.log(userId)
     if (data.value == 'Active') {
-      axios.post('/api/v1/admin/users/update/status',
+      appwriteService.updatePlan(
         {
           "id": userId,
-          "status": true
+          payload:
+          {
+            "status": true
+
+          }
         }
       )
-    } else {
-      axios.post('/api/v1/admin/users/update/status',
-        {
-          "id": userId,
-          "status": false
-        }
-      )
-    }
-  }
-  return (
-    <Select
-      dropdownClassName="!z-10"
-      className="min-w-[140px]"
-      inPortal={false}
-      placeholder="Select Status"
-      options={statusOptions}
-      value={value}
-      onChange={(e) => userStatusChange(e)}
-      displayValue={(option: { value: any }) =>
-        renderOptionDisplayValue(option.value as string)
+      toast.success("Plan Activated")
+} else {
+  appwriteService.updatePlan(
+    {
+      "id": userId,
+      payload:
+      {
+        "status": false
+
       }
-    />
-  );
+    }
+  )
+  toast.success("Plan Blocked")
+}
+  }
+return (
+  <Select
+    dropdownClassName="!z-10"
+    className="min-w-[140px]"
+    inPortal={false}
+    placeholder="Select Status"
+    options={statusOptions}
+    value={value}
+    onChange={(e) => userStatusChange(e)}
+    displayValue={(option: { value: any }) =>
+      renderOptionDisplayValue(option.value as string)
+    }
+  />
+);
 }
 
 

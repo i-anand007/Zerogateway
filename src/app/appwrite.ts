@@ -30,7 +30,7 @@ export const databases = new Databases(appwriteClient)
 export const storage = new Storage(appwriteClient);
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '66951bb9001d5c90ec32'
-const PLAN_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '66951bb9001d5c90ec32'
+const PLAN_ID = process.env.NEXT_PUBLIC_APPWRITE_PLAN_ID || '669670f90033fcd711e4'
 const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || '669a0ea7002f1eec3604'
 
 
@@ -127,15 +127,61 @@ export class AppwriteService {
         try {
             const createDocument = await databases.createDocument(
                 DATABASE_ID,
-                "669670f90033fcd711e4",
+                PLAN_ID,
                 ID.unique(),
                 data
             );
-            console.log(createDocument)
+            return (createDocument)
         } catch (error: any) {
             let response = error.toString();
             toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
             throw error
+        }
+    }
+
+    async updatePlan(data: { id: string; payload: object; }) {
+        try {
+            const updateDocument = await databases.updateDocument(
+                DATABASE_ID,
+                PLAN_ID,
+                data.id,
+                data.payload
+            );
+            return (updateDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
+    async deletePlan(data: string) {
+        try {
+            const deleteDocument = await databases.deleteDocument(
+                DATABASE_ID,
+                PLAN_ID,
+                data
+            );
+            toast.success("Plan Deleted")
+            return (deleteDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
+    async listPlan() {
+        try {
+            const listDocument = await databases.listDocuments(
+                DATABASE_ID,
+                PLAN_ID,
+            );
+            return listDocument
+        } catch (error: any) {     
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error         
         }
     }
 

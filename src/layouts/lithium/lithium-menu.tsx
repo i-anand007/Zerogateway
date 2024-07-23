@@ -218,18 +218,18 @@ export default function HeaderMenuLeft() {
       >
         <NavMenu.Item>
           <NavMenu.Trigger className="flex items-center gap-1 duration-200 ">
-            <MenuTriggerButton name="overview" />
+            <MenuTriggerButton name="admin" />
           </NavMenu.Trigger>
           <NavMenu.Content className="border border-[red] bg-white dark:bg-gray-100">
-            <div className="w-[172px]">
+            <div className="w-[220px]">
               <LinkMenu
                 className="flex flex-col p-3 dark:bg-gray-100"
-                items={lithiumMenuItems.overview.dropdownItems ?? []}
+                items={lithiumMenuItems.admin.dropdownItems ?? []}
               />
             </div>
           </NavMenu.Content>
         </NavMenu.Item>
-        <NavMenu.Item>
+        {/* <NavMenu.Item>
           <NavMenu.Trigger className="flex items-center gap-1 duration-200 ">
             <MenuTriggerButton name="appsKit" />
           </NavMenu.Trigger>
@@ -268,7 +268,7 @@ export default function HeaderMenuLeft() {
             </div>
           </NavMenu.Content>
         </NavMenu.Item>
-        {/* <NavMenu.Item>
+        <NavMenu.Item>
           <NavMenu.Trigger className="flex items-center gap-1 duration-200 ">
             <MenuTriggerButton name="tables" />
           </NavMenu.Trigger>
@@ -280,7 +280,7 @@ export default function HeaderMenuLeft() {
               />
             </div>
           </NavMenu.Content>
-        </NavMenu.Item> */}
+        </NavMenu.Item>
         <NavMenu.Item>
           <NavMenu.Trigger className="flex items-center gap-1 duration-200 ">
             <MenuTriggerButton name="tables" />
@@ -319,7 +319,7 @@ export default function HeaderMenuLeft() {
               />
             </div>
           </NavMenu.Content>
-        </NavMenu.Item>
+        </NavMenu.Item> */}
       </NavMenu>
     </>
   );

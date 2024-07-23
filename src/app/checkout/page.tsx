@@ -19,6 +19,7 @@ import { checkoutUpiSchema, CheckoutUpiSchema } from '@/utils/validators/checkou
 import { checkoutBankSchema, CheckoutBankSchema } from '@/utils/validators/checkout-bank.schema';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { PiChecksBold, PiFilesBold } from 'react-icons/pi';
+import BankCard from '@/components/cards/bank-card';
 
 
 export default function Checkout(
@@ -33,7 +34,7 @@ export default function Checkout(
   const [isPurpose, setIsPurpose] = useState<boolean>()
   const [purpose, setPurpose] = useState<string>()
   const [isBank, setIsBank] = useState<boolean>()
-  const [bank_Name, setBank_Name] = useState<string>("yoyo")
+  const [bank_Name, setBank_Name] = useState<string>()
   const [account_No, setAccount_No] = useState<number>()
   const [account_Name, setAccount_Name] = useState<number>()
   const [IFSC, setIFSC] = useState<string>()
@@ -44,6 +45,7 @@ export default function Checkout(
   const [reset, setReset] = useState({});
   const [isCopied, setIsCopied] = useState(false);
   const [state, copyToClipboard] = useCopyToClipboard();
+  
   const formData = {
     amount,
     utr: UTR,
@@ -131,9 +133,10 @@ export default function Checkout(
                         <>
                           <div className="flex flex-row items-center border rounded-lg shadow md:flex-row md:max-w-xl ">
                             <QRCode value="upi://pay?pa=patyes@yesbank" qrStyle="dots" eyeRadius={5} />
-                            <div className="flex flex-col justify-between p-6 leading-normal items-center">
-                              <h5 className="mb-5 text-[16px] leading-snug md:text-l md:!leading-normal lg:text-xl lg:leading-normaltex">Scan the QR using any UPI app on your phone</h5>
-                              <Image src="/images/upi_apps_icons.png" alt={''} width={200} height={50} />
+                            <div className="flex flex-col justify-between p-2 leading-normal ">
+                              <h5 className="text-[14px] leading-snug md:text-l md:!leading-normal lg:text-xl lg:leading-normaltex">Scan the QR using any UPI app on your phone</h5>
+                              <Image className='m-3' src="/images/upi_apps_icons.png" alt={''} width={150} height={50} />
+                              <BankCard title='UPI ID' data={UPI_ID}/>
                             </div>
                           </div>
 
@@ -182,70 +185,12 @@ export default function Checkout(
 
                         <>
                           <div className="space-y-2 lg:space-y-2">
-                            <div className="items-center border rounded-lg shadow md:flex-row md:max-w-xl p-2 ">
-                              <div className="flex justify-between items-center">
-                                <h6>Bank Name</h6>
-                                <Input
-                                  readOnly
-                                  inputClassName="hover:border-muted"
-                                  suffix={
-                                    <Tooltip
-                                      size="sm"
-                                      content={isCopied ? 'Copied to Clipboard' : 'Click to Copy'}
-                                      placement="top"
-                                      className="z-[1000]"
-                                    >
-                                      <ActionIcon
-                                        variant="text"
-                                        title="Click to Copy"
-                                        onClick={() => handleCopyToClipboard(bank_Name)}
-                                        className="-mr-3"
-                                      >
-                                        {isCopied ? (
-                                          <PiChecksBold className="h-[18px] w-[18px]" />
-                                        ) : (
-                                          <PiFilesBold className="h-4 w-4" />
-                                        )}
-                                      </ActionIcon>
-                                    </Tooltip>
-                                  }
-                                  value={bank_Name}
-                                />
-                              </div>
+                      
+                            <BankCard title={"Bank Name"} data={bank_Name}/>
+                            <BankCard title={"A/C Holder's Name"} data={account_Name}/>
+                            <BankCard title={"A/C Number"} data={account_No}/>
+                            <BankCard title={"IFSC Code"} data={IFSC}/>
 
-                            </div>
-                            <div className="items-center border rounded-lg shadow md:flex-row md:max-w-xl p-2">
-                              <div className="flex justify-between items-center">
-                                <h6>A/C Holder's Name</h6>
-                                <Input
-                                  readOnly
-                                  inputClassName="hover:border-muted"
-                                  value={"Yes Bank"}
-                                  suffix={
-                                    <Tooltip
-                                      size="sm"
-                                      content={isCopied ? 'Copied to Clipboard' : 'Click to Copy'}
-                                      placement="top"
-                                      className="z-[1000]"
-                                    >
-                                      <ActionIcon
-                                        variant="text"
-                                        title="Click to Copy"
-                                        onClick={(e) => handleCopyToClipboard("Yes Bank")}
-                                        className="-mr-3"
-                                      >
-                                        {isCopied ? (
-                                          <PiChecksBold className="h-[18px] w-[18px]" />
-                                        ) : (
-                                          <PiFilesBold className="h-4 w-4" />
-                                        )}
-                                      </ActionIcon>
-                                    </Tooltip>
-                                  }
-                                />
-                              </div>
-
-                            </div>
                           </div>
 
                           <Input

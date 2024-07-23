@@ -1,12 +1,11 @@
 'use client';
 
 import { PiTrashDuotone, PiMagnifyingGlassBold } from 'react-icons/pi';
-import StatusField from '@/components/controlled-table/status-field';
 import { Badge, Text, Title, Button, Input } from 'rizzui';
 import { STATUSES } from '@/data/users-data';
 import { rolesList } from '@/data/users-management';
 import ModalButton from '@/app/shared/modal-button';
-import CreateUser from '@/app/shared/users-management/create-user';
+import CreatePlan from '../create-plan';
 
 type FilterElementProps = {
   isFiltered: boolean;
@@ -34,23 +33,8 @@ export default function FilterElement({
     <>
       <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container ">
         <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
-          All Users
+          All Plans
         </Title>
-
-        <StatusField
-          options={roles}
-          dropdownClassName="!z-10 w-48"
-          value={filters['role']}
-          placeholder="Filter by Role"
-          className=" @4xl:-auto -order-2 w-full min-w-[160px] @[25rem]:w-[calc(calc(100%_-_10px)_/_2)] @4xl:-order-4 @4xl:w-auto"
-          getOptionValue={(option: { value: any }) => option.value}
-          onChange={(value: string) => {
-            updateFilter('role', value);
-          }}
-          displayValue={(selected: string) =>
-            roles.find((option) => option.value === selected)?.value ?? selected
-          }
-        />
 
         {isFiltered && (
           <Button
@@ -77,8 +61,8 @@ export default function FilterElement({
 
         <div className="-order-5 flex basis-auto justify-end @xl:-order-4 @4xl:-order-1">
           <ModalButton
-            label="Add New User"
-            view={<CreateUser />}
+            label="Add New Plan"
+            view={<CreatePlan />}
             customSize="600px"
             className="mt-0"
           />
