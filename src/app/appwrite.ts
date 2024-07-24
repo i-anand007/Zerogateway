@@ -36,9 +36,7 @@ const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || '669a0ea7002f1ee
 
 
 export class AppwriteService {
-    createDocument(arg0: { plan_name: string; plan_base_price: number; plan_discount: number; plan_price: number; validity: number; status: boolean; }) {
-      throw new Error("Method not implemented.");
-    }
+    
     async createUserAccount({ email, password, name }: CreateUserAccount) {
         try {
             const userAccount = await account.create(ID.unique(), email, password, name)
@@ -99,7 +97,6 @@ export class AppwriteService {
         try {
             return account.get()
         } catch (error) {
-            
         }
 
         return null

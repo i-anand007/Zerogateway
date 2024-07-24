@@ -2,18 +2,10 @@
 
 import { useState } from 'react';
 import { PiXBold } from 'react-icons/pi';
-import { Controller, SubmitHandler } from 'react-hook-form';
+import { SubmitHandler } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
-import { Input, Button, ActionIcon, Title, Select } from 'rizzui';
-import {
-  CreateUserInput,
-  createUserSchema,
-} from '@/utils/validators/create-user.schema';
+import { Input, Button, ActionIcon, Title } from 'rizzui';
 import { useModal } from '@/app/shared/modal-views/use-modal';
-import {
-  roles,
-  statuses,
-} from '@/app/shared/users-management/utils';
 import { createPlanSchema, CreatePlanSchema } from '@/utils/validators/create-plan.schema';
 import appwriteService from '@/app/appwrite';
 import toast from 'react-hot-toast';
@@ -21,9 +13,6 @@ export default function CreatePlan() {
   const { closeModal } = useModal();
   const [reset, setReset] = useState({});
   const [isLoading, setLoading] = useState(false);
-  // const [discount , setDiscount] = useState();
-  // const [basePrice , setBasePrice] = useState();
-
   const [basePrice, setBasePrice] = useState('');
   const [discount, setDiscount] = useState('');
   const [sellingPrice, setSellingPrice] = useState('');
@@ -58,14 +47,24 @@ export default function CreatePlan() {
       plan_base_price: Number(data.plan_base_price),
       plan_discount: Number(data.plan_discount),
       plan_price: Number(data.plan_price),
+      payment_pages: Number(data.payment_pages),
+      platform_fees: Number(data.platform_fees),
       validity: Number(data.validity),
     }
+
+    setTimeout(async () => {
 
     console.log(FormattedData)
     setLoading(true);
     await appwriteService.createPlan(FormattedData)
     toast.success("Plan Created")
     setLoading(false);
+    setReset({
+      roleName: '',
+      roleColor: '',
+    });
+    closeModal();
+  }, 600);
   };
 
   return (
@@ -75,7 +74,7 @@ export default function CreatePlan() {
       validationSchema={createPlanSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
-      {({ register, control, watch, formState: { errors } }) => {
+      {({ register, formState: { errors } }) => {
         return (
           <>
             <div className="col-span-full flex items-center justify-between">
@@ -123,6 +122,22 @@ export default function CreatePlan() {
               placeholder={sellingPrice}
               {...register('plan_price')}
               error={errors.plan_price?.message}
+            />
+
+            <Input
+              type="number"
+              label="Payment Pages"
+              placeholder="Payment Pages"
+              {...register('payment_pages')}
+              error={errors.payment_pages?.message}
+            />
+
+            <Input
+              type="number"
+              label="Platform Fees %"
+              placeholder="Platform Fees"
+              {...register('platform_fees')}
+              error={errors.platform_fees?.message}
             />
 
             <Input

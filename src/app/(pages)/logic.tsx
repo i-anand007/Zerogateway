@@ -10,6 +10,7 @@ import GlobalModal from "../shared/modal-views/container";
 import { inter, lexendDeca } from "../fonts";
 import { cn } from "rizzui";
 import Cookies from "js-cookie";
+import BerylliumLayout from "@/layouts/beryllium/beryllium-layout";
 
 
 export default function Logic({
@@ -43,9 +44,9 @@ export default function Logic({
                 className={cn(inter.variable, lexendDeca.variable, "font-inter")}
             >
                 <ThemeProvider>
-                    <LithiumLayout>
+                    <BerylliumLayout>
                         {children}
-                    </LithiumLayout>
+                    </BerylliumLayout>
                     <GlobalDrawer />
                     <GlobalModal />
                 </ThemeProvider>

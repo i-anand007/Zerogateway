@@ -16,7 +16,17 @@ const filterState = {
   status: '',
 };
 
-export default function PlansTable({ data = [] }: { data: any[] }) {
+export default function PlansTable({ data }: { data: any }) {
+  interface Columns {
+  data: any;
+  sortConfig: Object;
+  checkedItems: string[];
+  onHeaderCellClick: (value: string) => { onClick: () => void };
+  onDeleteItem: (id: string) => void;
+  onChecked: (recordKey: string) => void;
+  handleSelectAll: () => void;
+  onEditItem: (id: string) => void; // Ensure this matches your actual requirement
+}
   const [pageSize, setPageSize] = useState(10);
 
   const onHeaderCellClick = (value: string) => ({
@@ -51,28 +61,28 @@ export default function PlansTable({ data = [] }: { data: any[] }) {
     handleReset,
   } = useTable(data, pageSize, filterState);
 
-  const columns = useMemo(
-    () =>
-      getColumns({
-        data,
-        sortConfig,
-        checkedItems: selectedRowKeys,
-        onHeaderCellClick,
-        onDeleteItem,
-        onChecked: handleRowSelect,
-        handleSelectAll,
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      selectedRowKeys,
+  const columns = useMemo(() =>
+    getColumns({
+      data,
+      sortConfig,
+      checkedItems: selectedRowKeys,
       onHeaderCellClick,
+      onDeleteItem,
+      onChecked: handleRowSelect,
+      handleSelectAll,
+      onEditItem: (id) => {
+        // Implement your logic for onEditItem if needed
+      },
+    }), [
+      data,
       sortConfig.key,
       sortConfig.direction,
+      selectedRowKeys, // Ensure selectedRowKeys is defined somewhere in your component
+      onHeaderCellClick,
       onDeleteItem,
       handleRowSelect,
       handleSelectAll,
-    ]
-  );
+    ]);
 
   const { visibleColumns, checkedColumns, setCheckedColumns } =
     useColumn(columns);

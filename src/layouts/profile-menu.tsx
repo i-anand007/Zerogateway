@@ -1,5 +1,5 @@
 'use client';
-import { Title, Text, Avatar, Button, Popover } from 'rizzui';
+import { Title, Text, Avatar, Button, Popover, Badge } from 'rizzui';
 import cn from '@/utils/class-names';
 import { routes } from '@/config/routes';
 import Link from 'next/link';
@@ -75,9 +75,29 @@ const menuItems = [
   },
 ];
 
+const prefs = {
+  "payment_pages": "0",
+  "validity": "0",
+  "KYC": "true"
+}
 
 
 function DropdownMenu() {
+  const [payment_pages, setPayment_pages] = useState()
+  const [validity, setValidity] = useState()
+
+  useEffect(() => {
+    const getCurrentUserData = async () => {
+      const response = await appwriteService.getCurrentUser()
+      setPayment_pages(response?.prefs.payment_pages)
+      setValidity(response?.prefs.validity)
+      console.log(response?.prefs.payment_pages)
+    }
+    getCurrentUserData()
+  }, []);
+
+
+
   const router = useRouter();
 
   const logout = async () => {
@@ -104,7 +124,7 @@ function DropdownMenu() {
           <Text className="text-gray-600">{Cookies.get("user_email")?.slice(0, 22)}</Text>
         </div>
       </div>
-      <div className="grid px-3.5 py-3.5 font-medium text-gray-700">
+      <div className="grid px-3.5 py-2 font-medium text-gray-700">
         {menuItems.map((item) => (
           <Link
             key={item.name}
@@ -115,7 +135,38 @@ function DropdownMenu() {
           </Link>
         ))}
       </div>
-      <div className="border-t border-gray-300 px-6 pb-6 pt-5">
+      {payment_pages && validity ? 
+     <>
+      <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between">
+        <p className="h-auto font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0">
+        Payment Pages  -            
+        </p>
+        {payment_pages < 5 ? (
+          <Badge color="danger">{payment_pages}</Badge>
+        ) : payment_pages < 50 ? (
+          <Badge color="warning">{payment_pages}</Badge>
+        ) : (
+          <Badge>{payment_pages}</Badge>
+        )}
+      </div> 
+
+      <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between">
+        <p className="h-auto font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0">
+          Validity  -
+        </p>
+        {validity < 5 ? (
+          <Badge color="danger">{validity + ' Days'}</Badge>
+        ) : validity < 10 ? (
+          <Badge color="warning">{validity + ' Days'}</Badge>
+        ) : (
+          <Badge>{validity + ' Days'}</Badge>
+        )}
+      </div> 
+     </>
+      :
+      <></>
+      }
+      <div className="border-t border-gray-300 px-6 py-4">
         <Button
           className="h-auto w-full justify-start p-0 font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0"
           variant="text"

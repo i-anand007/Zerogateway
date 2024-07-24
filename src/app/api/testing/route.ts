@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
       createdAt: item.$createdAt,
       status: item.status ? 'Active' : 'Deactivated', // Example status transformation
   }));
-    return NextResponse.json(result, { status: 200 });
+    return NextResponse.json(rawdata, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }

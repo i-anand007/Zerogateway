@@ -24,8 +24,8 @@ const pageHeader = {
 
 
 export default function PlansPage() {
-  const [data, setData] = useState(null);
-  const [formattedData, setFormattedData] = useState(null);
+  const [data, setData] = useState(null || {});
+  const [formattedData, setFormattedData] = useState<object | null>(null);
 
   useEffect(() => {
     async function getPlans() {
@@ -42,6 +42,8 @@ export default function PlansPage() {
             plan_discount: item.plan_discount,
             plan_price: item.plan_price,
             validity: item.validity,
+            payment_pages: item.payment_pages,
+            platform_fees: item.platform_fees,
             createdAt: item.$createdAt,
             status: item.status ? 'Active' : 'Blocked',
           }));

@@ -13,7 +13,7 @@ export const siteConfig = {
   // logo: logoImg,
   // icon: logoIconImg,
   mode: MODE.LIGHT,
-  layout: LAYOUT_OPTIONS.LITHIUM,
+  layout: LAYOUT_OPTIONS.BERYLLIUM,
   // TODO: favicon
 };
 

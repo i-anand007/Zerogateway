@@ -23,6 +23,7 @@ import Link from 'next/link';
 import { useLayout } from '@/hooks/use-layout';
 // import { useBerylliumSidebars } from '@/layouts/beryllium/beryllium-utils';
 import { LAYOUT_OPTIONS } from '@/config/enums';
+import { useBerylliumSidebars } from '@/layouts/beryllium/beryllium-utils';
 const QuillEditor = dynamic(() => import('@/components/ui/quill-editor'), {
   ssr: false,
 });
@@ -211,7 +212,7 @@ export function ProfileHeader({
   children,
 }: React.PropsWithChildren<{ title: string; description?: string }>) {
   const { layout } = useLayout();
-  // const { expandedLeft } = useBerylliumSidebars();
+  const { expandedLeft } = useBerylliumSidebars();
 
   return (
     <div

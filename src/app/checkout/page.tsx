@@ -79,7 +79,7 @@ export default function Checkout(
           {isLoading ? <Lottie animationData={animationData} /> :
             <>
               <div className="flex flex-row mb-5 items-center">
-                <div className="relative -top-1/3 aspect-square w-[110px] overflow-hidden rounded-full border-[6px] bg-gray-100 shadow-profilePic @2xl:w-[130px] @5xl:-top-2/3 @5xl:w-[150px] dark:border-gray-50 3xl:w-[150px]">
+                <div className="relative -top-1/5 aspect-square w-[70px] overflow-hidden rounded-full border-[6px] bg-gray-100 shadow-profilePic @2xl:w-[80px] @5xl:-top-2/3 @5xl:w-[150px] dark:border-gray-50 3xl:w-[100px]">
                   <Image
                     src="https://isomorphic-furyroad.s3.amazonaws.com/public/profile-image.webp"
                     alt="profile-pic"
@@ -89,10 +89,10 @@ export default function Checkout(
                 </div>
                 <Title
                   as="h2"
-                  className="rizzui-title-h2 font-bold ml-8 text-[20px] leading-snug md:text-xl md:!leading-normal lg:text-2xl lg:leading-normaltex"
+                  className="rizzui-title-h3 font-bold ml-4 text-[16px] leading-snug md:text-xl md:!leading-normal lg:text-xl lg:leading-normaltex"
                 >
                   Paying to  {' '}  <br />
-                  <span className="bg-gradient-to-r from-[#136A8A] to-[#267871] bg-clip-text text-transparent text-center text-[30px] leading-snug md:text-3xl md:!leading-normal lg:text-3xl lg:leading-normaltex ">
+                  <span className="bg-gradient-to-r from-[#136A8A] to-[#267871] bg-clip-text text-transparent text-center text-[20px] leading-snug md:text-2xl md:!leading-normal lg:text-2xl lg:leading-normaltex ">
                     User
                   </span>
 
@@ -117,7 +117,10 @@ export default function Checkout(
                 />
               </div>
 
-              <Tabs defaultValue="upi" className="items-center content-center">
+              {amount == null || isNaN(amount) ? (
+                <></>
+              ) : (
+                <Tabs defaultValue="upi" className="items-center content-center">
                 <TabsList className="grid grid-cols-2 ">
                   <TabsTrigger value="upi">UPI</TabsTrigger>
                   <TabsTrigger value="bank">BANK</TabsTrigger>
@@ -229,6 +232,9 @@ export default function Checkout(
 
 
               </Tabs>
+              )}
+
+              
             </>
           }
         </div>

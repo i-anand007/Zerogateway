@@ -3,6 +3,9 @@ export const routes = {
     users_management: "/admin/users-management",
     plans: "/admin/plans",
   },
+  auth: {
+    forgotPassword4: "/auth/forgot-password",
+  },
   // eCommerce: {
   //   dashboard: "/ecommerce",
   //   products: "/ecommerce/products",

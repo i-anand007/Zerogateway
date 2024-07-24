@@ -17,6 +17,8 @@ import axios from 'axios';
 import appwriteService from '@/app/appwrite';
 import { STATUSES } from '@/data/users-data';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+
 
 export type Plan = {
   id: string;
@@ -66,10 +68,6 @@ type Columns = {
   onChecked?: (id: string) => void;
 };
 
-const editUser = async (id: string) => {
-  console.log(id)
-}
-
 const statusOptions = [
   { label: 'Active', value: 'Active' },
   { label: 'Blocked', value: 'Blocked' },
@@ -84,46 +82,9 @@ export const getColumns = ({
   onHeaderCellClick,
   handleSelectAll,
   onChecked,
-}: Columns) => [
-    // {
-    //   title: (
-    //     <div className="flex items-center gap-3 whitespace-nowrap ps-3">
-    //       <Checkbox
-    //         title={'Select All'}
-    //         onChange={handleSelectAll}
-    //         checked={checkedItems.length === data.length}
-    //         className="cursor-pointer"
-    //       />
-    //       User ID
-    //     </div>
-    //   ),
-    //   dataIndex: 'checked',
-    //   key: 'checked',
-    //   width: 30,
-    //   render: (_: any, row: User) => (
-    //     <div className="inline-flex ps-3">
-    //       <Checkbox
-    //         className="cursor-pointer"
-    //         checked={checkedItems.includes(row.id)}
-    //         {...(onChecked && { onChange: () => onChecked(row.id) })}
-    //         label={`#${row.id}`}
-    //       />
-    //     </div>
-    //   ),
-    // },
-    // {
-    //   title: <HeaderCell title="Name" />,
-    //   dataIndex: 'fullName',
-    //   key: 'fullName',
-    //   width: 250,
-    //   render: (_: string, user: User) => (
-    //     <AvatarCard
-    //       src={user.avatar}
-    //       name={user.fullName}
-    //       description={user.email}
-    //     />
-    //   ),
-    // },
+}: Columns) => 
+  [
+
     {
       title: (
         <HeaderCell
@@ -143,7 +104,7 @@ export const getColumns = ({
       ),
       dataIndex: 'plan_base_price',
       key: 'id',
-      width: 100,
+      width: 80,
       render: (plan_base_price: string) => `₹ ${plan_base_price}`
     },
 
@@ -155,7 +116,7 @@ export const getColumns = ({
       ),
       dataIndex: 'plan_discount',
       key: 'id',
-      width: 100,
+      width: 80,
       render: (plan_discount: string) => `${plan_discount} %`
     },
 
@@ -167,8 +128,32 @@ export const getColumns = ({
       ),
       dataIndex: 'plan_price',
       key: 'id',
-      width: 100,
+      width: 80,
       render: (plan_price: string) => `₹ ${plan_price}`
+    },
+
+    {
+      title: (
+        <HeaderCell
+          title="Payment Pages"
+        />
+      ),
+      dataIndex: 'payment_pages',
+      key: 'id',
+      width: 80,
+    },
+
+    
+    {
+      title: (
+        <HeaderCell
+          title="Platform fees"
+        />
+      ),
+      dataIndex: 'platform_fees',
+      key: 'id',
+      width: 50,
+      render: (platform_fees: string) => `${platform_fees} %`
     },
 
     {
@@ -179,38 +164,9 @@ export const getColumns = ({
       ),
       dataIndex: 'validity',
       key: 'id',
-      width: 100,
+      width: 80,
       render: (validity: string) => `${validity} Days`
     },
-
-    // {
-    //   title: (
-    //     <HeaderCell
-    //       title="Role"
-    //       sortable
-    //       ascending={
-    //         sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
-    //       }
-    //     />
-    //   ),
-    //   onHeaderCell: () => onHeaderCellClick('role'),
-    //   dataIndex: 'role',
-    //   key: 'role',
-    //   width: 100,
-    //   render: (role: string) => role,
-    // },
-
-    // {
-    //   title: <HeaderCell title="Company Name" />,
-    //   dataIndex: 'companyName',
-    //   key: 'fullName',
-    //   width: 200,
-    //   render: (_: string, user: User) => (
-    //     <CompanyCard
-    //       name={user.companyName}
-    //       description={user.companyEmail} />
-    //   ),
-    // },
 
     {
       title: (
@@ -225,47 +181,10 @@ export const getColumns = ({
       onHeaderCell: () => onHeaderCellClick('createdAt'),
       dataIndex: 'createdAt',
       key: 'createdAt',
-      width: 100,
+      width: 80,
       render: (value: Date) => <DateCell date={value} />,
     },
 
-
-    // {
-    //   title: <HeaderCell title="Permissions" />,
-    //   dataIndex: 'permissions',
-    //   key: 'permissions',
-    //   width: 200,
-    //   render: (permissions: User['permissions'][]) => (
-    //     <div className="flex items-center gap-2">
-    //       {permissions.map((permission) => (
-    //         <Badge
-    //           key={permission}
-    //           rounded="lg"
-    //           variant="outline"
-    //           className="border-muted font-normal text-gray-500"
-    //         >
-    //           {permission}
-    //         </Badge>
-    //       ))}
-    //     </div>
-    //   ),
-    // },
-
-
-    // {
-    //   title: <HeaderCell
-    //     title="Status"
-    //     sortable
-    //     ascending={
-    //       sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
-    //     }
-    //   />,
-    //   onHeaderCell: () => onHeaderCellClick('status'),
-    //   dataIndex: 'status',
-    //   key: 'status',
-    //   width: 100,
-    //   render: (status: User['status']) => getStatusBadge(status),
-    // },
     {
       title: (
         <HeaderCell
@@ -296,7 +215,10 @@ export const getColumns = ({
           <DeletePopover
             title={`Delete this user`}
             description={`Are you sure you want to delete Plan ?`}
-            onDelete={() => appwriteService.deletePlan(plan.id)}
+            onDelete={() => {
+              appwriteService.deletePlan(plan.id);
+              onDeleteItem(plan.id);
+            }}
           />
         </div>
       ),
