@@ -1,41 +1,63 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 import { SubmitHandler, Controller } from 'react-hook-form';
-import { PiClock, PiEnvelopeSimple, PiPassword } from 'react-icons/pi';
-import { Form } from '@/components/ui/form';
-import { Loader, Text, Input, Button } from 'rizzui';
+import { PiEnvelopeSimple, PiPassword, PiSealCheckFill, PiUserCircleThin } from 'react-icons/pi';
+import { Loader, Text, Input, Button, cn, Title, FileInput } from 'rizzui';
 import FormGroup from '@/app/shared/form-group';
-// import FormFooter from '@/components/form-footer';
+import { useLayout } from '@/hooks/use-layout';
+import { LAYOUT_OPTIONS } from '@/config/enums';
+import { useBerylliumSidebars } from '@/layouts/beryllium/beryllium-utils';
 import {
-  defaultValues,
-  personalInfoFormSchema,
   PersonalInfoFormTypes,
 } from '@/utils/validators/personal-info.schema';
-import UploadZone from '@/components/ui/file-upload/upload-zone';
-import { countries, roles, timezones } from '@/data/forms/my-details';
-import AvatarUpload from '@/components/ui/file-upload/avatar-upload';
-import { ProfileHeader } from './profile-settings';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import appwriteService from '@/app/appwrite';
+import Cookies from 'js-cookie';
 
-const Select = dynamic(() => import('rizzui').then((mod) => mod.Select), {
-  ssr: false,
-  loading: () => (
-    <div className="grid h-10 place-content-center">
-      <Loader variant="spinner" />
+export function ProfileHeader({
+  title,
+  description,
+  children,
+}: React.PropsWithChildren<{ title?: string; description?: string; profie_image?: string }>) {
+  const { layout } = useLayout();
+  const { expandedLeft } = useBerylliumSidebars();
+
+  return (
+    <div
+      className={cn(
+        'relative z-0 pt-10  ',
+        layout === LAYOUT_OPTIONS.BERYLLIUM 
+      )}
+    >
+      <div className="relative z-10 mx-auto flex w-full flex-wrap items-center justify-start border-b border-dashed border-muted pb-10">
+        <div className="relative -top-1/3 aspect-square w-[80px] overflow-hidden rounded-full border-[6px] border-white bg-gray-100 shadow-profilePic @2xl:w-[100px] @5xl:-top-2/3 @5xl:w-[100px] dark:border-gray-50 3xl:w-[100px]">
+          <img
+            src={Cookies.get("profile_pic")}
+            alt="profile-pic"
+            className="aspect-auto"
+          />
+        </div>
+        <div className='ml-5'>
+          <Title
+            as="h2"
+            className="mb-2 inline-flex items-center gap-3 text-xl font-bold text-gray-900"
+          >
+            {title}
+            {/* <PiSealCheckFill className="h-5 w-5 text-primary md:h-6 md:w-6" /> */}
+          </Title>
+
+            <Text className="text-sm text-gray-500">{description}</Text>
+
+        </div>
+        {children}
+      </div>
     </div>
-  ),
-});
+  );
+}
 
-const QuillEditor = dynamic(() => import('@/components/ui/quill-editor'), {
-  ssr: false,
-});
-
-export default function PersonalInfoView({ $id }: { $id: string }) {
-
-  const [resource, setResource] = useState();
+export default function PersonalInfoView() {
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -43,7 +65,7 @@ export default function PersonalInfoView({ $id }: { $id: string }) {
     setSelectedFile(event.target.files[0]);
   };
 
-  const handleClick = () => {
+  const uploadFile = () => {
     if (!selectedFile) return;
     appwriteService.uploadFile(selectedFile);
   };
@@ -56,19 +78,20 @@ export default function PersonalInfoView({ $id }: { $id: string }) {
     });
   };
 
+
+
+  const userData = async () => {
+    const data = await appwriteService.getCurrentUser()
+    console.log(data)
+  }
+  userData()
+
   return (
     <div className='@container'>
       <ProfileHeader
-        title="Olivia Rhye"
-        description="olivia@example.com"
+        title={Cookies.get("user_name")}
+        description={Cookies.get("user_email")}
       />
-
-      <div>
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={handleClick}>Upload File</button>
-      </div>
-
-
 
       <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
         <FormGroup
@@ -85,6 +108,23 @@ export default function PersonalInfoView({ $id }: { $id: string }) {
             onClick={() => { }}
           >
             Update Name
+          </Button>
+        </FormGroup>
+
+        <FormGroup
+          title="Profile Image"
+          className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+        >
+          <FileInput
+            placeholder="Profile Image"
+            className="flex-grow"
+            onChange={handleFileChange}
+          />
+          <Button
+            className="w-full"
+            onClick={uploadFile}
+          >
+            Update Profile Image
           </Button>
         </FormGroup>
 

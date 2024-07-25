@@ -1124,7 +1124,7 @@ td.rc-table-cell-fix-right {
 
 input::placeholder,
 textarea::placeholder {
-  @apply dark:!text-gray-300;
+  @apply dark:!text-gray-500;
 }
 
 /* ................................................... */

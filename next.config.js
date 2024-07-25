@@ -16,6 +16,7 @@ const nextConfig = {
     },
     images: {
         domains: [
+            'cloud.appwrite.io',
             'isomorphic-furyroad.s3.amazonaws.com', 
             'w7.pngwing.com'
         ],

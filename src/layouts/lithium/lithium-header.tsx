@@ -19,6 +19,7 @@ import {
 import HeaderMenuLeft from '@/layouts/lithium/lithium-menu';
 // import Sidebar from '@/layouts/hydrogen/sidebar';
 import StickyHeader from '@/layouts/sticky-header';
+import Sidebar from '../beryllium/beryllium-sidebar-drawer';
 
 function HeaderMenuRight() {
   return (
@@ -85,9 +86,9 @@ export default function Header() {
       </div>
       <div className="flex w-full items-center gap-5 xl:w-auto 3xl:gap-6">
         <div className="flex w-full max-w-2xl items-center xl:w-auto">
-          {/* <HamburgerButton
+          <HamburgerButton
             view={<Sidebar className="static w-full 2xl:w-full" />}
-          /> */}
+          />
           <Link
             aria-label="Site Logo"
             href={'/'}

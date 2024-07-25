@@ -64,13 +64,12 @@ export default function UsersTable({ data = [] }: { data: any[] }) {
       onChecked: handleRowSelect,
       handleSelectAll,
       onEditItem: (id) => {
-        // Implement your logic for onEditItem if needed
       },
     }), [
       data,
       sortConfig.key,
       sortConfig.direction,
-      selectedRowKeys, // Ensure selectedRowKeys is defined somewhere in your component
+      selectedRowKeys, 
       onHeaderCellClick,
       onDeleteItem,
       handleRowSelect,
