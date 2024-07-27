@@ -13,7 +13,7 @@
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@floating-ui/react": "^0.26.13",
-    "@headlessui/react": "^1.7.18",
+    "@headlessui/react": "^2.1.2",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@reduxjs/toolkit": "^2.2.6",
@@ -28,7 +28,7 @@
     "i": "^0.3.7",
     "jotai": "^2.8.0",
     "lottie-react": "^2.4.0",
-    "next": "14.2.3",
+    "next": "^14.2.5",
     "next-themes": "^0.3.0",
     "node-appwrite": "^13.0.0",
     "npm": "^10.8.1",
@@ -51,7 +51,7 @@
     "react-redux": "^9.1.2",
     "react-use": "^17.5.0",
     "recharts": "^2.12.7",
-    "rizzui": "^0.8.4",
+    "rizzui": "^0.8.5",
     "simplebar-react": "^3.2.5",
     "tailwind-merge": "^2.3.0",
     "zod": "^3.23.8"
@@ -66,7 +66,7 @@
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.3",
     "postcss": "^8.4.38",
-    "rimraf": "^5.0.5",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   }

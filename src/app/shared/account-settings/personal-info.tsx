@@ -95,23 +95,6 @@ export default function PersonalInfoView() {
 
       <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
         <FormGroup
-          title="Name"
-          className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
-        >
-          <Input
-            placeholder="Full Name"
-            className="flex-grow"
-            onChange={() => { }}
-          />
-          <Button
-            className="w-full"
-            onClick={() => { }}
-          >
-            Update Name
-          </Button>
-        </FormGroup>
-
-        <FormGroup
           title="Profile Image"
           className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
         >
@@ -125,6 +108,23 @@ export default function PersonalInfoView() {
             onClick={uploadFile}
           >
             Update Profile Image
+          </Button>
+        </FormGroup>
+
+        <FormGroup
+          title="Name"
+          className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+        >
+          <Input
+            placeholder="Full Name"
+            className="flex-grow"
+            onChange={() => { }}
+          />
+          <Button
+            className="w-full"
+            onClick={() => { }}
+          >
+            Update Name
           </Button>
         </FormGroup>
 

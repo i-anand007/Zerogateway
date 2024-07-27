@@ -68,11 +68,11 @@ export default function AuthWrapper({
       const isLoggedIn = async () => {
         const response: boolean = await appwriteService.isLoggedIn()
           if (response == true) {
-            const response: any = await appwriteService.getCurrentUser()
-            Cookies.set("user_loggedIn", "true")
-            Cookies.set("user_name", response?.name)
-            Cookies.set("user_email", response?.email)
-            Cookies.set("user_labels", response?.labels)
+            // const response: any = await appwriteService.getCurrentUser()
+            // Cookies.set("user_loggedIn", "true")
+            // Cookies.set("user_name", response?.name)
+            // Cookies.set("user_email", response?.email)
+            // Cookies.set("user_labels", response?.labels)
             router.push('/');
         }
       }

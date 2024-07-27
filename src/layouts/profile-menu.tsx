@@ -1,7 +1,6 @@
 'use client';
 import { Title, Text, Avatar, Button, Popover, Badge } from 'rizzui';
 import cn from '@/utils/class-names';
-import { routes } from '@/config/routes';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -29,8 +28,8 @@ export default function ProfileMenu({
           )}
         >
           <Avatar
-          src={Cookies.get("profile_pic")}
-          name= {Cookies.get("user_name")}
+            src={Cookies.get("profile_pic")}
+            name={Cookies.get("user_name") || ''}
             className={cn('!h-9 w-9 sm:!h-10 sm:!w-10', avatarClassName)}
           />
           {!!username && (
@@ -100,12 +99,30 @@ function DropdownMenu() {
 
   const router = useRouter();
 
+  const today = Date.now()
+  console.log(today.toString())
+  // console.log(isISOStringWithTimezone())
+
+  var timeStr = today.
+  var date = new Date(timeStr);
+  var day = date.getDate();
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+
+  console.log(
+    date,
+    day,
+    year,
+    month
+  )
+
   const logout = async () => {
     await appwriteService.logout()
     Cookies.set("user_loggedIn", "false")
     Cookies.set("user_id", "")
     Cookies.set("user_name", "")
     Cookies.set("user_email", "")
+    Cookies.set("profile_pic", "")
     Cookies.set("user_labels", [])
     toast.success('Logged Out')
     router.push('/auth/login');
@@ -115,8 +132,8 @@ function DropdownMenu() {
       <div className="flex items-center border-b border-gray-300 px-6 pb-5 pt-6">
         <Avatar
           src={Cookies.get("profile_pic")}
-          name= {Cookies.get("user_name")}
-        /> 
+          name={Cookies.get("user_name") || ''}
+        />
         <div className="ms-3">
           <Title as="h6" className="font-semibold">
             {Cookies.get("user_name")}
@@ -135,36 +152,36 @@ function DropdownMenu() {
           </Link>
         ))}
       </div>
-      {payment_pages && validity ? 
-     <>
-      <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between">
-        <p className="h-auto font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0">
-        Payment Pages  -            
-        </p>
-        {payment_pages < 5 ? (
-          <Badge color="danger">{payment_pages}</Badge>
-        ) : payment_pages < 50 ? (
-          <Badge color="warning">{payment_pages}</Badge>
-        ) : (
-          <Badge>{payment_pages}</Badge>
-        )}
-      </div> 
+      {payment_pages && validity ?
+        <>
+          <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between">
+            <p className="h-auto font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0">
+              Payment Pages  -
+            </p>
+            {payment_pages < 5 ? (
+              <Badge color="danger">{payment_pages}</Badge>
+            ) : payment_pages < 50 ? (
+              <Badge color="warning">{payment_pages}</Badge>
+            ) : (
+              <Badge>{payment_pages}</Badge>
+            )}
+          </div>
 
-      <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between">
-        <p className="h-auto font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0">
-          Validity  -
-        </p>
-        {validity < 5 ? (
-          <Badge color="danger">{validity + ' Days'}</Badge>
-        ) : validity < 10 ? (
-          <Badge color="warning">{validity + ' Days'}</Badge>
-        ) : (
-          <Badge>{validity + ' Days'}</Badge>
-        )}
-      </div> 
-     </>
-      :
-      <></>
+          <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between">
+            <p className="h-auto font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0">
+              Validity  -
+            </p>
+            {validity < 5 ? (
+              <Badge color="danger">{validity + ' Days'}</Badge>
+            ) : validity < 10 ? (
+              <Badge color="warning">{validity + ' Days'}</Badge>
+            ) : (
+              <Badge>{validity + ' Days'}</Badge>
+            )}
+          </div>
+        </>
+        :
+        <></>
       }
       <div className="border-t border-gray-300 px-6 py-4">
         <Button
