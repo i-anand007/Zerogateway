@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import appwriteService from '@/app/appwrite';
 import toast from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import getDaysDifference from '@/hooks/use-date-difference';
 
 
 export default function ProfileMenu({
@@ -83,15 +84,17 @@ const prefs = {
 
 function DropdownMenu() {
   const [payment_pages, setPayment_pages] = useState()
-  const [validity, setValidity] = useState()
+  const [validity, setValidity] = useState<number | undefined>(undefined)
 
   useEffect(() => {
     const getCurrentUserData = async () => {
       const response = await appwriteService.getCurrentUser()
       setPayment_pages(response?.prefs.payment_pages)
-      setValidity(response?.prefs.validity)
-      console.log(response?.prefs.payment_pages)
+      const val = new Date(response?.prefs.validity)
+      const daysDifference = getDaysDifference(val);
+      setValidity(daysDifference)
     }
+
     getCurrentUserData()
   }, []);
 
@@ -99,22 +102,7 @@ function DropdownMenu() {
 
   const router = useRouter();
 
-  const today = Date.now()
-  console.log(today.toString())
-  // console.log(isISOStringWithTimezone())
 
-  var timeStr = today.
-  var date = new Date(timeStr);
-  var day = date.getDate();
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1;
-
-  console.log(
-    date,
-    day,
-    year,
-    month
-  )
 
   const logout = async () => {
     await appwriteService.logout()
@@ -152,7 +140,7 @@ function DropdownMenu() {
           </Link>
         ))}
       </div>
-      {payment_pages && validity ?
+      {payment_pages && validity !== undefined && validity > 0 ?
         <>
           <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between">
             <p className="h-auto font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0">
@@ -171,17 +159,30 @@ function DropdownMenu() {
             <p className="h-auto font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0">
               Validity  -
             </p>
-            {validity < 5 ? (
-              <Badge color="danger">{validity + ' Days'}</Badge>
-            ) : validity < 10 ? (
-              <Badge color="warning">{validity + ' Days'}</Badge>
-            ) : (
-              <Badge>{validity + ' Days'}</Badge>
-            )}
+            {validity <= 0 ? (
+              <Badge color="danger">{0 + ' Days'}</Badge>
+            ) :
+              validity < 5 ? (
+                <Badge color="danger">{validity + ' Days'}</Badge>
+              ) :
+                validity < 10 ? (
+                  <Badge color="warning">{validity + ' Days'}</Badge>
+                ) : (
+                  <Badge>{validity + ' Days'}</Badge>
+                )}
           </div>
         </>
         :
         <></>
+      }
+      {validity !== undefined && validity <= 0 ? 
+      <>
+      <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between bg-red-600">
+            <p className="h-auto font-medium outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0 text-white">
+              Plan Not Active
+            </p>
+          </div>
+      </> : <></>
       }
       <div className="border-t border-gray-300 px-6 py-4">
         <Button

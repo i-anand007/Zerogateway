@@ -15,6 +15,10 @@ const menuItems = [
     value: '/profile-settings',
   },
   {
+    label: 'KYC',
+    value: '/profile-settings/submit-kyc',
+  },
+  {
     label: 'Billing',
     value: '/profile-settings/billing',
   },

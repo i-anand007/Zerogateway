@@ -18,7 +18,6 @@ export default function Home() {
       payment_pages: '40',
       validity: '2024-07-26T08:43:21.224+00:00',
       KYC: true,
-      profile_pic: '66a1f8bb003a857f8a52',
     })
   }
 

@@ -20,6 +20,8 @@ import { checkoutBankSchema, CheckoutBankSchema } from '@/utils/validators/check
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { PiChecksBold, PiFilesBold } from 'react-icons/pi';
 import BankCard from '@/components/cards/bank-card';
+import { useModal } from '@/app/shared/modal-views/use-modal';
+import SubmitKyc from './submit-kyc';
 
 
 export default function Checkout(
@@ -45,6 +47,8 @@ export default function Checkout(
   const [reset, setReset] = useState({});
   const [isCopied, setIsCopied] = useState(false);
   const [state, copyToClipboard] = useCopyToClipboard();
+
+  const { openModal } = useModal();
   
   const formData = {
     amount,
@@ -69,32 +73,23 @@ export default function Checkout(
 
   return (
 
+  
+
     <div >
-       <div className={'mx-auto w-full max-w-md rounded-xl bg-white px-4 py-9 sm:px-6 md:max-w-xl md:px-10 md:py-12 lg:max-w-[700px] lg:px-16 xl:rounded-2xl 3xl:rounded-3xl dark:bg-gray-50'} >
-        <div className="items-center bg-slate-300 p-6">
+      <span
+                onClick={() =>
+                  openModal({
+                    view: <SubmitKyc />,
+                  })
+                }
+              >
+                Add User
+              </span>
+       <div className={'mx-auto rounded-xl bg-white px-4 py-9 sm:px-6 md:max-w-xl md:px-10 md:py-12 lg:max-w-[1200px]  xl:rounded-2xl 3xl:rounded-3xl dark:bg-gray-50'} >
+        <div className="items-center rounded-xl bg-slate-200 p-6">
 
           {isLoading ? <Lottie animationData={animationData} /> :
-            <>
-              <div className="flex flex-row mb-5 items-center">
-                <div className="relative -top-1/5 aspect-square w-[70px] overflow-hidden rounded-full border-[6px] bg-gray-100 shadow-profilePic @2xl:w-[80px] @5xl:-top-2/3 @5xl:w-[150px] dark:border-gray-50 3xl:w-[100px]">
-                  <Image
-                    src="https://isomorphic-furyroad.s3.amazonaws.com/public/profile-image.webp"
-                    alt="profile-pic"
-                    fill
-                    className=""
-                  />
-                </div>
-                <Title
-                  as="h2"
-                  className="rizzui-title-h3 font-bold ml-4 text-[16px] leading-snug md:text-xl md:!leading-normal lg:text-xl lg:leading-normaltex"
-                >
-                  Paying to  {' '}  <br />
-                  <span className="bg-gradient-to-r from-[#136A8A] to-[#267871] bg-clip-text text-transparent text-center text-[20px] leading-snug md:text-2xl md:!leading-normal lg:text-2xl lg:leading-normaltex ">
-                    User
-                  </span>
-
-                </Title>
-              </div>
+            <>            
 
               <div className="space-y-5 lg:space-y-6 mb-5">
                 <Input
