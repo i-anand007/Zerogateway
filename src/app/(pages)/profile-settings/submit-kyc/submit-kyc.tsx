@@ -149,7 +149,7 @@ export default function SubmitKyc() {
               )}
             /> */}
 
-            <div className="col-span-full flex items-center justify-end gap-4">
+            {/* <div className="col-span-full flex items-center justify-end gap-4">
               <Button
                 variant="outline"
                 onClick={closeModal}
@@ -164,7 +164,7 @@ export default function SubmitKyc() {
               >
                 Create User
               </Button>
-            </div>
+            </div> */}
           </>
         );
       }}

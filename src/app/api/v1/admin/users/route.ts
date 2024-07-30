@@ -25,7 +25,8 @@ export async function GET(req: NextRequest) {
       phone: item.phone,
       role: item.labels.includes("Administrator") ? 'Administrator' : 'Customer',
       createdAt: item.$createdAt,
-      status: item.status ? 'Active' : 'Blocked', // Example status transformation
+      status: item.status ? 'Active' : 'Blocked', 
+      KYCstatus: item.prefs.KYC ? item.prefs.KYC : 'Pending', 
   }));
     return NextResponse.json(result, { status: 200 });
   } catch (error) {

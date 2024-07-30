@@ -33,11 +33,11 @@ export function ProfileHeader({
     >
       <div className="relative z-10 mx-auto flex w-full flex-wrap items-center justify-start border-b border-dashed border-muted pb-10">
         <div className="relative -top-1/3 aspect-square w-[80px] overflow-hidden rounded-full border-[6px] border-white bg-gray-100 shadow-profilePic @2xl:w-[100px] @5xl:-top-2/3 @5xl:w-[100px] dark:border-gray-50 3xl:w-[100px]">
-          <img
+          {/* <img
             src={Cookies.get("profile_pic")}
             alt="profile-pic"
             className="aspect-auto"
-          />
+          /> */}
         </div>
         <div className='ml-5'>
           <Title

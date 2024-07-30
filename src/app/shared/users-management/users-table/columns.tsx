@@ -1,21 +1,17 @@
 'use client';
 
 import { STATUSES, type User } from '@/data/users-data';
-import { Text, Badge, Tooltip, Checkbox, ActionIcon, Button, Select } from 'rizzui';
+import { Text, Badge, Tooltip, ActionIcon, Select } from 'rizzui';
 import { HeaderCell } from '@/components/ui/table';
 import EyeIcon from '@/components/icons/eye';
 import PencilIcon from '@/components/icons/pencil';
 import AvatarCard from '@/components/ui/avatar-card';
 import DateCell from '@/components/ui/date-cell';
 import DeletePopover from '@/app/shared/delete-popover';
-import CompanyCard from '@/components/ui/user-company-card';
-import EditUser from '../edit-user';
-import ModalButton from '../../modal-button';
-import ModalButtonIcon from '../../modal-button-icon';
-import { useModal } from '../../modal-views/use-modal';
 import { PiCheckCircleBold, PiClockBold, PiXCircleBold } from 'react-icons/pi';
 import { useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 function getStatusBadge(status: User['status']) {
   switch (status) {
@@ -64,42 +60,18 @@ const statusOptions = [
   { label: 'Blocked', value: 'Blocked' },
 ];
 
+const KYCstatusOptions = [
+  { label: 'Pending', value: 'Pending' },
+  { label: 'Approved', value: 'Approved' },
+  { label: 'Rejected', value: 'Rejected' },
+];
+
 
 export const getColumns = ({
-  data,
   sortConfig,
-  checkedItems,
   onDeleteItem,
   onHeaderCellClick,
-  handleSelectAll,
-  onChecked,
 }: Columns) => [
-    // {
-    //   title: (
-    //     <div className="flex items-center gap-3 whitespace-nowrap ps-3">
-    //       <Checkbox
-    //         title={'Select All'}
-    //         onChange={handleSelectAll}
-    //         checked={checkedItems.length === data.length}
-    //         className="cursor-pointer"
-    //       />
-    //       User ID
-    //     </div>
-    //   ),
-    //   dataIndex: 'checked',
-    //   key: 'checked',
-    //   width: 30,
-    //   render: (_: any, row: User) => (
-    //     <div className="inline-flex ps-3">
-    //       <Checkbox
-    //         className="cursor-pointer"
-    //         checked={checkedItems.includes(row.id)}
-    //         {...(onChecked && { onChange: () => onChecked(row.id) })}
-    //         label={`#${row.id}`}
-    //       />
-    //     </div>
-    //   ),
-    // },
     {
       title: <HeaderCell title="Name" />,
       dataIndex: 'fullName',
@@ -142,18 +114,6 @@ export const getColumns = ({
       render: (role: string) => role,
     },
 
-    // {
-    //   title: <HeaderCell title="Company Name" />,
-    //   dataIndex: 'companyName',
-    //   key: 'fullName',
-    //   width: 200,
-    //   render: (_: string, user: User) => (
-    //     <CompanyCard
-    //       name={user.companyName}
-    //       description={user.companyEmail} />
-    //   ),
-    // },
-
     {
       title: (
         <HeaderCell
@@ -171,43 +131,6 @@ export const getColumns = ({
       render: (value: Date) => <DateCell date={value} />,
     },
 
-
-    // {
-    //   title: <HeaderCell title="Permissions" />,
-    //   dataIndex: 'permissions',
-    //   key: 'permissions',
-    //   width: 200,
-    //   render: (permissions: User['permissions'][]) => (
-    //     <div className="flex items-center gap-2">
-    //       {permissions.map((permission) => (
-    //         <Badge
-    //           key={permission}
-    //           rounded="lg"
-    //           variant="outline"
-    //           className="border-muted font-normal text-gray-500"
-    //         >
-    //           {permission}
-    //         </Badge>
-    //       ))}
-    //     </div>
-    //   ),
-    // },
-
-
-    // {
-    //   title: <HeaderCell
-    //     title="Status"
-    //     sortable
-    //     ascending={
-    //       sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
-    //     }
-    //   />,
-    //   onHeaderCell: () => onHeaderCellClick('status'),
-    //   dataIndex: 'status',
-    //   key: 'status',
-    //   width: 100,
-    //   render: (status: User['status']) => getStatusBadge(status),
-    // },
     {
       title: (
         <HeaderCell
@@ -227,6 +150,27 @@ export const getColumns = ({
         return <StatusSelect selectItem={status} userId={user.id} />;
       },
     },
+
+    {
+      title: (
+        <HeaderCell
+          title="KYC Status"
+          sortable
+          ascending={
+            sortConfig?.direction === 'asc' && sortConfig?.key === 'status'
+          }
+        />
+      ),
+      dataIndex: 'KYCstatus',
+      key: 'KYCstatus',
+      width: 50,
+      onHeaderCell: () => onHeaderCellClick('KYCstatus'),
+      render: (KYCstatus: string, user: User) => {
+        return <KYCStatusSelect selectKYCItem={KYCstatus} userId={user.id} />;
+      },
+    },
+
+
     {
       title: <></>,
       dataIndex: 'action',
@@ -257,23 +201,7 @@ export const getColumns = ({
             >
               <EyeIcon className="h-4 w-4" />
             </ActionIcon>
-          </Tooltip>
-          {/* <EditUser /> */}
-          {/* <ModalButtonIcon
-            icon=<ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              className="hover:!border-gray-900 hover:text-gray-700"
-            >
-              <PencilIcon className="h-4 w-4" />
-            </ActionIcon>
-            view=<EditUser (user.id) />
-            customSize="600px"
-            className="mt-0"
-          /> */}
-
-
+          </Tooltip>   
 
           <DeletePopover
             title={`Delete this user`}
@@ -285,6 +213,7 @@ export const getColumns = ({
     },
   ];
 
+  
 function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: string }) {
   const selectItemValue = statusOptions.find(
     (option: { label: string | undefined; }) => option.label === selectItem
@@ -292,7 +221,6 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
   const [value, setValue] = useState(selectItemValue);
   const userStatusChange = async (data: any) => {
     setValue(data)
-    console.log(userId)
     if (data.value == 'Active') {
       axios.post('/api/v1/admin/users/update/status',
         {
@@ -312,8 +240,8 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
   return (
     <Select
       dropdownClassName="!z-10"
-      className="min-w-[140px]"
-      inPortal={false}
+      className="min-w-[100px]"
+      inPortal={true}
       placeholder="Select Status"
       options={statusOptions}
       value={value}
@@ -343,6 +271,93 @@ function renderOptionDisplayValue(value: string) {
           <PiCheckCircleBold className="shrink-0 fill-green-dark text-base" />
           <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
             {value}
+          </Text>
+        </div>
+      );
+  }
+}
+
+
+
+  
+function KYCStatusSelect({ selectKYCItem, userId }: { selectKYCItem?: string; userId: string }) {
+  const selectKYCItemValue = KYCstatusOptions.find(
+    (option: { label: string | undefined; }) => option.label === selectKYCItem
+  );
+  const [KYCvalue, setKYCValue] = useState(selectKYCItemValue);
+  const userKYCStatusChange = async (data: any) => {
+    setKYCValue(data)
+    if (data.value == 'Pending') {
+      axios.patch('/api/v1/admin/users/update/prefs',
+        {
+          "id": userId,
+          "prefs": { 'KYC': 'Pending' }
+        }
+      )
+      toast.success('KYC Updated')
+    } else 
+    if (data.value == 'Approved') {
+      axios.patch('/api/v1/admin/users/update/prefs',
+        {
+          "id": userId,
+          "prefs": { 'KYC': 'Approved' }
+        }
+      )
+      toast.success('KYC Updated')
+    } else
+    if (data.value == 'Rejected') {
+      axios.patch('/api/v1/admin/users/update/prefs',
+        {
+          "id": userId,
+          "prefs": { 'KYC': 'Rejected' }
+        }
+      )
+      toast.success('KYC Updated')
+    }
+  }
+  return (
+    <Select
+      dropdownClassName="!z-10"
+      className="min-w-[100px]"
+      inPortal={true}
+      placeholder="Select Status"
+      options={KYCstatusOptions}
+      value={KYCvalue}
+      onChange={(e) => userKYCStatusChange(e)}
+      displayValue={(option: { value: any }) =>
+        renderKYCOptionDisplayValue(option.value as string)
+      }
+    />
+  );
+}
+
+
+function renderKYCOptionDisplayValue(KYCvalue: string) {
+  switch (KYCvalue) {
+    case 'Rejected':
+      return (
+        <div className="flex items-center">
+          <PiXCircleBold className="shrink-0 fill-red-dark  text-base" />
+          <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
+            {KYCvalue}
+          </Text>
+        </div>
+      );
+    case 'Pending':
+      return (
+        <div className="flex items-center">
+          <PiClockBold className="shrink-0 fill-orange-600  text-base" />
+          <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
+            {KYCvalue}
+          </Text>
+        </div>
+      );
+    default:
+      return (
+        <div className="flex items-center">
+          <PiCheckCircleBold className="shrink-0 fill-green-dark text-base" />
+          <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
+            {KYCvalue}
           </Text>
         </div>
       );
