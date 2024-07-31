@@ -40,10 +40,6 @@ export default function Header({ className }: { className?: string }) {
           >
             <Logo iconOnly={true} />
           </Link>
-          <SearchWidget
-            icon={<PiMagnifyingGlass className="me-3 h-[20px] w-[20px]" />}
-            className="xl:w-[500px]"
-          />
         </div>
 
         <div className="flex items-center justify-between">

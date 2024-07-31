@@ -17,9 +17,9 @@ import appwriteService from '@/app/appwrite';
 import { AppwriteUsersApi } from '@/app/appwrite_api';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const rawdata = await appwriteService.listKYC()
+    const rawdata = await AppwriteUsersApi.list()
   //   const result  = rawdata.users.map(item => ({
   //     id: item.$id,
   //     fullName: item.name,

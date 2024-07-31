@@ -39,6 +39,7 @@ export default function FilterElement({
 
         <StatusField
           options={roles}
+          inPortal={true}
           dropdownClassName="!z-10 w-48"
           value={filters['role']}
           placeholder="Filter by Role"

@@ -96,12 +96,6 @@ export default function Header() {
           >
             <Logo iconOnly={true} />
           </Link>
-          <SearchWidget
-            icon={<PiMagnifyingGlassDuotone className="h-[20px] w-[20px]" />}
-            className={cn(
-              'text-gray-700 hover:text-gray-900 focus-visible:outline-0 active:translate-y-0 xl:border-0 xl:p-0 xl:shadow-none xl:backdrop-blur-none xl:hover:border-0 xl:hover:outline-0 xl:focus:outline-0 xl:focus-visible:outline-0 [&_.magnifying-glass]:me-0 [&_.placeholder-text]:hidden [&_.search-command]:ms-2 [&_.search-command]:hidden [&_.search-command]:lg:text-gray-0'
-            )}
-          />
         </div>
         <HeaderMenuRight />
       </div>
