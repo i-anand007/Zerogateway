@@ -297,6 +297,21 @@ export class AppwriteService {
         }
     }
 
+    async addAdminUPI(data: object) {
+        try {
+            const createDocument = await databases.createDocument(
+                DATABASE_ID,
+                PLAN_ID,
+                ID.unique(),
+                data
+            );
+            return (createDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
 
 }
 
