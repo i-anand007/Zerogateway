@@ -7,7 +7,8 @@ import { STATUSES } from '@/data/users-data';
 import { rolesList } from '@/data/users-management';
 import ModalButton from '@/app/shared/modal-button';
 import CreateUser from '@/app/shared/users-management/create-user';
-import CreateUPI from '../create-upi';
+import CreateUPI from '../create-bank';
+import CreateBANK from '../create-bank';
 
 type FilterElementProps = {
   isFiltered: boolean;
@@ -35,7 +36,7 @@ export default function FilterElement({
     <>
       <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container ">
         <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
-          All UPI
+          All BANKS
         </Title>
 
         {/* <StatusField
@@ -79,8 +80,8 @@ export default function FilterElement({
 
         <div className="-order-5 flex basis-auto justify-end @xl:-order-4 @4xl:-order-1">
           <ModalButton
-            label="Add UPI"
-            view={<CreateUPI />}
+            label="Add BANK"
+            view={<CreateBANK />}
             customSize="600px"
             className="mt-0"
           />

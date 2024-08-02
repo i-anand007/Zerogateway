@@ -35,6 +35,8 @@ const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || '669a0ea7002f1ee
 
 const PLAN_ID = process.env.NEXT_PUBLIC_APPWRITE_PLAN_ID || '669670f90033fcd711e4'
 const KYC_ID = '66a88fe2000ed1a3d59d'
+const AdminUPI_ID = '669b9e9a0011cfaf2917'
+const AdminBANK_ID = '669ba107001349375425'
 
 
 
@@ -285,11 +287,11 @@ export class AppwriteService {
 
     async listKYC() {
         try {
-            const listDocument = await databases.listDocuments(
+            const listDocuments = await databases.listDocuments(
                 DATABASE_ID,
                 KYC_ID,
             );
-            return listDocument
+            return listDocuments
         } catch (error: any) {
             let response = error.toString();
             toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
@@ -301,11 +303,137 @@ export class AppwriteService {
         try {
             const createDocument = await databases.createDocument(
                 DATABASE_ID,
-                PLAN_ID,
+                AdminUPI_ID,
                 ID.unique(),
                 data
             );
             return (createDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
+    async listAdminUPI() {
+        try {
+            const listDocuments = await databases.listDocuments(
+                DATABASE_ID,
+                AdminUPI_ID,
+            );
+            console.log(listDocuments)
+            const data = listDocuments.documents.map(item => ({
+                id: item.$id,
+                createdAt: item.$createdAt,
+                upi_id : item.upi_id,
+                merchant : item.merchant == 'true' ? 'Merchant' : 'Non Merchant',
+                status: item.status ? 'Active' : 'Blocked',
+            }))
+            return (data)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
+    async updateAdminUPIstatus(data: { id: string; payload: object; }) {
+        try {
+            const updateDocument = await databases.updateDocument(
+                DATABASE_ID,
+                AdminUPI_ID,
+                data.id,
+                data.payload
+            );
+            return (updateDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+    
+    async deleteAdminUPI(data: string) {
+        try {
+            const deleteDocument = await databases.deleteDocument(
+                DATABASE_ID,
+                AdminUPI_ID,
+                data
+            );
+            toast.success("UPI Deleted")
+            return (deleteDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+    
+    async addAdminBANK(data: object) {
+        try {
+            const createDocument = await databases.createDocument(
+                DATABASE_ID,
+                AdminBANK_ID,
+                ID.unique(),
+                data
+            );
+            return (createDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+    
+    async listAdminBANK() {
+        try {
+            const listDocuments = await databases.listDocuments(
+                DATABASE_ID,
+                AdminBANK_ID,
+            );
+            console.log(listDocuments)
+            const data = listDocuments.documents.map(item => ({
+                id: item.$id,
+                createdAt: item.$createdAt,
+                bank_name : item.bank_name,
+                account_name : item.account_name,
+                account_number : item.account_number,
+                ifsc : item.ifsc,
+                status: item.status ? 'Active' : 'Blocked',
+            }))
+            return (data)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+    
+    async updateAdminBANKstatus(data: { id: string; payload: object; }) {
+        try {
+            const updateDocument = await databases.updateDocument(
+                DATABASE_ID,
+                AdminBANK_ID,
+                data.id,
+                data.payload
+            );
+            return (updateDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+    
+    async deleteAdminBANK(data: string) {
+        try {
+            const deleteDocument = await databases.deleteDocument(
+                DATABASE_ID,
+                AdminBANK_ID,
+                data
+            );
+            toast.success("BANK Deleted")
+            return (deleteDocument)
         } catch (error: any) {
             let response = error.toString();
             toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')

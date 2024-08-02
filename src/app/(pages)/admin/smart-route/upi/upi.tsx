@@ -1,25 +1,20 @@
 'use client';
 
-
 import { useEffect, useState } from 'react';
 import appwriteService from '@/app/appwrite';
-import axios from 'axios';
 import Loading from '@/components/loading';
 import Table from './table';
 
 
 export default function UPI() {
-
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const [Data, setData] = useState(null)
+  const [Data, setData] = useState<any>(null)
   
   useEffect(() => {
     async function getUser() {
       try {
-        const response = await axios.get('/api/v1/admin/users');
+        const response = await appwriteService.listAdminUPI();
         if (response) {
-          setData(response.data);
+          setData(response);
         }
         console.log(response);
         
@@ -36,7 +31,7 @@ export default function UPI() {
     {Data === null ? (
       <Loading/>
     ) : (
-      <Table data={Data} /> // Render UsersTable once usersData is not null
+      <Table data={Data} />
     )}
   </>
   );

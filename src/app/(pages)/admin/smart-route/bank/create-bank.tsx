@@ -8,27 +8,24 @@ import { useRouter } from 'next/router';
 import appwriteService from '@/app/appwrite';
 import toast from 'react-hot-toast';
 
-export default function CreateUPI() {
+export default function CreateBANK() {
   const { closeModal } = useModal();
   const [isLoading, setLoading] = useState(false);
-  const [UPI, setUPI] = useState('');
-  const [merchant, setMerchant] = useState<object>({
-    label: 'Non Merchant', value: 'false'
-  });
-
-  const upiType = [
-    { label: 'Non Merchant', value: 'false' },
-    { label: 'Merchant', value: 'true' },
-  ];
+  const [bank_name, setBank_name] = useState('');
+  const [account_name, setAccount_name] = useState('');
+  const [account_number, setAccount_number] = useState('');
+  const [ifsc, setIfsc] = useState('');
 
   const Submit = async () => {
     setLoading(true);
     setTimeout(async () => {
       const user = await appwriteService.getCurrentUser()
-      const addUPI = await appwriteService.addAdminUPI({
+      const addUPI = await appwriteService.addAdminBANK({
         user_Id: user?.$id,
-        upi_id: UPI,
-        merchant: (merchant as { value: string }).value,
+        account_name : account_name,
+        bank_name : bank_name,
+        account_number : account_number,
+        ifsc : ifsc,
       })
       {
         addUPI.$id ?
@@ -52,18 +49,33 @@ export default function CreateUPI() {
         </ActionIcon>
       </div>
 
+      
       <Input
-        label="UPI Id"
-        placeholder="Enter UPI Id"
+        label="Bank Name"
+        placeholder="Bank Name"
         className="col-span-half"
-        onChange={(e) => { setUPI(e.target.value) }}
+        onChange={(e) => {setBank_name(e.target.value) }}
       />
 
-      <Select
-        label="UPI Type"
-        value={merchant}
-        options={upiType}
-        onChange={setMerchant}
+      <Input
+        label="Account Holder Name"
+        placeholder="Enter Account Holder Name"
+        className="col-span-half"
+        onChange={(e) => {setAccount_name(e.target.value) }}
+      />
+
+      <Input
+        label="Account Number"
+        placeholder="Enter Account Number"
+        className="col-span-half"
+        onChange={(e) => {setAccount_number(e.target.value) }}
+      />
+
+      <Input
+        label="IFSC Code"
+        placeholder="Enter IFSC Code"
+        className="col-span-half"
+        onChange={(e) => {setIfsc(e.target.value) }}
       />
 
       <div className="col-span-full flex items-center justify-end gap-4">

@@ -74,9 +74,9 @@ export const getColumns = ({
   onHeaderCellClick,
 }: Columns) => [
     {
-      title: <HeaderCell title="UPI Id" />,
-      dataIndex: 'upi_id',
-      key: 'upi_id',
+      title: <HeaderCell title="Account Name" />,
+      dataIndex: 'account_name',
+      key: 'account_name',
       width: 150,
     },
 
@@ -95,18 +95,52 @@ export const getColumns = ({
     {
       title: (
         <HeaderCell
-          title="UPI Type"
+          title="Bank Name"
           sortable
           ascending={
-            sortConfig?.direction === 'asc' && sortConfig?.key === 'merchant'
+            sortConfig?.direction === 'asc' && sortConfig?.key === 'bank_name'
           }
         />
       ),
-      onHeaderCell: () => onHeaderCellClick('merchant'),
-      dataIndex: 'merchant',
-      key: 'merchant',
+      onHeaderCell: () => onHeaderCellClick('bank_name'),
+      dataIndex: 'bank_name',
+      key: 'bank_name',
       width: 100,
-      render: (merchant: string) => merchant,
+      render: (bank_name: string) => bank_name,
+    },
+
+    {
+      title: (
+        <HeaderCell
+          title="Account Number"
+          sortable
+          ascending={
+            sortConfig?.direction === 'asc' && sortConfig?.key === 'account_number'
+          }
+        />
+      ),
+      onHeaderCell: () => onHeaderCellClick('account_number'),
+      dataIndex: 'account_number',
+      key: 'account_number',
+      width: 100,
+      render: (account_number: string) => account_number,
+    },
+
+    {
+      title: (
+        <HeaderCell
+          title="IFSC"
+          sortable
+          ascending={
+            sortConfig?.direction === 'asc' && sortConfig?.key === 'ifsc'
+          }
+        />
+      ),
+      onHeaderCell: () => onHeaderCellClick('ifsc'),
+      dataIndex: 'ifsc',
+      key: 'ifsc',
+      width: 100,
+      render: (ifsc: string) => ifsc,
     },
 
     {
@@ -146,26 +180,6 @@ export const getColumns = ({
       },
     },
 
-    // {
-    //   title: (
-    //     <HeaderCell
-    //       title="KYC Status"
-    //       sortable
-    //       ascending={
-    //         sortConfig?.direction === 'asc' && sortConfig?.key === 'status'
-    //       }
-    //     />
-    //   ),
-    //   dataIndex: 'KYCstatus',
-    //   key: 'KYCstatus',
-    //   width: 50,
-    //   onHeaderCell: () => onHeaderCellClick('KYCstatus'),
-    //   render: (KYCstatus: string, user: User) => {
-    //     return <KYCStatusSelect selectKYCItem={KYCstatus} userId={user.id} />;
-    //   },
-    // },
-
-
     {
       title: <></>,
       dataIndex: 'action',
@@ -176,11 +190,11 @@ export const getColumns = ({
 
 
           <DeletePopover
-            title={`Delete this user`}
-            description={`Are you sure you want to delete user - ${user.fullName} ?`}
+            title={`Delete this Bank`}
+            description={`Are you sure you want to delete ?`}
             onDelete={async () => {
               onDeleteItem(user.id);
-              await appwriteService.deleteAdminUPI(user.id);
+              await appwriteService.deleteAdminBANK(user.id);
             }}
           />
         </div>
@@ -197,7 +211,7 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
   const userStatusChange = async (data: any) => {
     setValue(data)
     if (data.value == 'Active') {
-      await appwriteService.updateAdminUPIstatus(
+      await appwriteService.updateAdminBANKstatus(
         {
           "id": userId,
           payload : {
@@ -207,7 +221,7 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
       )
       toast.success('Blocked')
     } else {
-      await appwriteService.updateAdminUPIstatus(
+      await appwriteService.updateAdminBANKstatus(
         {
           "id": userId,
           payload : {
@@ -252,93 +266,6 @@ function renderOptionDisplayValue(value: string) {
           <PiCheckCircleBold className="shrink-0 fill-green-dark text-base" />
           <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
             {value}
-          </Text>
-        </div>
-      );
-  }
-}
-
-
-
-  
-function KYCStatusSelect({ selectKYCItem, userId }: { selectKYCItem?: string; userId: string }) {
-  const selectKYCItemValue = KYCstatusOptions.find(
-    (option: { label: string | undefined; }) => option.label === selectKYCItem
-  );
-  const [KYCvalue, setKYCValue] = useState(selectKYCItemValue);
-  const userKYCStatusChange = async (data: any) => {
-    setKYCValue(data)
-    if (data.value == 'Pending') {
-      axios.patch('/api/v1/admin/users/update/prefs',
-        {
-          "id": userId,
-          "prefs": { 'KYC': 'Pending' }
-        }
-      )
-      toast.success('KYC Updated')
-    } else 
-    if (data.value == 'Approved') {
-      axios.patch('/api/v1/admin/users/update/prefs',
-        {
-          "id": userId,
-          "prefs": { 'KYC': 'Approved' }
-        }
-      )
-      toast.success('KYC Updated')
-    } else
-    if (data.value == 'Rejected') {
-      axios.patch('/api/v1/admin/users/update/prefs',
-        {
-          "id": userId,
-          "prefs": { 'KYC': 'Rejected' }
-        }
-      )
-      toast.success('KYC Updated')
-    }
-  }
-  return (
-    <Select
-      dropdownClassName="!z-10"
-      className="min-w-[100px]"
-      inPortal={true}
-      placeholder="Select Status"
-      options={KYCstatusOptions}
-      value={KYCvalue}
-      onChange={(e) => userKYCStatusChange(e)}
-      displayValue={(option: { value: any }) =>
-        renderKYCOptionDisplayValue(option.value as string)
-      }
-    />
-  );
-}
-
-
-function renderKYCOptionDisplayValue(KYCvalue: string) {
-  switch (KYCvalue) {
-    case 'Rejected':
-      return (
-        <div className="flex items-center">
-          <PiXCircleBold className="shrink-0 fill-red-dark  text-base" />
-          <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
-            {KYCvalue}
-          </Text>
-        </div>
-      );
-    case 'Pending':
-      return (
-        <div className="flex items-center">
-          <PiClockBold className="shrink-0 fill-orange-600  text-base" />
-          <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
-            {KYCvalue}
-          </Text>
-        </div>
-      );
-    default:
-      return (
-        <div className="flex items-center">
-          <PiCheckCircleBold className="shrink-0 fill-green-dark text-base" />
-          <Text className="ms-1.5 text-sm font-medium capitalize text-gray-700">
-            {KYCvalue}
           </Text>
         </div>
       );

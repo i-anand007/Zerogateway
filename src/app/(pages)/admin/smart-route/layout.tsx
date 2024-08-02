@@ -2,7 +2,7 @@ import PageHeader from '@/app/shared/page-header';
 import Nav from './navigation';
 
 const pageHeader = {
-  title: 'Profile Settings',
+  title: 'Admin Smart Route',
   breadcrumb: [
     {
       href: '/',
