@@ -117,6 +117,10 @@ export class AppwriteService {
         return null
     }
 
+    async getPrefs() {
+        return await account.getPrefs();
+    }
+
     async updatePrefs(prefs: any) {
         try {
             if (prefs === 'clear') {

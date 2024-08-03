@@ -87,7 +87,6 @@ export default function AuthWrapper({
   return (
     <>
       <AuthHeader />
-
       <div className="flex w-full flex-col justify-center px-5">
         <div
           className={cn(
@@ -109,11 +108,7 @@ export default function AuthWrapper({
                 <Button variant="outline" className="h-11 w-full" onClick={() => appwriteService.googleLogin()}>
                   <FcGoogle className="me-2 h-4 w-4 shrink-0" />
                   <span className="truncate">Signin with Google</span>
-                </Button>
-                <Button variant="outline" className="h-11 w-full">
-                  <BsFacebook className="me-2 h-4 w-4 shrink-0 md:h-5 md:w-5" />
-                  <span className="truncate">Signin with Facebook</span>
-                </Button>
+                </Button>   
               </div>
               <OrSeparation
                 title={`Or, Sign ${isSignIn ? 'in' : 'up'} with your email`}
