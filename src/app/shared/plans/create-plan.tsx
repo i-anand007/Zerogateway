@@ -48,7 +48,7 @@ export default function CreatePlan() {
       plan_discount: Number(data.plan_discount),
       plan_price: Number(data.plan_price),
       payment_pages: Number(data.payment_pages),
-      platform_fees: Number(data.platform_fees),
+      // platform_fees: Number(data.platform_fees),
       validity: Number(data.validity),
     }
 
@@ -119,7 +119,7 @@ export default function CreatePlan() {
               type="number"
               className='placeholder-gray-500 placeholder-opacity-100 focus:placeholder-gray-40'
               label="Selling Price"
-              placeholder={sellingPrice}
+              placeholder="Selling Price"
               {...register('plan_price')}
               error={errors.plan_price?.message}
             />
@@ -132,13 +132,13 @@ export default function CreatePlan() {
               error={errors.payment_pages?.message}
             />
 
-            <Input
+            {/* <Input
               type="number"
               label="Platform Fees %"
               placeholder="Platform Fees"
               {...register('platform_fees')}
               error={errors.platform_fees?.message}
-            />
+            /> */}
 
             <Input
               type="number"

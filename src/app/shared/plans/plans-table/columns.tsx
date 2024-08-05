@@ -144,17 +144,17 @@ export const getColumns = ({
     },
 
     
-    {
-      title: (
-        <HeaderCell
-          title="Platform fees"
-        />
-      ),
-      dataIndex: 'platform_fees',
-      key: 'id',
-      width: 50,
-      render: (platform_fees: string) => `${platform_fees} %`
-    },
+    // {
+    //   title: (
+    //     <HeaderCell
+    //       title="Platform fees"
+    //     />
+    //   ),
+    //   dataIndex: 'platform_fees',
+    //   key: 'id',
+    //   width: 50,
+    //   render: (platform_fees: string) => `${platform_fees} %`
+    // },
 
     {
       title: (

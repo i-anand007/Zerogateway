@@ -7,18 +7,16 @@ import appwriteService, { account } from "../appwrite";
 export default function Home() {
 
   const getCurrentUser = async () => {
-    const data = await appwriteService.getCurrentUser()
+    const data = await appwriteService.isAdmin()
     if (data) {
-      console.log(data.prefs.validity)
+      console.log(data)
     }
   }
 
   const profileImage = async () => {
-    const data = await appwriteService.updatePrefs({
-      payment_pages: '40',
-      validity: '2024-07-26T08:43:21.224+00:00',
-      KYC: true,
-    })
+    const data = await appwriteService.getCurrentUser(
+    )
+    console.log(data)
   }
 
   return (

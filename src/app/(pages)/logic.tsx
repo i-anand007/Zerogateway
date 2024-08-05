@@ -30,7 +30,7 @@ export default function Logic({
                 Cookies.set("user_name", response?.name)
                 Cookies.set("user_email", response?.email)
                 Cookies.set("profile_pic", response?.prefs.profile_pic)
-                Cookies.set("user_labels", response?.labels)
+                Cookies.set("user_labels", response?.labels)               
             }
             getUser()
         }

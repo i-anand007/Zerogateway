@@ -107,6 +107,19 @@ export class AppwriteService {
         return null
     }
 
+    async isAdmin() {
+        try {
+            const response = await account.get()
+            if (response.labels.includes('Administrator')) {
+                return 'true'
+            } else
+                return 'false'
+        } catch (error) {
+        }
+
+        return null
+    }
+
     async updatePhone({ phone, password }: UpdateUserPassword) {
         try {
             return account.updatePhone(phone, password)
@@ -329,8 +342,8 @@ export class AppwriteService {
             const data = listDocuments.documents.map(item => ({
                 id: item.$id,
                 createdAt: item.$createdAt,
-                upi_id : item.upi_id,
-                merchant : item.merchant == 'true' ? 'Merchant' : 'Non Merchant',
+                upi_id: item.upi_id,
+                merchant: item.merchant == 'true' ? 'Merchant' : 'Non Merchant',
                 status: item.status ? 'Active' : 'Blocked',
             }))
             return (data)
@@ -356,7 +369,7 @@ export class AppwriteService {
             throw error
         }
     }
-    
+
     async deleteAdminUPI(data: string) {
         try {
             const deleteDocument = await databases.deleteDocument(
@@ -372,7 +385,7 @@ export class AppwriteService {
             throw error
         }
     }
-    
+
     async addAdminBANK(data: object) {
         try {
             const createDocument = await databases.createDocument(
@@ -388,7 +401,7 @@ export class AppwriteService {
             throw error
         }
     }
-    
+
     async listAdminBANK() {
         try {
             const listDocuments = await databases.listDocuments(
@@ -399,10 +412,10 @@ export class AppwriteService {
             const data = listDocuments.documents.map(item => ({
                 id: item.$id,
                 createdAt: item.$createdAt,
-                bank_name : item.bank_name,
-                account_name : item.account_name,
-                account_number : item.account_number,
-                ifsc : item.ifsc,
+                bank_name: item.bank_name,
+                account_name: item.account_name,
+                account_number: item.account_number,
+                ifsc: item.ifsc,
                 status: item.status ? 'Active' : 'Blocked',
             }))
             return (data)
@@ -412,7 +425,7 @@ export class AppwriteService {
             throw error
         }
     }
-    
+
     async updateAdminBANKstatus(data: { id: string; payload: object; }) {
         try {
             const updateDocument = await databases.updateDocument(
@@ -428,7 +441,7 @@ export class AppwriteService {
             throw error
         }
     }
-    
+
     async deleteAdminBANK(data: string) {
         try {
             const deleteDocument = await databases.deleteDocument(
