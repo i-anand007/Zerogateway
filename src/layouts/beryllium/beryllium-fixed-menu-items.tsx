@@ -13,6 +13,7 @@ import {
 } from 'react-icons/pi';
 import { atom } from 'jotai';
 import Cookies from 'js-cookie';
+import FileStackIcon from '@/components/icons/file-stack';
 
 export interface SubMenuItemType {
   name: string;
@@ -38,10 +39,8 @@ export interface MenuItemsType {
   menuItems: ItemType[];
 }
 
-const isAdmin = Cookies.get('user_labels')?.includes('Administrator')
 
 
-// Admin menu items
 const adminMenuItems = {
   id: '0',
   name: 'Admin',
@@ -62,6 +61,11 @@ const adminMenuItems = {
       name: 'KYC',
       icon: PiTable,
       href: "/admin/kyc"
+    },
+    {
+      name: 'Smart Route',
+      icon: FileStackIcon,
+      href: "/admin/smart-route"
     },
   ],
 };
@@ -108,7 +112,7 @@ const baseMenuItems = [
 
 
 export const berylliumMenuItems = [  
-  ...(isAdmin ? [adminMenuItems] : baseMenuItems)
+  ...(Cookies.get('user_labels')?.includes('Administrator') ? [adminMenuItems] : baseMenuItems)
 ];
 
 // export const berylliumMenuItems: MenuItemsType[] = [

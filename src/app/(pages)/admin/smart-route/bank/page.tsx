@@ -15,8 +15,6 @@ export default function UPI() {
         if (response) {
           setData(response);
         }
-        console.log(response);
-        
       } catch (error) {
         console.error(error);
       }

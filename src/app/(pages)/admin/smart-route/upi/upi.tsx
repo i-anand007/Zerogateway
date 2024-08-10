@@ -15,9 +15,7 @@ export default function UPI() {
         const response = await appwriteService.listAdminUPI();
         if (response) {
           setData(response);
-        }
-        console.log(response);
-        
+        }        
       } catch (error) {
         console.error(error);
       }

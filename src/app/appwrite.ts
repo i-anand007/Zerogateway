@@ -338,7 +338,6 @@ export class AppwriteService {
                 DATABASE_ID,
                 AdminUPI_ID,
             );
-            console.log(listDocuments)
             const data = listDocuments.documents.map(item => ({
                 id: item.$id,
                 createdAt: item.$createdAt,
