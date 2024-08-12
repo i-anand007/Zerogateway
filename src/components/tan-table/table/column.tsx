@@ -161,7 +161,7 @@ export const defaultColumns = [
     }) => (
       <>
         <div className="flex items-center justify-end gap-3 pe-3">
-          <Tooltip
+          {/* <Tooltip
             size="sm"
             content={'Edit Invoice'}
             placement="top"
@@ -200,7 +200,7 @@ export const defaultColumns = [
                 <EyeIcon className="h-4 w-4" />
               </ActionIcon>
             </Link>
-          </Tooltip>
+          </Tooltip> */}
           {/* <DeletePopover
             title={`Delete the invoice`}
             description={`Are you sure you want to delete this #${row.id} invoice?`}

@@ -419,8 +419,8 @@ export class AppwriteService {
             }))
             return (data)
         } catch (error: any) {
-            let response = error.toString();
-            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            // let response = error.toString();
+            // toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
             throw error
         }
     }

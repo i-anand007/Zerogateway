@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Button, Input, FileInput, Title, Tooltip, ActionIcon } from 'rizzui';
 import { QRCode } from 'react-qrcode-logo';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMedia } from '@/hooks/use-media';
 import { Form } from '@/components/ui/form';
 import * as animationData from '@/components/lottie/loading-hand.json'
@@ -20,13 +20,19 @@ import { checkoutBankSchema, CheckoutBankSchema } from '@/utils/validators/check
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { PiChecksBold, PiFilesBold } from 'react-icons/pi';
 import BankCard from '@/components/cards/bank-card';
+import { useSearchParams } from 'next/navigation';
+import appwriteService from '../appwrite';
+import { AppwriteUsersApi } from '../appwrite_api';
+import axios from 'axios';
 
 
 export default function Checkout(
 ) {
+
+  const searchParams = useSearchParams()
   const [isLoading, setLoading] = useState(false)
   const [ID, setID] = useState<number>()
-  const [name, setname] = useState<string>()
+  const [name, setname] = useState<string>("Zero Gateway")
   const [amount, setAmount] = useState<number>()
   const [amountDisable, setAmountDisable] = useState<boolean>()
   const [UPI_ID, setUPI_ID] = useState<string>()
@@ -45,7 +51,73 @@ export default function Checkout(
   const [reset, setReset] = useState({});
   const [isCopied, setIsCopied] = useState(false);
   const [state, copyToClipboard] = useCopyToClipboard();
-  
+  const [planPurchase, setPlanPurchase] = useState(false)
+
+  const AdminId = process.env.NEXT_PUBLIC_APPWRITE_ADMIN_ID!
+  const planId = searchParams.get('plan')
+
+  useEffect(() => {
+    const dataFetching = async () => {
+
+      const allUPI = await appwriteService.listAdminUPI()
+      const allBank = await appwriteService.listAdminBANK()
+      const AdminPrefs = await AppwriteUsersApi.getPrefs(AdminId)
+      let bank_counter = parseInt(AdminPrefs.bank_counter)
+      let upi_counter = parseInt(AdminPrefs.upi_counter)
+
+      const plans = (await appwriteService.listPlan()).documents
+      for (let i = 0; i < plans.length; i++) {
+        if (plans[i].$id === planId) {
+          console.log(plans[i])
+          setname('Zero')
+          setAmount(plans[i].plan_price)
+          setPurpose("Plan Purchase" + plans[i].plan_name)
+          break;
+        }
+      }
+
+      if (bank_counter >= allBank.length - 1) {
+        bank_counter = 0;
+        let response = await axios.patch('/api/v1/admin/users/update/prefs',
+          {
+            "prefs": {
+              "bank_counter": 0
+            },
+            "id": AdminId
+          }
+        )
+        console.log(response)
+      } else {
+        console.log("bank increr")
+        bank_counter = ++bank_counter;
+        console.log(bank_counter);
+        let response = await axios.patch('/api/v1/admin/users/update/prefs',
+          {
+            "prefs": {
+              "bank_counter": (bank_counter).toString()
+            },
+            "id": AdminId
+          }
+        )
+        console.log(response)
+      }
+
+      if (upi_counter >= allUPI.length - 1) {
+        upi_counter = 0;
+      }
+
+
+
+      if (allBank) {
+        console.log(allBank.length)
+        console.log(allUPI[AdminPrefs.upi_counter])
+        console.log(bank_counter + 1)
+      }
+    }
+    dataFetching()
+  }, []);
+
+
   const formData = {
     amount,
     utr: UTR,
@@ -68,7 +140,6 @@ export default function Checkout(
 
 
   return (
-
     <div className="relative flex min-h-screen w-full flex-col justify-center bg-gradient-to-tr from-[#136A8A] to-[#267871] p-4 md:p-12 lg:p-28">
       <div className={'mx-auto w-full max-w-md rounded-xl bg-white px-4 py-9 sm:px-6 md:max-w-xl md:px-10 md:py-12 lg:max-w-[700px] lg:px-16 xl:rounded-2xl 3xl:rounded-3xl dark:bg-gray-50'} >
         <div className="absolute top-0 right-0 mt-2 mr-2 bg-black text-white px-2 py-1 rounded-md">
@@ -93,7 +164,7 @@ export default function Checkout(
                 >
                   Paying to  {' '}  <br />
                   <span className="bg-gradient-to-r from-[#136A8A] to-[#267871] bg-clip-text text-transparent text-center text-[20px] leading-snug md:text-2xl md:!leading-normal lg:text-2xl lg:leading-normaltex ">
-                    User
+                    {name}
                   </span>
 
                 </Title>
@@ -121,120 +192,120 @@ export default function Checkout(
                 <></>
               ) : (
                 <Tabs defaultValue="upi" className="items-center content-center">
-                <TabsList className="grid grid-cols-2 ">
-                  <TabsTrigger value="upi">UPI</TabsTrigger>
-                  <TabsTrigger value="bank">BANK</TabsTrigger>
-                </TabsList>
-                <TabsContent value="upi">
-                  <Form<CheckoutUpiSchema>
-                    validationSchema={checkoutUpiSchema}
-                    onSubmit={onSubmit}
-                  >
-                    {({ register, formState: { errors } }) => (
-                      <div className="space-y-5 lg:space-y-6 mt-5">
+                  <TabsList className="grid grid-cols-2 ">
+                    <TabsTrigger value="upi">UPI</TabsTrigger>
+                    <TabsTrigger value="bank">BANK</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="upi">
+                    <Form<CheckoutUpiSchema>
+                      validationSchema={checkoutUpiSchema}
+                      onSubmit={onSubmit}
+                    >
+                      {({ register, formState: { errors } }) => (
+                        <div className="space-y-5 lg:space-y-6 mt-5">
 
-                        <>
-                          <div className="flex flex-row items-center border rounded-lg shadow md:flex-row md:max-w-xl ">
-                            <QRCode value="upi://pay?pa=patyes@yesbank" qrStyle="dots" eyeRadius={5} />
-                            <div className="flex flex-col justify-between p-2 leading-normal ">
-                              <h5 className="text-[14px] leading-snug md:text-l md:!leading-normal lg:text-xl lg:leading-normaltex">Scan the QR using any UPI app on your phone</h5>
-                              <Image className='m-3' src="/images/upi_apps_icons.png" alt={''} width={150} height={50} />
-                              <BankCard title='UPI ID' data={UPI_ID}/>
+                          <>
+                            <div className="flex flex-row items-center border rounded-lg shadow md:flex-row md:max-w-xl ">
+                              <QRCode value="upi://pay?pa=patyes@yesbank" qrStyle="dots" eyeRadius={5} />
+                              <div className="flex flex-col justify-between p-2 leading-normal ">
+                                <h5 className="text-[14px] leading-snug md:text-l md:!leading-normal lg:text-xl lg:leading-normaltex">Scan the QR using any UPI app on your phone</h5>
+                                <Image className='m-3' src="/images/upi_apps_icons.png" alt={''} width={150} height={50} />
+                                <BankCard title='UPI ID' data={UPI_ID} />
+                              </div>
                             </div>
-                          </div>
 
-                          <Input
-                            label="UTR"
-                            placeholder="Enter your UTR"
-                            size={isMedium ? 'lg' : 'xl'}
-                            className="[&>label>span]:font-medium"
-                            {...register('utr')}
-                            error={errors.utr ? "Please provide correct UTR." : undefined}
-                            onChange={(e) => setUTR(e.target.value)}
-                          />
+                            <Input
+                              label="UTR"
+                              placeholder="Enter your UTR"
+                              size={isMedium ? 'lg' : 'xl'}
+                              className="[&>label>span]:font-medium"
+                              {...register('utr')}
+                              error={errors.utr ? "Please provide correct UTR." : undefined}
+                              onChange={(e) => setUTR(e.target.value)}
+                            />
 
-                          <FileInput label="Upload Screenshot"
-                            {...register('screenshot')}
-                            error={errors.screenshot ? "Please Upload Image" : undefined}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                              const files = e.target.files;
-                              if (files && files.length > 0) {
-                                setScreenshot(files[0]);
-                              }
-                            }}
-                          />
+                            <FileInput label="Upload Screenshot"
+                              {...register('screenshot')}
+                              error={errors.screenshot ? "Please Upload Image" : undefined}
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                const files = e.target.files;
+                                if (files && files.length > 0) {
+                                  setScreenshot(files[0]);
+                                }
+                              }}
+                            />
 
-                          <Button
-                            className="w-full"
-                            type="submit"
-                            size={isMedium ? 'lg' : 'xl'}
-                          >
-                            Proceed
-                          </Button>
-                        </>
-                      </div>
-                    )}
-                  </Form>
-                </TabsContent>
+                            <Button
+                              className="w-full"
+                              type="submit"
+                              size={isMedium ? 'lg' : 'xl'}
+                            >
+                              Proceed
+                            </Button>
+                          </>
+                        </div>
+                      )}
+                    </Form>
+                  </TabsContent>
 
-                <TabsContent value="bank">
-                  <Form<CheckoutBankSchema>
-                    validationSchema={checkoutBankSchema}
-                    onSubmit={onSubmit}
-                  // onSubmit={onSubmit}
-                  >
-                    {({ register, formState: { errors } }) => (
-                      <div className="space-y-5 lg:space-y-6 mt-5">
+                  <TabsContent value="bank">
+                    <Form<CheckoutBankSchema>
+                      validationSchema={checkoutBankSchema}
+                      onSubmit={onSubmit}
+                    // onSubmit={onSubmit}
+                    >
+                      {({ register, formState: { errors } }) => (
+                        <div className="space-y-5 lg:space-y-6 mt-5">
 
-                        <>
-                          <div className="space-y-2 lg:space-y-2">
-                      
-                            <BankCard title={"Bank Name"} data={bank_Name}/>
-                            <BankCard title={"A/C Holder's Name"} data={account_Name}/>
-                            <BankCard title={"A/C Number"} data={account_No}/>
-                            <BankCard title={"IFSC Code"} data={IFSC}/>
+                          <>
+                            <div className="space-y-2 lg:space-y-2">
 
-                          </div>
+                              <BankCard title={"Bank Name"} data={bank_Name} />
+                              <BankCard title={"A/C Holder's Name"} data={account_Name} />
+                              <BankCard title={"A/C Number"} data={account_No} />
+                              <BankCard title={"IFSC Code"} data={IFSC} />
 
-                          <Input
-                            label="Bank Txn ID"
-                            placeholder="Enter Bank Txn ID"
-                            size={isMedium ? 'lg' : 'xl'}
-                            className="[&>label>span]:font-medium"
-                            {...register('utr')}
-                            error={errors.utr ? "Please provide correct UTR." : undefined}
-                            onChange={(e) => setUTR(e.target.value)}
-                          />
+                            </div>
 
-                          <FileInput label="Upload Screenshot"
-                            {...register('screenshot')}
-                            error={errors.screenshot ? "Please Upload Image" : undefined}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                              const files = e.target.files;
-                              if (files && files.length > 0) {
-                                setScreenshot(files[0]);
-                              }
-                            }}
-                          />
+                            <Input
+                              label="Bank Txn ID"
+                              placeholder="Enter Bank Txn ID"
+                              size={isMedium ? 'lg' : 'xl'}
+                              className="[&>label>span]:font-medium"
+                              {...register('utr')}
+                              error={errors.utr ? "Please provide correct UTR." : undefined}
+                              onChange={(e) => setUTR(e.target.value)}
+                            />
 
-                          <Button
-                            className="w-full"
-                            type="submit"
-                            size={isMedium ? 'lg' : 'xl'}
-                          >
-                            Proceed
-                          </Button>
-                        </>
-                      </div>
-                    )}
-                  </Form>
-                </TabsContent>
+                            <FileInput label="Upload Screenshot"
+                              {...register('screenshot')}
+                              error={errors.screenshot ? "Please Upload Image" : undefined}
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                const files = e.target.files;
+                                if (files && files.length > 0) {
+                                  setScreenshot(files[0]);
+                                }
+                              }}
+                            />
+
+                            <Button
+                              className="w-full"
+                              type="submit"
+                              size={isMedium ? 'lg' : 'xl'}
+                            >
+                              Proceed
+                            </Button>
+                          </>
+                        </div>
+                      )}
+                    </Form>
+                  </TabsContent>
 
 
-              </Tabs>
+                </Tabs>
               )}
 
-              
+
             </>
           }
         </div>

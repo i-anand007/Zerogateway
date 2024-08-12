@@ -79,7 +79,7 @@ export default function TableToolbar<TData extends Record<string, any>>({
           </FilterDrawerView>
         )}
 
-        {isMultipleSelected ? (
+        {/* {isMultipleSelected ? (
           <Button
             size="sm"
             color="danger"
@@ -95,9 +95,9 @@ export default function TableToolbar<TData extends Record<string, any>>({
             <PiTrash size={18} />
             Delete
           </Button>
-        ) : null}
+        ) : null} */}
 
-        {table && (
+        {/* {table && (
           <Popover position="bottom-end">
             <Popover.Trigger>
               <ActionIcon
@@ -131,7 +131,7 @@ export default function TableToolbar<TData extends Record<string, any>>({
               </div>
             </Popover.Content>
           </Popover>
-        )}
+        )} */}
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ import { Badge, Text, Title, Button, Input } from 'rizzui';
 import { STATUSES } from '@/data/users-data';
 import { rolesList } from '@/data/users-management';
 import ModalButton from '@/app/shared/modal-button';
-import CreatePlan from '../create-plan';
 
 type FilterElementProps = {
   isFiltered: boolean;
@@ -58,15 +57,6 @@ export default function FilterElement({
           clearable
           className="-order-4 w-full @xl:-order-5 @xl:ms-auto @xl:w-auto @4xl:-order-2 @4xl:w-[230px] @5xl:w-auto"
         />
-
-        <div className="-order-5 flex basis-auto justify-end @xl:-order-4 @4xl:-order-1">
-          <ModalButton
-            label="Add New Plan"
-            view={<CreatePlan />}
-            customSize="600px"
-            className="mt-0"
-          />
-        </div>
       </div>
     </>
   );

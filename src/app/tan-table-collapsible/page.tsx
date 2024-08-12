@@ -8,10 +8,6 @@ const pageHeader = {
   title: 'Collapsible',
   breadcrumb: [
     {
-      href: routes.eCommerce.dashboard,
-      name: 'Home',
-    },
-    {
       name: 'Table',
     },
     {

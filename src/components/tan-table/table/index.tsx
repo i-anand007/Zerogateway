@@ -24,11 +24,11 @@ export default function Table() {
         },
       },
       meta: {
-        handleDeleteRow: (row) => {
+        handleDeleteRow: (row: { id: string; }) => {
           setData((prev) => prev.filter((r) => r.id !== row.id));
         },
       },
-      enableColumnResizing: true,
+      enableColumnResizing: false,
       columnResizeDirection: direction as any,
       columnResizeMode: 'onChange',
     },

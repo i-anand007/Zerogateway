@@ -4,7 +4,7 @@ import PageHeader from '@/app/shared/page-header';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/loading';
 import appwriteService from '@/app/appwrite';
-import PlansTable from '@/app/shared/plans/plans-table';
+import PlansTable from './plans-table';
 import toast from 'react-hot-toast';
 
 const pageHeader = {
