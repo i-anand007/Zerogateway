@@ -24,15 +24,16 @@ import { useSearchParams } from 'next/navigation';
 import appwriteService from '../appwrite';
 import { AppwriteUsersApi } from '../appwrite_api';
 import axios from 'axios';
+import updateCounter from '../shared/update-counter';
 
 
 export default function Checkout(
 ) {
 
   const searchParams = useSearchParams()
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const [ID, setID] = useState<number>()
-  const [name, setname] = useState<string>("Zero Gateway")
+  const [name, setname] = useState<string>("")
   const [amount, setAmount] = useState<number>()
   const [amountDisable, setAmountDisable] = useState<boolean>()
   const [UPI_ID, setUPI_ID] = useState<string>()
@@ -55,10 +56,10 @@ export default function Checkout(
 
   const AdminId = process.env.NEXT_PUBLIC_APPWRITE_ADMIN_ID!
   const planId = searchParams.get('plan')
+  const userId = searchParams.get('user')
 
   useEffect(() => {
-    const dataFetching = async () => {
-
+    const planFetching = async () => {
       const allUPI = await appwriteService.listAdminUPI()
       const allBank = await appwriteService.listAdminBANK()
       const AdminPrefs = await AppwriteUsersApi.getPrefs(AdminId)
@@ -69,52 +70,32 @@ export default function Checkout(
       for (let i = 0; i < plans.length; i++) {
         if (plans[i].$id === planId) {
           console.log(plans[i])
-          setname('Zero')
           setAmount(plans[i].plan_price)
-          setPurpose("Plan Purchase" + plans[i].plan_name)
+          setPurpose("Plan Purchase -" + plans[i].plan_name)
           break;
         }
       }
+      setname('Zero Gateway')
 
-      if (bank_counter >= allBank.length - 1) {
-        bank_counter = 0;
-        let response = await axios.patch('/api/v1/admin/users/update/prefs',
-          {
-            "prefs": {
-              "bank_counter": 0
-            },
-            "id": AdminId
-          }
-        )
-        console.log(response)
-      } else {
-        console.log("bank increr")
-        bank_counter = ++bank_counter;
-        console.log(bank_counter);
-        let response = await axios.patch('/api/v1/admin/users/update/prefs',
-          {
-            "prefs": {
-              "bank_counter": (bank_counter).toString()
-            },
-            "id": AdminId
-          }
-        )
-        console.log(response)
-      }
+      const upiData = await appwriteService.listAdminUPI()
+      setUPI_ID(upiData[upi_counter].upi_id)
+      const isMerchant = upiData[upi_counter].merchant === "Merchant";
+      setUPI_TYPE_Merchant(isMerchant);
 
-      if (upi_counter >= allUPI.length - 1) {
-        upi_counter = 0;
-      }
+      const BankData = await appwriteService.listAdminBANK()
+      setBank_Name(BankData[bank_counter].bank_name)
+      setAccount_Name(BankData[bank_counter].account_name)
+      setAccount_No(BankData[bank_counter].account_number)
+      setIFSC(BankData[bank_counter].ifsc)
 
+      // Update bank_counter
+      await updateCounter(bank_counter, allBank, "bank_counter", AdminId);
+      // Update upi_counter
+      await updateCounter(upi_counter, allUPI, "upi_counter", AdminId);
 
-
-      if (allBank) {
-        console.log(allBank.length)
-        console.log(allUPI[AdminPrefs.upi_counter])
-        console.log(bank_counter + 1)
-      }
     }
-    dataFetching()
+    setLoading(false)
+    planFetching()
   }, []);
 
 
@@ -122,6 +103,7 @@ export default function Checkout(
     amount,
     utr: UTR,
     bankTxnId: BankTxnID,
+    purpose,
     screenshot
   }
 
@@ -205,14 +187,17 @@ export default function Checkout(
                         <div className="space-y-5 lg:space-y-6 mt-5">
 
                           <>
-                            <div className="flex flex-row items-center border rounded-lg shadow md:flex-row md:max-w-xl ">
-                              <QRCode value="upi://pay?pa=patyes@yesbank" qrStyle="dots" eyeRadius={5} />
-                              <div className="flex flex-col justify-between p-2 leading-normal ">
-                                <h5 className="text-[14px] leading-snug md:text-l md:!leading-normal lg:text-xl lg:leading-normaltex">Scan the QR using any UPI app on your phone</h5>
-                                <Image className='m-3' src="/images/upi_apps_icons.png" alt={''} width={150} height={50} />
-                                <BankCard title='UPI ID' data={UPI_ID} />
-                              </div>
-                            </div>
+                          <div className="flex flex-col md:flex-row items-center border rounded-lg shadow md:max-w-xl ">
+  <QRCode value="upi://pay?pa=patyes@yesbank" qrStyle="dots" eyeRadius={5} />
+  <div className="flex flex-col justify-between p-2 leading-normal md:w-full">
+    <h5 className="text-[14px] leading-snug md:text-l md:!leading-normal lg:text-xl lg:leading-normal">Scan the QR using any UPI app on your phone</h5>
+    <Image className='m-3' src="/images/upi_apps_icons.png" alt={''} width={150} height={50} />
+  </div>
+  <div className="w-full md:w-auto">
+    <BankCard title='UPI ID' data={UPI_ID} />
+  </div>
+</div>
+
 
                             <Input
                               label="UTR"
