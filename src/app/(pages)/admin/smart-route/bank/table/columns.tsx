@@ -160,25 +160,25 @@ export const getColumns = ({
       render: (value: Date) => <DateCell date={value} />,
     },
 
-    {
-      title: (
-        <HeaderCell
-          title="Status"
-          sortable
-          ascending={
-            sortConfig?.direction === 'asc' && sortConfig?.key === 'status'
-          }
-        />
-      ),
-      dataIndex: 'status',
-      key: 'status',
-      width: 50,
-      onHeaderCell: () => onHeaderCellClick('status'),
-      render: (status: string, user: User) => {
+    // {
+    //   title: (
+    //     <HeaderCell
+    //       title="Status"
+    //       sortable
+    //       ascending={
+    //         sortConfig?.direction === 'asc' && sortConfig?.key === 'status'
+    //       }
+    //     />
+    //   ),
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   width: 50,
+    //   onHeaderCell: () => onHeaderCellClick('status'),
+    //   render: (status: string, user: User) => {
 
-        return <StatusSelect selectItem={status} userId={user.id} />;
-      },
-    },
+    //     return <StatusSelect selectItem={status} userId={user.id} />;
+    //   },
+    // },
 
     {
       title: <></>,

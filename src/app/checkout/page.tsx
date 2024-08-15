@@ -170,6 +170,24 @@ export default function Checkout(
                 />
               </div>
 
+              <div className="space-y-5 lg:space-y-6 mb-5">
+                <Input
+                  type="number"
+                  size={isMedium ? 'lg' : 'xl'}
+                  label="Amount ₹"
+                  placeholder="Enter Amount"
+                  value={amount}
+                  className="[&>label>span]:font-medium col-s"
+                  readOnly={amountDisable}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value.trim();
+                    if (value === '' || !isNaN(parseFloat(value))) {
+                      setAmount(value === '' ? undefined : parseFloat(value));
+                    }
+                  }}
+                />
+              </div>
+
               {amount == null || isNaN(amount) ? (
                 <></>
               ) : (
@@ -187,16 +205,14 @@ export default function Checkout(
                         <div className="space-y-5 lg:space-y-6 mt-5">
 
                           <>
-                          <div className="flex flex-col md:flex-row items-center border rounded-lg shadow md:max-w-xl ">
-  <QRCode value="upi://pay?pa=patyes@yesbank" qrStyle="dots" eyeRadius={5} />
-  <div className="flex flex-col justify-between p-2 leading-normal md:w-full">
-    <h5 className="text-[14px] leading-snug md:text-l md:!leading-normal lg:text-xl lg:leading-normal">Scan the QR using any UPI app on your phone</h5>
-    <Image className='m-3' src="/images/upi_apps_icons.png" alt={''} width={150} height={50} />
-  </div>
-  <div className="w-full md:w-auto">
-    <BankCard title='UPI ID' data={UPI_ID} />
-  </div>
-</div>
+                            <div className="flex flex-col md:flex-row items-center border rounded-lg shadow md:max-w-xl ">
+                              <QRCode value="upi://pay?pa=patyes@yesbank" qrStyle="dots" eyeRadius={5} />
+                              <div className="flex flex-col justify-between p-2 leading-normal md:w-full">
+                                <h5 className="text-[14px] leading-snug md:text-l md:!leading-normal lg:text-xl lg:leading-normal">Scan the QR using any UPI app on your phone</h5>
+                                <Image className='m-3 ' src="/images/upi_apps_icons.png" alt={''} width={150} height={50} />
+                                <BankCard title='UPI ID' data={UPI_ID} />
+                              </div>
+                            </div>
 
 
                             <Input
