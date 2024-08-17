@@ -33,11 +33,11 @@ export function ProfileHeader({
     >
       <div className="relative z-10 mx-auto flex w-full flex-wrap items-center justify-start border-b border-dashed border-muted pb-10">
         <div className="relative -top-1/3 aspect-square w-[80px] overflow-hidden rounded-full border-[6px] border-white bg-gray-100 shadow-profilePic @2xl:w-[100px] @5xl:-top-2/3 @5xl:w-[100px] dark:border-gray-50 3xl:w-[100px]">
-          {/* <img
+          <img
             src={Cookies.get("profile_pic")}
             alt="profile-pic"
             className="aspect-auto"
-          /> */}
+          />
         </div>
         <div className='ml-5'>
           <Title
@@ -59,15 +59,24 @@ export function ProfileHeader({
 
 export default function PersonalInfoView() {
 
-  const [selectedFile, setSelectedFile] = useState(null);
+  interface UserData {
+    name: string;
+    email: string;
+  }
+
+  const [selectedFile, setSelectedFile] = useState(null);  
+  const[userData, setUserData] = useState<UserData  | null>()
 
   const handleFileChange = (event: any) => {
     setSelectedFile(event.target.files[0]);
   };
 
-  const uploadFile = () => {
+  const uploadProfileImage = async () => {
     if (!selectedFile) return;
-    appwriteService.uploadFile(selectedFile);
+    const response = await appwriteService.uploadFile(selectedFile);
+    const pImage = await appwriteService.getFilePreview(response.$id)
+    await appwriteService.updatePrefs({'profile_pic': response.$id });
+    Cookies.set("profile_pic", pImage.href)
   };
 
 
@@ -78,13 +87,14 @@ export default function PersonalInfoView() {
     });
   };
 
-
-
-  const userData = async () => {
-    const data = await appwriteService.getCurrentUser()
-    console.log(data)
-  }
-  userData()
+  useEffect(() => {
+    const userData = async () => {
+      const data = await appwriteService.getCurrentUser()
+      setUserData(data)
+      console.log(data)
+    }
+    userData()
+  });
 
   return (
     <div className='@container'>
@@ -105,7 +115,7 @@ export default function PersonalInfoView() {
           />
           <Button
             className="w-full"
-            onClick={uploadFile}
+            onClick={uploadProfileImage}
           >
             Update Profile Image
           </Button>
@@ -116,7 +126,7 @@ export default function PersonalInfoView() {
           className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
         >
           <Input
-            placeholder="Full Name"
+            placeholder={userData?.name}
             className="flex-grow"
             onChange={() => { }}
           />
@@ -138,7 +148,7 @@ export default function PersonalInfoView() {
               <PiEnvelopeSimple className="h-6 w-6 text-gray-500" />
             }
             type="email"
-            placeholder="georgia.young@example.com"
+            placeholder={userData?.email}
             onChange={() => { }}
           />
 

@@ -31,7 +31,7 @@ export default function RegisterForm() {
     const response = await appwriteService.createUserAccount({ email, password, name })
     await console.log(response)
     if (response.$id) {
-      const updatePhonne = await appwriteService.updatePhonne({ phone, password})
+      const updatePhonne = await appwriteService.updatePhone({ phone, password})
       await console.log(updatePhonne)
       toast.success('Account Created')
       router.push('/');

@@ -53,7 +53,7 @@ export default function Checkout() {
             <div className="font-bold text-xl mb-2">INVOICE</div>
             <div className="text-sm">Date: {}</div>
             <div className="text-sm">Invoice #: 66967524002da1bc9b6a</div>
-        </div>
+        </div>  ``
     </div>
     <div className="border-b-2 border-gray-300 pb-8 mb-8">
         <h2 className="text-2xl font-bold mb-4">Bill To:</h2>

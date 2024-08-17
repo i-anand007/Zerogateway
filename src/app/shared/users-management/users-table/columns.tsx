@@ -206,7 +206,10 @@ export const getColumns = ({
           <DeletePopover
             title={`Delete this user`}
             description={`Are you sure you want to delete user - ${user.fullName} ?`}
-            onDelete={() => onDeleteItem(user.id)}
+            onDelete={() => 
+              onDeleteItem(user.id)
+              
+            }
           />
         </div>
       ),

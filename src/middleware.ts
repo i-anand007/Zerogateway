@@ -15,9 +15,9 @@ export function middleware(request: NextRequest) {
       return NextResponse.next()
     }
 
-    if (isLoggedIn !== 'true' && !url.pathname.startsWith("/auth")) {
-        return NextResponse.redirect(new URL('/auth/login', request.url))
-      }
+    // if (isLoggedIn !== 'true' && !url.pathname.startsWith("/auth")) {
+    //     return NextResponse.redirect(new URL('/auth/login', request.url))
+    //   }
 }
 
 // See "Matching Paths" below to learn more
