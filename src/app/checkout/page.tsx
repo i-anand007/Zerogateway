@@ -208,22 +208,7 @@ export default function Checkout(
                 />
               </div>
 
-              {isPurpose == true ? (
-                <Input
-                  label="Name"
-                  placeholder="Enter your Name"
-                  size={isMedium ? 'lg' : 'xl'}
-                  value={name}
-                  className="[&>label>span]:font-medium mb-2"
-                  onChange={(e) => {
-                    const data = e.target.value;
-                    setName(data);
-                    console.log(data);
-                  }}
-                />
-              ) : (<></>)
-              }
-
+              
               {isPurpose == true ? (
                 <Input
                   label="Purpose"
@@ -241,13 +226,29 @@ export default function Checkout(
               ) : (<></>)
               }
 
-              {isPurpose == true ? (
+              {isName == true ? (
+                <Input
+                  label="Name"
+                  placeholder="Enter your Name"
+                  size={isMedium ? 'lg' : 'xl'}
+                  value={name}
+                  className="[&>label>span]:font-medium mb-2"
+                  onChange={(e) => {
+                    const data = e.target.value;
+                    setName(data);
+                    console.log(data);
+                  }}
+                />
+              ) : (<></>)
+              }
+
+
+              {isEmail == true ? (
                 <Input
                   label="Purpose"
-                  placeholder="Enter your Purpose"
+                  placeholder="Enter your Email"
                   size={isMedium ? 'lg' : 'xl'}
                   value={purpose}
-                  readOnly={purposeDisable}
                   className="[&>label>span]:font-medium mb-2"
                   onChange={(e) => {
                     const data = e.target.value;
