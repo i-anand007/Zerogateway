@@ -1,5 +1,6 @@
 'use client';
 
+import { ID } from 'appwrite';
 import Image from 'next/image';
 import { Button, Input, FileInput, Title, Tooltip, ActionIcon } from 'rizzui';
 import { QRCode } from 'react-qrcode-logo';
@@ -30,28 +31,52 @@ import updateCounter from '../shared/update-counter';
 export default function Checkout(
 ) {
 
+
   const searchParams = useSearchParams()
   const [isLoading, setLoading] = useState(true)
-  const [ID, setID] = useState<number>()
-  const [name, setname] = useState<string>("")
+
+  const id = ID.unique()
+
+  const [userto, setUserto] = useState<string>("")
+  const [userfrom, setUserfrom] = useState<string>("")
+
+  const [nameto, setnameto] = useState<string>("")
+  
+  const [isName, setIsName] = useState<boolean>(false)
+  const [name, setName] = useState<string>("")
+
+  const [isPurpose, setIsPurpose] = useState<boolean>(false)
+  const [purpose, setPurpose] = useState<string>()
+  const [purposeDisable, setPurposeDisable] = useState<boolean>()
+
+  const [isPhone, setIsPhone] = useState<boolean>(false)
+  const [phone, setPhone] = useState<string>("")
+
+  const [isEmail, setIsEmail] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>("")
+
   const [amount, setAmount] = useState<number>()
   const [amountDisable, setAmountDisable] = useState<boolean>()
+
   const [UPI_ID, setUPI_ID] = useState<string>()
   const [UPI_TYPE_Merchant, setUPI_TYPE_Merchant] = useState<boolean>()
-  const [isPurpose, setIsPurpose] = useState<boolean>()
-  const [purpose, setPurpose] = useState<string>()
-  const [isBank, setIsBank] = useState<boolean>()
+
+  const [upi_acc, setUpi_acc] = useState<string>()
+  const [payment_mode, setpayment_mode] = useState<boolean>()
+
   const [bank_Name, setBank_Name] = useState<string>()
   const [account_No, setAccount_No] = useState<number>()
   const [account_Name, setAccount_Name] = useState<number>()
   const [IFSC, setIFSC] = useState<string>()
+
   const [UTR, setUTR] = useState<string>()
-  const [BankTxnID, setBankTxnID] = useState<string>()
   const [screenshot, setScreenshot] = useState<File | null>(null)
   const isMedium = useMedia('(max-width: 1200px)', false);
+
   const [reset, setReset] = useState({});
   const [isCopied, setIsCopied] = useState(false);
   const [state, copyToClipboard] = useCopyToClipboard();
+
   const [planPurchase, setPlanPurchase] = useState(false)
 
   const AdminId = process.env.NEXT_PUBLIC_APPWRITE_ADMIN_ID!
@@ -71,11 +96,15 @@ export default function Checkout(
         if (plans[i].$id === planId) {
           console.log(plans[i])
           setAmount(plans[i].plan_price)
+          setAmountDisable(true)
+          setIsPurpose(true)
           setPurpose("Plan Purchase -" + plans[i].plan_name)
+          setPurposeDisable(true)
           break;
         }
       }
-      setname('Zero Gateway')
+
+      setnameto('Zero Gateway')
 
       const upiData = await appwriteService.listAdminUPI()
       setUPI_ID(upiData[upi_counter].upi_id)
@@ -88,10 +117,13 @@ export default function Checkout(
       setAccount_No(BankData[bank_counter].account_number)
       setIFSC(BankData[bank_counter].ifsc)
 
-      // Update bank_counter
       await updateCounter(bank_counter, allBank, "bank_counter", AdminId);
-      // Update upi_counter
       await updateCounter(upi_counter, allUPI, "upi_counter", AdminId);
+
+
+
+      const data = await appwriteService.listPayments()
+      console.log(data)
 
     }
     setLoading(false)
@@ -100,10 +132,16 @@ export default function Checkout(
 
 
   const formData = {
-    amount,
-    utr: UTR,
-    bankTxnId: BankTxnID,
+    userto,
+    userfrom,
     purpose,
+    name,
+    phone,
+    email,
+    payment_mode,
+    upi_acc,
+    UTR,
+    amount,
     screenshot
   }
 
@@ -125,7 +163,7 @@ export default function Checkout(
     <div className="relative flex min-h-screen w-full flex-col justify-center bg-gradient-to-tr from-[#136A8A] to-[#267871] p-4 md:p-12 lg:p-28">
       <div className={'mx-auto w-full max-w-md rounded-xl bg-white px-4 py-9 sm:px-6 md:max-w-xl md:px-10 md:py-12 lg:max-w-[700px] lg:px-16 xl:rounded-2xl 3xl:rounded-3xl dark:bg-gray-50'} >
         <div className="absolute top-0 right-0 mt-2 mr-2 bg-black text-white px-2 py-1 rounded-md">
-          ID -
+          Payment ID - {id}
         </div>
         <div className="items-center">
 
@@ -146,7 +184,7 @@ export default function Checkout(
                 >
                   Paying to  {' '}  <br />
                   <span className="bg-gradient-to-r from-[#136A8A] to-[#267871] bg-clip-text text-transparent text-center text-[20px] leading-snug md:text-2xl md:!leading-normal lg:text-2xl lg:leading-normaltex ">
-                    {name}
+                    {nameto}
                   </span>
 
                 </Title>
@@ -170,23 +208,57 @@ export default function Checkout(
                 />
               </div>
 
-              <div className="space-y-5 lg:space-y-6 mb-5">
+              {isPurpose == true ? (
                 <Input
-                  type="number"
+                  label="Name"
+                  placeholder="Enter your Name"
                   size={isMedium ? 'lg' : 'xl'}
-                  label="Amount ₹"
-                  placeholder="Enter Amount"
-                  value={amount}
-                  className="[&>label>span]:font-medium col-s"
-                  readOnly={amountDisable}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const value = e.target.value.trim();
-                    if (value === '' || !isNaN(parseFloat(value))) {
-                      setAmount(value === '' ? undefined : parseFloat(value));
-                    }
+                  value={name}
+                  className="[&>label>span]:font-medium mb-2"
+                  onChange={(e) => {
+                    const data = e.target.value;
+                    setName(data);
+                    console.log(data);
                   }}
                 />
-              </div>
+              ) : (<></>)
+              }
+
+              {isPurpose == true ? (
+                <Input
+                  label="Purpose"
+                  placeholder="Enter your Purpose"
+                  size={isMedium ? 'lg' : 'xl'}
+                  value={purpose}
+                  readOnly={purposeDisable}
+                  className="[&>label>span]:font-medium mb-2"
+                  onChange={(e) => {
+                    const data = e.target.value;
+                    setPurpose(data);
+                    console.log(data);
+                  }}
+                />
+              ) : (<></>)
+              }
+
+              {isPurpose == true ? (
+                <Input
+                  label="Purpose"
+                  placeholder="Enter your Purpose"
+                  size={isMedium ? 'lg' : 'xl'}
+                  value={purpose}
+                  readOnly={purposeDisable}
+                  className="[&>label>span]:font-medium mb-2"
+                  onChange={(e) => {
+                    const data = e.target.value;
+                    setPurpose(data);
+                    console.log(data);
+                  }}
+                />
+              ) : (<></>)
+              }
+
+
 
               {amount == null || isNaN(amount) ? (
                 <></>

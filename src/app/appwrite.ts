@@ -22,18 +22,18 @@ type CreateDocument = {
 const appwriteClient = new Client()
 
 appwriteClient
-    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '669519590004b6369e2e');
+    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
 
 export const account = new Account(appwriteClient)
 export const databases = new Databases(appwriteClient)
 export const storage = new Storage(appwriteClient);
 
-const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '66951bb9001d5c90ec32'
-const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || '669a0ea7002f1eec3604'
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!
+const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!
+const PAYMENTS_ID = process.env.NEXT_PUBLIC_APPWRITE_PAYMENTS_ID!
 
-
-const PLAN_ID = process.env.NEXT_PUBLIC_APPWRITE_PLAN_ID || '669670f90033fcd711e4'
+const PLAN_ID = process.env.NEXT_PUBLIC_APPWRITE_PLAN_ID!
 const KYC_ID = '66a88fe2000ed1a3d59d'
 const AdminUPI_ID = '669b9e9a0011cfaf2917'
 const AdminBANK_ID = '669ba107001349375425'
@@ -450,6 +450,20 @@ export class AppwriteService {
             );
             toast.success("BANK Deleted")
             return (deleteDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
+    async listPayments() {
+        try {
+            const listDocuments = await databases.listDocuments(
+                DATABASE_ID,
+                PAYMENTS_ID,
+            );
+            return listDocuments
         } catch (error: any) {
             let response = error.toString();
             toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
