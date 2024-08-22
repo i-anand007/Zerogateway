@@ -64,7 +64,6 @@ export default function PlansTable({ data }: { data: any }) {
   const columns = useMemo(() =>
     getColumns({
       data,
-      sortConfig,
       checkedItems: selectedRowKeys,
       onHeaderCellClick,
       onDeleteItem,
@@ -75,8 +74,6 @@ export default function PlansTable({ data }: { data: any }) {
       },
     }), [
       data,
-      sortConfig.key,
-      sortConfig.direction,
       selectedRowKeys, // Ensure selectedRowKeys is defined somewhere in your component
       onHeaderCellClick,
       onDeleteItem,

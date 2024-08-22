@@ -81,7 +81,7 @@ export default function AuthWrapper({
       router.push('/');
     }
 
-  }, []);
+  }, [router]);
 
 
   return (

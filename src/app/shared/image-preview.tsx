@@ -25,7 +25,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ id }) => {
             setLoading(false)
         };
         userData();
-    }, []);
+    }, [id]);
 
     return (
         <div className='relative p-2'>

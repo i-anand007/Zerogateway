@@ -57,7 +57,6 @@ export default function UsersTable({ data = [] }: { data: any[] }) {
   const columns = useMemo(() =>
     getColumns({
       data,
-      sortConfig,
       checkedItems: selectedRowKeys,
       onHeaderCellClick,
       onDeleteItem,
@@ -67,8 +66,6 @@ export default function UsersTable({ data = [] }: { data: any[] }) {
       },
     }), [
       data,
-      sortConfig.key,
-      sortConfig.direction,
       selectedRowKeys, 
       onHeaderCellClick,
       onDeleteItem,

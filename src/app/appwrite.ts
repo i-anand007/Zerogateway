@@ -1,4 +1,4 @@
-import { Client, Account, ID, OAuthProvider, Databases, Storage } from 'appwrite';
+import { Client, Account, ID, OAuthProvider, Databases, Storage, Query } from 'appwrite';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 
@@ -34,6 +34,9 @@ const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!
 const PAYMENTS_ID = process.env.NEXT_PUBLIC_APPWRITE_PAYMENTS_ID!
 
 const PLAN_ID = process.env.NEXT_PUBLIC_APPWRITE_PLAN_ID!
+const USER_UPI_ID = process.env.NEXT_PUBLIC_APPWRITE_USER_UPI_ID!
+const USER_BANK_ID = process.env.NEXT_PUBLIC_APPWRITE_USER_BANK_ID!
+
 const KYC_ID = '66a88fe2000ed1a3d59d'
 const AdminUPI_ID = '669b9e9a0011cfaf2917'
 const AdminBANK_ID = '669ba107001349375425'
@@ -407,7 +410,6 @@ export class AppwriteService {
                 DATABASE_ID,
                 AdminBANK_ID,
             );
-            console.log(listDocuments)
             const data = listDocuments.documents.map(item => ({
                 id: item.$id,
                 createdAt: item.$createdAt,
@@ -456,6 +458,57 @@ export class AppwriteService {
             throw error
         }
     }
+
+
+
+    async listUserUPI(userID: string) {
+        try {
+            const listDocuments = await databases.listDocuments(
+                DATABASE_ID,
+                USER_UPI_ID,
+                [
+                    Query.contains("user_Id", userID)
+                ]
+            );
+            const data = listDocuments.documents.map(item => ({
+                id: item.$id,
+                createdAt: item.$createdAt,
+                upi_id: item.upi_id,
+                merchant: item.merchant == 'true' ? 'Merchant' : 'Non Merchant',
+                status: item.status ? 'Active' : 'Blocked',
+            }))
+            return (data)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
+    async listUserBANK(userID: string) {
+        try {
+            const listDocuments = await databases.listDocuments(
+                DATABASE_ID,
+                USER_BANK_ID,
+                [
+                    Query.contains("user_Id", userID)
+                ]
+            );
+            const data = listDocuments.documents.map(item => ({
+                id: item.$id,
+                createdAt: item.$createdAt,
+                bank_name: item.bank_name,
+                account_name: item.account_name,
+                account_number: item.account_number,
+                ifsc: item.ifsc,
+                status: item.status ? 'Active' : 'Blocked',
+            }))
+            return (data)
+        } catch (error: any) {
+            false
+        }
+    }
+
 
     async listPayments() {
         try {
