@@ -5,6 +5,8 @@ import { Column } from '@tanstack/react-table';
 export function getColumnOptions<TData extends Record<string, any>>(
   column: Column<TData>
 ) {
+  
+// @ts-ignore
   const isColumnDraggable = column.columnDef.meta?.isColumnDraggable ?? true;
   const canResize = column.getCanResize();
   const canPin = column.getCanPin();

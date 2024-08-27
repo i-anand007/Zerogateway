@@ -45,7 +45,7 @@ export default function Checkout() {
   <div className="">
     <div className="flex items-center justify-between mb-8">
         <div className="flex flex-col items-left">
-            <img className="h-8 w-8 mr-2" src="https://tailwindflex.com/public/images/logos/favicon-32x32.png"
+            <Image className="h-8 w-8 mr-2" src="https://tailwindflex.com/public/images/logos/favicon-32x32.png"
                 alt="Logo" />
             <div className="text-gray-700 font-semibold text-lg">Your Company Name</div>
         </div>

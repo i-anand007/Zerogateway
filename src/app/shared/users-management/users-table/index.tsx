@@ -19,19 +19,15 @@ const filterState = {
   status: '',
 };
 
-export default function UsersTable({ data = [] }: { data: any[] }) {
+interface User {
+  id: string;
+  plan_name: string;
+  plan_base_price: string;
+  // Add other properties as needed
+}
+
+export default function UsersTable({ data }: { data: User[] }) {
   const [pageSize, setPageSize] = useState(10);
-
-  const onHeaderCellClick = (value: string) => ({
-    onClick: () => {
-      handleSort(value);
-    },
-  });
-
-  const onDeleteItem = useCallback((id: string) => {
-    handleDelete(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const {
     isLoading,
@@ -54,7 +50,15 @@ export default function UsersTable({ data = [] }: { data: any[] }) {
     handleReset,
   } = useTable(data, pageSize, filterState);
 
-  const columns = useMemo(() =>
+  const onHeaderCellClick = useCallback((value: string) => ({
+    onClick: () => handleSort(value),
+  }), [handleSort]);
+
+  const onDeleteItem = useCallback((id: string) => {
+    handleDelete(id);
+  }, [handleDelete]);
+
+  const columns = useMemo(() => 
     getColumns({
       data,
       checkedItems: selectedRowKeys,
@@ -63,18 +67,18 @@ export default function UsersTable({ data = [] }: { data: any[] }) {
       onChecked: handleRowSelect,
       handleSelectAll,
       onEditItem: (id) => {
+        // Implement onEditItem logic if needed
       },
     }), [
       data,
-      selectedRowKeys, 
+      selectedRowKeys,
       onHeaderCellClick,
       onDeleteItem,
       handleRowSelect,
       handleSelectAll,
     ]);
 
-  const { visibleColumns, checkedColumns, setCheckedColumns } =
-    useColumn(columns);
+  const { visibleColumns, checkedColumns, setCheckedColumns } = useColumn(columns);
 
   return (
     <div className="mt-14">

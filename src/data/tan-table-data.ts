@@ -64,48 +64,6 @@ export const defaultData: Person[] = [
     // ]
   },
     
-  
-  {
-      id: '62447',
-      name: 'Francis Sanford MD',
-      userName: 'George33',
-      avatar:
-        'https://isomorphic-furyroad.s3.amazonaws.com/public/avatars/avatar-01.webp',
-      email: 'Maryam.Barrows@yahoo.com',
-      dueDate: '2023-10-18T13:24:00.760Z',
-      amount: '544.00',
-      status: 'Paid',
-      createdAt: '2023-01-14T20:37:08.482Z',
-      products: [
-        {
-          id: '0o02051402',
-          name: 'Tasty Metal Shirt',
-          category: 'Shoes',
-          image:
-            'https://isomorphic-furyroad.s3.amazonaws.com/public/products/modern/7.webp',
-          price: '410.00',
-          quantity: 2,
-        },
-        {
-          id: '0o17477064',
-          name: 'Modern Cotton Gloves',
-          category: 'Watch',
-          image:
-            'https://isomorphic-furyroad.s3.amazonaws.com/public/products/modern/5.webp',
-          price: '342.00',
-          quantity: 3,
-        },
-        {
-          id: '0o02374305',
-          name: 'Rustic Steel Computer',
-          category: 'Shoes',
-          image:
-            'https://isomorphic-furyroad.s3.amazonaws.com/public/products/modern/6.webp',
-          price: '948.00',
-          quantity: 1,
-        },
-      ]
-    }
 
 
   // },

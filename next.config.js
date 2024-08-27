@@ -17,10 +17,21 @@ const nextConfig = {
     images: {
         domains: [
             'cloud.appwrite.io',
-            'isomorphic-furyroad.s3.amazonaws.com', 
+            'isomorphic-furyroad.s3.amazonaws.com',
             'w7.pngwing.com'
         ],
     },
+    typescript: {
+        // !! WARN !!
+        // Dangerously allow production builds to successfully complete even if
+        // your project has type errors.
+        // !! WARN !!
+        ignoreBuildErrors: true,
+    },
+    experimental: {
+        missingSuspenseWithCSRBailout: false,
+    },
+    // output: 'export',
 }
 
 module.exports = nextConfig

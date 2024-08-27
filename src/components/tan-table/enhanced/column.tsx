@@ -90,13 +90,6 @@ export const defaultColumns = [
     filterFn: 'createdDate' as any,
     cell: ({ row }) => <DateCell date={new Date(row.original.createdAt)} />,
   }),
-  columnHelper.accessor('dueDate', {
-    id: 'dueDate',
-    size: 200,
-    header: 'Due Date',
-    filterFn: 'dueDate' as any,
-    cell: ({ row }) => <DateCell date={new Date(row.original.createdAt)} />,
-  }),
   columnHelper.accessor('amount', {
     id: 'amount',
     size: 140,
@@ -135,10 +128,10 @@ export const defaultColumns = [
             placement="top"
             color="invert"
           >
-            <Link
+            {/* <Link
               href={routes.invoice.edit(row.original.id)}
               aria-label="go to invoice edit"
-            >
+            > */}
               <ActionIcon
                 as="span"
                 size="sm"
@@ -147,7 +140,7 @@ export const defaultColumns = [
               >
                 <PencilIcon className="h-4 w-4" />
               </ActionIcon>
-            </Link>
+            {/* </Link> */}
           </Tooltip>
           <Tooltip
             size="sm"
@@ -155,10 +148,10 @@ export const defaultColumns = [
             placement="top"
             color="invert"
           >
-            <Link
+            {/* <Link
               href={routes.invoice.details(row.original.id)}
               aria-label="go to invoice details"
-            >
+            > */}
               <ActionIcon
                 as="span"
                 size="sm"
@@ -167,12 +160,13 @@ export const defaultColumns = [
               >
                 <EyeIcon className="h-4 w-4" />
               </ActionIcon>
-            </Link>
+            {/* </Link> */}
           </Tooltip>
           <DeletePopover
             title={`Delete the invoice`}
             description={`Are you sure you want to delete this #${row.id} invoice?`}
             onDelete={() =>
+              // @ts-ignore
               meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
             }
           />

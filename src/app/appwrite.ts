@@ -505,7 +505,9 @@ export class AppwriteService {
             }))
             return (data)
         } catch (error: any) {
-            false
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
         }
     }
 

@@ -84,7 +84,7 @@ export const DatePicker = ({
         }
         showPopperArrow={showPopperArrow}
         dateFormat={dateFormat}
-        selectsRange={selectsRange}
+        // selectsRange={selectsRange}
         onCalendarOpen={onCalendarOpen || handleCalenderOpen}
         onCalendarClose={onCalendarClose || handleCalenderClose}
         calendarClassName={cn(

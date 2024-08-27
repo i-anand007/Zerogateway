@@ -46,10 +46,10 @@ export default function EnhancedTanTable() {
         },
       },
       meta: {
-        handleDeleteRow: (row) => {
+        handleDeleteRow: (row: { id: string; }) => {
           setData((prev) => prev.filter((r) => r.id !== row.id));
         },
-        handleMultipleDelete: (rows) => {
+        handleMultipleDelete: (rows: string | string[]) => {
           setData((prev) => prev.filter((r) => !rows.includes(r.id)));
           table.resetRowSelection();
         },

@@ -28,9 +28,11 @@ export default function PlansPage() {
   const [formattedData, setFormattedData] = useState<object | null>(null);
 
   useEffect(() => {
+    
     async function getPlans() {
-      try {
-        const rawData = await appwriteService.listPlan();
+      const rawData = await appwriteService.listPlan()
+      console.log(rawData)
+    console.log("2nd")
         if (rawData.documents) {
           setData(rawData);
 
@@ -48,11 +50,10 @@ export default function PlansPage() {
             status: item.status ? 'Active' : 'Blocked',
           }));
           setFormattedData(formattedData); 
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
+          console.log(formattedData)
+    }}
+
+    console.log("first")
 
     getPlans(); // Call the async function inside useEffect
 

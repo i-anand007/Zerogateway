@@ -26,7 +26,7 @@ function MenuItem({ menu }: { menu: MenuItemsType }) {
   const isActive = menuItems === menu;
 
   function handleClick() {
-    setMenuItems(menu);
+    setMenuItems(menu as unknown as typeof menuItems); // Explicitly cast if needed
     if (!expandedLeft) {
       setExpandedLeft(true);
     }

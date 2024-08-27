@@ -7,6 +7,7 @@ import { useColumn } from '@/hooks/use-column';
 import ControlledTable from '@/components/controlled-table';
 import { getColumns } from './columns';
 import FilterElement from './filter-element';
+
 const TableFooter = dynamic(() => import('@/app/shared/table-footer'), {
   ssr: false,
 });
@@ -16,29 +17,24 @@ const filterState = {
   status: '',
 };
 
-export default function PlansTable({ data }: { data: any }) {
-  interface Columns {
+// Define appropriate TypeScript types for your component props and other elements
+interface TableProps {
   data: any;
+}
+
+interface ColumnConfig {
+  data: any[];
   sortConfig: Object;
   checkedItems: string[];
   onHeaderCellClick: (value: string) => { onClick: () => void };
   onDeleteItem: (id: string) => void;
   onChecked: (recordKey: string) => void;
   handleSelectAll: () => void;
-  onEditItem: (id: string) => void; // Ensure this matches your actual requirement
+  onEditItem: (id: string) => void;
 }
+
+export default function PlansTable({ data }: TableProps) {
   const [pageSize, setPageSize] = useState(10);
-
-  const onHeaderCellClick = (value: string) => ({
-    onClick: () => {
-      handleSort(value);
-    },
-  });
-
-  const onDeleteItem = useCallback((id: string) => {
-    handleDelete(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const {
     isLoading,
@@ -61,6 +57,18 @@ export default function PlansTable({ data }: { data: any }) {
     handleReset,
   } = useTable(data, pageSize, filterState);
 
+  // Memoize onHeaderCellClick with useCallback
+  const onHeaderCellClick = useCallback((value: string) => ({
+    onClick: () => {
+      handleSort(value);
+    },
+  }), [handleSort]);
+
+  const onDeleteItem = useCallback((id: string) => {
+    handleDelete(id);
+  }, [handleDelete]);
+
+  // Memoize columns to avoid unnecessary re-renders
   const columns = useMemo(() =>
     getColumns({
       data,
@@ -73,16 +81,15 @@ export default function PlansTable({ data }: { data: any }) {
         // Implement your logic for onEditItem if needed
       },
     }), [
-      data,
-      selectedRowKeys, // Ensure selectedRowKeys is defined somewhere in your component
-      onHeaderCellClick,
-      onDeleteItem,
-      handleRowSelect,
-      handleSelectAll,
-    ]);
+    data,
+    selectedRowKeys,
+    onHeaderCellClick,
+    onDeleteItem,
+    handleRowSelect,
+    handleSelectAll,
+  ]);
 
-  const { visibleColumns, checkedColumns, setCheckedColumns } =
-    useColumn(columns);
+  const { visibleColumns, checkedColumns, setCheckedColumns } = useColumn(columns);
 
   return (
     <div className="mt-14">
@@ -90,7 +97,10 @@ export default function PlansTable({ data }: { data: any }) {
         updateFilter={updateFilter}
         handleReset={handleReset}
         onSearch={handleSearch}
-        searchTerm={searchTerm} isFiltered={false} filters={{}}      />
+        searchTerm={searchTerm}
+        isFiltered={isFiltered}
+        filters={filters}
+      />
       <ControlledTable
         variant="modern"
         data={tableData}

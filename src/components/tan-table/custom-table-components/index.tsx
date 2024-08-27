@@ -315,7 +315,7 @@ export function CustomExpandedComponent<TData extends Record<string, any>>(
 ) {
   return (
     <div className="grid grid-cols-1 divide-y border-y border-muted/70 bg-gray-0 px-3.5 dark:bg-gray-50">
-      {row.original.products?.map((product: Products) => (
+      {row.original.products.map((product: Products) => (
         <article
           key={product.id + product.name}
           className="flex items-center justify-between py-6 first-of-type:pt-2.5 last-of-type:pb-2.5"

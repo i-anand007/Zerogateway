@@ -6,6 +6,7 @@ import { useTable } from '@/hooks/use-table';
 import { useColumn } from '@/hooks/use-column';
 import ControlledTable from '@/components/controlled-table';
 import { getColumns } from '../table/columns';
+
 const FilterElement = dynamic(
   () => import('../table/filter-element'),
   { ssr: false }
@@ -21,17 +22,6 @@ const filterState = {
 
 export default function Table({ data = [] }: { data: any[] }) {
   const [pageSize, setPageSize] = useState(10);
-
-  const onHeaderCellClick = (value: string) => ({
-    onClick: () => {
-      handleSort(value);
-    },
-  });
-
-  const onDeleteItem = useCallback((id: string) => {
-    handleDelete(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const {
     isLoading,
@@ -54,6 +44,18 @@ export default function Table({ data = [] }: { data: any[] }) {
     handleReset,
   } = useTable(data, pageSize, filterState);
 
+  // Memoize the onHeaderCellClick function
+  const onHeaderCellClick = useCallback((value: string) => ({
+    onClick: () => {
+      handleSort(value);
+    },
+  }), [handleSort]); // Depend on handleSort as it's used inside the callback
+
+  const onDeleteItem = useCallback((id: string) => {
+    handleDelete(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleDelete]);
+
   const columns = useMemo(() =>
     getColumns({
       data,
@@ -73,8 +75,7 @@ export default function Table({ data = [] }: { data: any[] }) {
       handleSelectAll,
     ]);
 
-  const { visibleColumns, checkedColumns, setCheckedColumns } =
-    useColumn(columns);
+  const { visibleColumns, checkedColumns, setCheckedColumns } = useColumn(columns);
 
   return (
     <div className="mt-14">
