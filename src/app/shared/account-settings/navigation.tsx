@@ -12,15 +12,15 @@ import { LAYOUT_OPTIONS } from '@/config/enums';
 const menuItems = [
   {
     label: 'Profile',
-    value: '/profile-settings',
+    value: '/dashboard/profile-settings',
   },
   {
     label: 'KYC',
-    value: '/profile-settings/submit-kyc',
+    value: '/dashboard/profile-settings/submit-kyc',
   },
   {
     label: 'Billing',
-    value: '/profile-settings/billing',
+    value: '/dashboard/profile-settings/billing',
   },
 ];
 

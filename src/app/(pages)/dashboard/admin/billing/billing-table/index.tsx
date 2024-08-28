@@ -5,12 +5,9 @@ import dynamic from 'next/dynamic';
 import { useTable } from '@/hooks/use-table';
 import { useColumn } from '@/hooks/use-column';
 import ControlledTable from '@/components/controlled-table';
-import { getColumns } from '../table/columns';
+import { getColumns } from './columns';
+import FilterElement from './filter-element';
 
-const FilterElement = dynamic(
-  () => import('../table/filter-element'),
-  { ssr: false }
-);
 const TableFooter = dynamic(() => import('@/app/shared/table-footer'), {
   ssr: false,
 });
@@ -20,7 +17,23 @@ const filterState = {
   status: '',
 };
 
-export default function Table({ data = [] }: { data: any[] }) {
+// Define appropriate TypeScript types for your component props and other elements
+interface TableProps {
+  data: any;
+}
+
+interface ColumnConfig {
+  data: any[];
+  sortConfig: Object;
+  checkedItems: string[];
+  onHeaderCellClick: (value: string) => { onClick: () => void };
+  onDeleteItem: (id: string) => void;
+  onChecked: (recordKey: string) => void;
+  handleSelectAll: () => void;
+  onEditItem: (id: string) => void;
+}
+
+export default function BillingTable({ data }: TableProps) {
   const [pageSize, setPageSize] = useState(10);
 
   const {
@@ -44,18 +57,18 @@ export default function Table({ data = [] }: { data: any[] }) {
     handleReset,
   } = useTable(data, pageSize, filterState);
 
-  // Memoize the onHeaderCellClick function
+  // Memoize onHeaderCellClick with useCallback
   const onHeaderCellClick = useCallback((value: string) => ({
     onClick: () => {
       handleSort(value);
     },
-  }), [handleSort]); // Depend on handleSort as it's used inside the callback
+  }), [handleSort]);
 
   const onDeleteItem = useCallback((id: string) => {
     handleDelete(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleDelete]);
 
+  // Memoize columns to avoid unnecessary re-renders
   const columns = useMemo(() =>
     getColumns({
       data,
@@ -65,27 +78,28 @@ export default function Table({ data = [] }: { data: any[] }) {
       onChecked: handleRowSelect,
       handleSelectAll,
       onEditItem: (id) => {
+        // Implement your logic for onEditItem if needed
       },
     }), [
-      data,
-      selectedRowKeys, 
-      onHeaderCellClick,
-      onDeleteItem,
-      handleRowSelect,
-      handleSelectAll,
-    ]);
+    data,
+    selectedRowKeys,
+    onHeaderCellClick,
+    onDeleteItem,
+    handleRowSelect,
+    handleSelectAll,
+  ]);
 
   const { visibleColumns, checkedColumns, setCheckedColumns } = useColumn(columns);
 
   return (
     <div className="mt-14">
       <FilterElement
-        isFiltered={isFiltered}
-        filters={filters}
         updateFilter={updateFilter}
         handleReset={handleReset}
         onSearch={handleSearch}
         searchTerm={searchTerm}
+        isFiltered={isFiltered}
+        filters={filters}
       />
       <ControlledTable
         variant="modern"

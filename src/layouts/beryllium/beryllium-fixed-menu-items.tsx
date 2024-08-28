@@ -50,22 +50,22 @@ const adminMenuItems = {
     {
       name: 'Users Management',
       icon: PiFolderLock,
-      href: "/admin/users-management"
+      href: "/dashboard/admin/users-management"
     },
     {
       name: 'Plans',
       icon: PiCurrencyCircleDollar,
-      href: "/admin/plans"
+      href: "/dashboard/admin/plans"
     },
     {
       name: 'KYC',
       icon: PiTable,
-      href: "/admin/kyc"
+      href: "/dashboard/admin/kyc"
     },
     {
       name: 'Smart Route',
       icon: FileStackIcon,
-      href: "/admin/smart-route"
+      href: "/dashboard/admin/smart-route"
     },
   ],
 };
@@ -80,7 +80,7 @@ const baseMenuItems = [
     menuItems: [
       {
         name: 'Payment Link',
-        href: '/',
+        href: '/dashboard/',
         icon: PiFolderLock,
       },
     ],
@@ -93,17 +93,17 @@ const baseMenuItems = [
     menuItems: [
       {
         name: 'Profile Setting',
-        href: '/profile-settings',
+        href: '/dashboard/profile-settings',
         icon: PiUserGear,
       },
       {
         name: 'KYC',
-        href: '/profile-settings/submit-kyc',
+        href: '/dashboard/profile-settings/submit-kyc',
         icon: PiGridFour,
       },
       {
         name: 'Billing',
-        href: '/profile-settings/billing',
+        href: '/dashboard/profile-settings/billing',
         icon: PiMoney ,
       },
     ],

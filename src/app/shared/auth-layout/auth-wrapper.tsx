@@ -73,12 +73,12 @@ export default function AuthWrapper({
             // Cookies.set("user_name", response?.name)
             // Cookies.set("user_email", response?.email)
             // Cookies.set("user_labels", response?.labels)
-            router.push('/');
+            router.push('/dashboard');
         }
       }
       isLoggedIn()
     } else {
-      router.push('/');
+      router.push('/dashboard');
     }
 
   }, [router]);

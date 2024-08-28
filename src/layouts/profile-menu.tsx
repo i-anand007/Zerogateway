@@ -33,11 +33,7 @@ export default function ProfileMenu({
             name={Cookies.get("user_name") || ''}
             className={cn('!h-9 w-9 sm:!h-10 sm:!w-10', avatarClassName)}
           />
-          {!!username && (
-            <span className="username hidden text-gray-200 dark:text-gray-700 md:inline-flex">
-              Hi, Andry
-            </span>
-          )}
+
         </button>
       </Popover.Trigger>
 
@@ -175,14 +171,20 @@ function DropdownMenu() {
         :
         <></>
       }
-      {validity !== undefined && validity <= 0 ? 
-      <>
-      <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between bg-red-600">
+      {validity !== undefined && validity <= 0 ?
+        <>
+          <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between bg-red-600">
             <p className="h-auto font-medium outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0 text-white">
               Plan Not Active
             </p>
           </div>
-      </> : <></>
+        </> : <>
+        <div className="border-t border-gray-300 px-6 pb-3 pt-4 flex flex-row justify-between bg-green-600">
+            <p className="h-auto font-medium outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0 text-white">
+              {validity} Day Left
+            </p>
+          </div>
+        </>
       }
       <div className="border-t border-gray-300 px-6 py-4">
         <Button

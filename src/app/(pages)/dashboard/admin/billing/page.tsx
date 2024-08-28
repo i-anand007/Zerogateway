@@ -1,0 +1,75 @@
+"use client"
+
+import PageHeader from '@/app/shared/page-header';
+import { useEffect, useState } from 'react';
+import Loading from '@/components/loading';
+import appwriteService from '@/app/appwrite';
+import BillingTable from '../billing/billing-table';
+import toast from 'react-hot-toast';
+
+const pageHeader = {
+  title: 'Plans ',
+  breadcrumb: [
+    {
+      href: '/',
+      name: 'Dashboard',
+    },
+    {
+      name: 'Plans',
+    },
+  ],
+};
+
+
+
+
+export default function PlansPage() {
+  const [data, setData] = useState(null || {});
+  const [formattedData, setFormattedData] = useState<object | null>(null);
+
+  useEffect(() => {
+
+    async function getPlans() {
+      const rawData = await appwriteService.listPayments("66adf858e2d98ce14727")
+      console.log(rawData)
+      console.log("2nd")
+      if (rawData.documents) {
+        setData(rawData);
+
+        // Format the data here after setting Data
+        const formattedData = rawData.documents.map(item => ({
+          id: item.$id,
+          plan_name: item.plan_name,
+          plan_base_price: item.plan_base_price,
+          plan_discount: item.plan_discount,
+          plan_price: item.plan_price,
+          validity: item.validity,
+          payment_pages: item.payment_pages,
+          platform_fees: item.platform_fees,
+          createdAt: item.$createdAt,
+          status: item.status ? 'Active' : 'Blocked',
+        }));
+        setFormattedData(formattedData);
+        console.log(formattedData)
+      }
+    }
+
+    console.log("first")
+
+    getPlans(); // Call the async function inside useEffect
+
+  }, []);
+
+  return (
+    <>
+      <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
+        {/* <ModalButton label="Add New Role" view={<CreateRole />} /> */}
+      </PageHeader>
+      {formattedData === null ? (
+        <Loading />
+      ) : (
+        <BillingTable data={formattedData} />
+      )}
+    </>
+  );
+}

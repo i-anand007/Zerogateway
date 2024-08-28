@@ -14,8 +14,8 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
 const initialValues: LoginSchema = {
-  email: 'anandm.primex@gmail.com',
-  password: 'Asdf@1234',
+  email: 'xxxxxxx@xxxxx.com',
+  password: 'xxxxxxx',
 };
 
 export default function SignInForm() {
@@ -32,7 +32,7 @@ export default function SignInForm() {
       Cookies.set("user_email", response.providerUid, { path: '/', sameSite: 'strict' })
       setLoading(false)
       toast.success('Logged In')
-      router.push('/');
+      // router.push('/');
     }
   };
 

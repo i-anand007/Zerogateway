@@ -459,8 +459,6 @@ export class AppwriteService {
         }
     }
 
-
-
     async listUserUPI(userID: string) {
         try {
             const listDocuments = await databases.listDocuments(
@@ -511,12 +509,72 @@ export class AppwriteService {
         }
     }
 
+    async addPayments(
+        paymentid: string,
+        userto: any,
+        userfrom: any,
+        purpose: any,
+        name: any,
+        phone: any,
+        email: any,
+        payment_mode: any,
+        upi_acc: any,
+        utr: any,
+        amount: any,
+        screenshot: any
+    ) {
+        try {
+            const createDocument = await databases.createDocument(
+                DATABASE_ID,
+                PAYMENTS_ID,
+                paymentid,
+                {
+                    userto,
+                    userfrom,
+                    purpose,
+                    name,
+                    phone,
+                    email,
+                    payment_mode,
+                    upi_acc,
+                    utr,
+                    amount,
+                    screenshot
+                }
+            );
+            return createDocument
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
 
-    async listPayments() {
+    async listPayments(userId: string) {
         try {
             const listDocuments = await databases.listDocuments(
                 DATABASE_ID,
                 PAYMENTS_ID,
+                [Query.contains("userto", userId)]
+            );
+            return listDocuments
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
+    async getPaymentsInfo(
+        paymentId: string
+    ) {
+        try {
+            const listDocuments = await databases.listDocuments(
+                DATABASE_ID,
+                PAYMENTS_ID,
+                [
+                    Query.equal("$id", paymentId)
+                ]
             );
             return listDocuments
         } catch (error: any) {

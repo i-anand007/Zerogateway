@@ -90,90 +90,46 @@ export default function Checkout(
 
   const planId = searchParams.get('plan')
   const userId = searchParams.get('user')
+  const getpurpose = searchParams.get('purpose')
+  const getamount = searchParams.get('amount')
 
   const UPILink = `upi://pay?pn=${nameto}&pa=${UPI_ID}&cu=INR&am=${amount}`
 
 
 
 
-  
+
   useEffect(() => {
     setPaymentId(ID.unique());
-  }, []); 
-  
+  }, []);
+
 
   useEffect(() => {
 
     async function dataFetching() {
 
-      if (planId !== undefined) {
-       try {
-         const data = await appwriteService.isLoggedIn()
-         if (data === false) {
-           setError("Please Login First")
-           toast.error("Please Login First")
-         }
-       } catch (error) {
-         setError("Please Login First")
-         toast.error("Please Login First")
-       }
-   
-       const user = await appwriteService.getCurrentUser()
-       setUserfrom(user?.$id)
-   
-       const allUPI = await appwriteService.listAdminUPI()
-       const allBank = await appwriteService.listAdminBANK()
-       const AdminPrefs = await AppwriteUsersApi.getPrefs(AdminId)
-       let bank_counter = parseInt(AdminPrefs.bank_counter)
-       let upi_counter = parseInt(AdminPrefs.upi_counter)
-   
-       const plans = (await appwriteService.listPlan()).documents
-       for (let i = 0; i < plans.length; i++) {
-         if (plans[i].$id === planId) {
-           console.log(plans[i])
-           setAmount(plans[i].plan_price)
-           setAmountDisable(true)
-           setIsPurpose(true)
-           setPurpose("Plan Purchase - " + plans[i].plan_name)
-           setPurposeDisable(true)
-           break;
-         }
-       }
-       setUserto(AdminId)
-       setnameto('Zero Gateway')
-   
-       setUPI_ID(allUPI[upi_counter].upi_id)
-       const isMerchant = allUPI[upi_counter].merchant === "Merchant";
-       setUPI_TYPE_Merchant(isMerchant);
-   
-       setBank_Name(allBank[bank_counter].bank_name)
-       setAccount_Name(allBank[bank_counter].account_name)
-       setAccount_No(allBank[bank_counter].account_number)
-       setIFSC(allBank[bank_counter].ifsc)
-   
-       await updateCounter(bank_counter, allBank, "bank_counter", AdminId);
-       await updateCounter(upi_counter, allUPI, "upi_counter", AdminId);
-   
-       const data = await appwriteService.listPayments()
-       console.log(data)
-       
-      setLoading(false)
-      }
+      if (planId) {
+        console.log("Plan ran")
+        try {
+          const data = await appwriteService.isLoggedIn()
+          if (data === false) {
+            setError("Please Login First")
+            toast.error("Please Login First")
+          }
+        } catch (error) {
+          setError("Please Login First")
+          toast.error("Please Login First")
+        }
 
-      if (userId !== undefined) {
-    
-        const userInfo = await AppwriteUsersApi.get(userId!)
-        console.log(userInfo)
-    
-        const allUPI = await appwriteService.listUserUPI(userId!)
-        const allBank = await appwriteService.listUserBANK(userId!)
-        const UserPrefs = await AppwriteUsersApi.getPrefs(userId!)
+        const user = await appwriteService.getCurrentUser()
+        setUserfrom(user?.$id)
 
-        console.log(allUPI , allBank)
-        
-        let bank_counter = parseInt(UserPrefs.bank_counter)
-        let upi_counter = parseInt(UserPrefs.upi_counter)
-    
+        const allUPI = await appwriteService.listAdminUPI()
+        const allBank = await appwriteService.listAdminBANK()
+        const AdminPrefs = await AppwriteUsersApi.getPrefs(AdminId)
+        let bank_counter = parseInt(AdminPrefs.bank_counter)
+        let upi_counter = parseInt(AdminPrefs.upi_counter)
+
         const plans = (await appwriteService.listPlan()).documents
         for (let i = 0; i < plans.length; i++) {
           if (plans[i].$id === planId) {
@@ -186,42 +142,93 @@ export default function Checkout(
             break;
           }
         }
-        setUserto(userId!)
-        setnameto(userInfo.name)
+        setUserto(AdminId)
+        setnameto('Zero Gateway')
 
-        console.log(allUPI[upi_counter].upi_id)
-        console.log(allBank[upi_counter].bank_name)
-    
         setUPI_ID(allUPI[upi_counter].upi_id)
         const isMerchant = allUPI[upi_counter].merchant === "Merchant";
         setUPI_TYPE_Merchant(isMerchant);
-    
+
         setBank_Name(allBank[bank_counter].bank_name)
         setAccount_Name(allBank[bank_counter].account_name)
         setAccount_No(allBank[bank_counter].account_number)
         setIFSC(allBank[bank_counter].ifsc)
-    
+
         await updateCounter(bank_counter, allBank, "bank_counter", AdminId);
         await updateCounter(upi_counter, allUPI, "upi_counter", AdminId);
-    
+
         const data = await appwriteService.listPayments()
         console.log(data)
-        
-       setLoading(false)
-       }
-   
-     }
+
+        setLoading(false)
+      }
+
+      if (userId) {
+
+        console.log("User ran")
+        try {
+          const userInfo = await AppwriteUsersApi.get(userId!)
+          setnameto(userInfo.name)
+        } catch (error) {
+          toast.error("WRONG DATA PROVIDED")
+        }
+
+        const allUPI = await appwriteService.listUserUPI(userId!)
+        const allBank = await appwriteService.listUserBANK(userId!)
+        const UserPrefs = await AppwriteUsersApi.getPrefs(userId!)
+
+        console.log(allUPI, allBank)
+        setLoading(false)
+        setUserfrom("Guest")
+
+        let bank_counter = parseInt(UserPrefs.bank_counter)
+        let upi_counter = parseInt(UserPrefs.upi_counter)
+
+        getpurpose
+          ? (setIsPurpose(true), setPurpose(getpurpose), setPurposeDisable(true))
+          : null;
+
+        getamount
+          ? (setAmount(parseInt(getamount)), setAmountDisable(true))
+          : null;
+
+
+
+
+
+        setUserto(userId!)
+
+        setUPI_ID(allUPI[upi_counter].upi_id)
+        const isMerchant = allUPI[upi_counter].merchant === "Merchant";
+        setUPI_TYPE_Merchant(isMerchant);
+
+        setBank_Name(allBank[bank_counter].bank_name)
+        setAccount_Name(allBank[bank_counter].account_name)
+        setAccount_No(allBank[bank_counter].account_number)
+        setIFSC(allBank[bank_counter].ifsc)
+
+        await updateCounter(bank_counter, allBank, "bank_counter", userId);
+        await updateCounter(upi_counter, allUPI, "upi_counter", userId);
+
+        const data = await appwriteService.listPayments()
+        console.log(data)
+
+      }
+
+    }
 
     console.log(userId)
     console.log(planId)
+    console.log(getpurpose)
 
     dataFetching()
-  }, []); 
+  }, []);
 
 
- 
 
-  const onSubmit = () => {
+
+  const onSubmit = async () => {
+    const uploadedScreenshot = await appwriteService.uploadFile(screenshot);
     const formData = {
       userto,
       userfrom,
@@ -235,7 +242,29 @@ export default function Checkout(
       amount,
       screenshot
     }
+    try {
+      await appwriteService.addPayments(
+        paymentId,
+        userto,
+        userfrom,
+        purpose,
+        name,
+        phone,
+        email,
+        payment_mode,
+        upi_acc,
+        UTR,
+        amount,
+        uploadedScreenshot.$id
+      )
+      toast.success("Payment Completed")
+    } catch (error) {
+      console.log(error)
+      toast.error("Failed to proceed")
+    }
+
     console.log(formData)
+    console.log(uploadedScreenshot.$id)
   };
 
 
@@ -259,25 +288,25 @@ export default function Checkout(
           {isLoading ? <Lottie animationData={animationData} /> :
             <>
               <div className="flex flex-row mb-5 items-center">
-                    <div className="relative -top-1/5 aspect-square w-[70px] overflow-hidden rounded-full border-[6px] bg-gray-100 shadow-profilePic @2xl:w-[80px] @5xl:-top-2/3 @5xl:w-[150px] dark:border-gray-50 3xl:w-[100px]">
-                      <Image
-                        src="https://isomorphic-furyroad.s3.amazonaws.com/public/profile-image.webp"
-                        alt="profile-pic"
-                        fill
-                        className=""
-                      />
-                    </div>
-                    <Title
-                      as="h2"
-                      className="rizzui-title-h3 font-bold ml-4 text-[16px] leading-snug md:text-xl md:!leading-normal lg:text-xl lg:leading-normaltex"
-                    >
-                      Paying to  {' '}  <br />
-                      <span className="bg-gradient-to-r from-[#136A8A] to-[#267871] bg-clip-text text-transparent text-center text-[20px] leading-snug md:text-2xl md:!leading-normal lg:text-2xl lg:leading-normaltex ">
-                        {nameto}
-                      </span>
+                <div className="relative -top-1/5 aspect-square w-[70px] overflow-hidden rounded-full border-[6px] bg-gray-100 shadow-profilePic @2xl:w-[80px] @5xl:-top-2/3 @5xl:w-[150px] dark:border-gray-50 3xl:w-[100px]">
+                  <Image
+                    src="https://isomorphic-furyroad.s3.amazonaws.com/public/profile-image.webp"
+                    alt="profile-pic"
+                    fill
+                    className=""
+                  />
+                </div>
+                <Title
+                  as="h2"
+                  className="rizzui-title-h3 font-bold ml-4 text-[16px] leading-snug md:text-xl md:!leading-normal lg:text-xl lg:leading-normaltex"
+                >
+                  Paying to  {' '}  <br />
+                  <span className="bg-gradient-to-r from-[#136A8A] to-[#267871] bg-clip-text text-transparent text-center text-[20px] leading-snug md:text-2xl md:!leading-normal lg:text-2xl lg:leading-normaltex ">
+                    {nameto}
+                  </span>
 
-                    </Title>
-                  </div>
+                </Title>
+              </div>
 
               <div className="space-y-5 lg:space-y-6 mb-5">
                 <Input

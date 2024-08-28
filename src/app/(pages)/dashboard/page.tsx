@@ -1,23 +1,12 @@
 'use client'
 import { Title } from "rizzui";
-import appwriteService, { account } from "../appwrite";
 
 
 
-export default function Home() {
+export default function Dashboard() {
 
-  const getCurrentUser = async () => {
-    const data = await appwriteService.isAdmin()
-    if (data) {
-      console.log(data)
-    }
-  }
 
-  const profileImage = async () => {
-    const data = await appwriteService.getCurrentUser(
-    )
-    console.log(data)
-  }
+
 
   return (
     <>
@@ -29,7 +18,7 @@ export default function Home() {
       standard
     </p>
     <h1 className="flex justify-center gap-1 mt-6 font-sans antialiased font-normal tracking-normal text-white text-7xl">
-      <span className="mt-2 text-4xl">$</span>299877984657179
+      <span className="mt-2 text-4xl">$</span>29
       <span className="self-end text-4xl">/mo</span>
     </h1>
   </div>

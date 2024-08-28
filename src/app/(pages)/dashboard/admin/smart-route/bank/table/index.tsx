@@ -5,10 +5,10 @@ import dynamic from 'next/dynamic';
 import { useTable } from '@/hooks/use-table';
 import { useColumn } from '@/hooks/use-column';
 import ControlledTable from '@/components/controlled-table';
-import { getColumns } from '../table/columns';
+import { getColumns } from './columns';
 
 const FilterElement = dynamic(
-  () => import('../table/filter-element'),
+  () => import('./filter-element'),
   { ssr: false }
 );
 const TableFooter = dynamic(() => import('@/app/shared/table-footer'), {

@@ -23,18 +23,24 @@ export default function RegisterForm() {
   const router = useRouter();
   const [reset, setReset] = useState({});
   const onSubmit: SubmitHandler<RegisterSchema> = async (data) => {
+    console.log("hii");
     console.log(data);
     const email = data.email
     const name = data.name
-    const phone = `+91${data.number.toString()}`
+    // const phone = `+91${data.number.toString()}`
     const password = data.password
     const response = await appwriteService.createUserAccount({ email, password, name })
-    await console.log(response)
+    console.log(response)
     if (response.$id) {
-      const updatePhonne = await appwriteService.updatePhone({ phone, password})
-      await console.log(updatePhonne)
+      await appwriteService.updatePrefs({
+        payment_pages: 0,
+        validity: new Date(),
+        profile_pic: "",
+      })
+      // const updatePhonne = await appwriteService.updatePhone({ phone, password})
+      // await console.log(updatePhonne)
       toast.success('Account Created')
-      router.push('/');
+      // router.push('/');
     } else if (!response.$id) {
       toast.error('Account Not Created')
     }
@@ -71,7 +77,7 @@ export default function RegisterForm() {
               {...register('email')}
               error={errors.email?.message}
             />
-            <Input
+            {/* <Input
               type="number"
               size={isMedium ? 'lg' : 'xl'}
               label="Mobile Number"
@@ -79,7 +85,7 @@ export default function RegisterForm() {
               className="[&>label>span]:font-medium"
               {...register('number')}
               error={errors.number?.message}
-            />
+            /> */}
             <Password
               label="Password"
               placeholder="Enter your password"
