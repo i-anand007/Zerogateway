@@ -1,23 +1,21 @@
 'use client'
 import { Title } from "rizzui";
 import appwriteService, { account } from "../appwrite";
+import { useRouter } from "next/navigation";
 
 
 
 export default function Home() {
 
+  const router = useRouter();
   const getCurrentUser = async () => {
-    const data = await appwriteService.isAdmin()
+    const data = await appwriteService.isLoggedIn()
     if (data) {
-      console.log(data)
+      router.push('/dashboard')
     }
   }
 
-  const profileImage = async () => {
-    const data = await appwriteService.getCurrentUser(
-    )
-    console.log(data)
-  }
+  getCurrentUser()
 
   return (
     <>

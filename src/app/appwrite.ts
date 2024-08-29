@@ -584,6 +584,22 @@ export class AppwriteService {
         }
     }
 
+    async updatePaymentStatus(data: { id: string; payload: object; }) {
+        try {
+            const updateDocument = await databases.updateDocument(
+                DATABASE_ID,
+                PAYMENTS_ID,
+                data.id,
+                data.payload
+            );
+            return (updateDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
 }
 
 

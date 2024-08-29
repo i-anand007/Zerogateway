@@ -38,7 +38,7 @@ export type Billing = {
 
 function getStatusBadge(status: Billing['status']) {
   switch (status) {
-    case 'true':
+    case STATUSES.Blocked:
       return (
         <div className="flex items-center">
           <Badge color="danger" renderAsDot />
@@ -46,18 +46,18 @@ function getStatusBadge(status: Billing['status']) {
           <Text className="ms-2 font-medium text-red-dark">{status}</Text>
         </div>
       );
-    case 'false':
+    case STATUSES.Active:
       return (
         <div className="flex items-center">
           <Badge color="success" renderAsDot />
           <Text className="ms-2 font-medium text-green-dark">{status}</Text>
         </div>
       );
-    case 'null':
+    default:
       return (
         <div className="flex items-center">
-          <Badge color="success" renderAsDot />
-          <Text className="ms-2 font-medium text-green-dark">{"Pending"}</Text>
+          <Badge renderAsDot className="bg-gray-400" />
+          <Text className="ms-2 font-medium text-gray-600">{status}</Text>
         </div>
       );
   }
@@ -74,15 +74,11 @@ type Columns = {
   onChecked?: (id: string) => void;
 };
 
-// const statusOptions = [
-//   { label: 'Success', value: 'Success' },
-//   { label: 'Declined', value: 'Declined' },
-// ];
-
 const statusOptions = [
   { label: 'Active', value: 'Active' },
   { label: 'Blocked', value: 'Blocked' },
 ];
+
 
 export const getColumns = ({
   data,
@@ -118,40 +114,40 @@ export const getColumns = ({
       // render: (purpose: string) => `${purpose}`
     },
 
-    {
-      title: (
-        <HeaderCell
-          title="Name"
-        />
-      ),
-      dataIndex: 'name',
-      key: 'id',
-      width: 80,
-      // render: (plan_discount: string) => `${plan_discount} %`
-    },
+    // {
+    //   title: (
+    //     <HeaderCell
+    //       title="Name"
+    //     />
+    //   ),
+    //   dataIndex: 'name',
+    //   key: 'id',
+    //   width: 80,
+    //   // render: (plan_discount: string) => `${plan_discount} %`
+    // },
 
-    {
-      title: (
-        <HeaderCell
-          title="Email"
-        />
-      ),
-      dataIndex: 'email',
-      key: 'id',
-      width: 80,
-      // render: (plan_price: string) => `₹ ${plan_price}`
-    },
+    // {
+    //   title: (
+    //     <HeaderCell
+    //       title="Email"
+    //     />
+    //   ),
+    //   dataIndex: 'email',
+    //   key: 'id',
+    //   width: 80,
+    //   // render: (plan_price: string) => `₹ ${plan_price}`
+    // },
 
-    {
-      title: (
-        <HeaderCell
-          title="Phone"
-        />
-      ),
-      dataIndex: 'phone',
-      key: 'id',
-      width: 80,
-    },
+    // {
+    //   title: (
+    //     <HeaderCell
+    //       title="Phone"
+    //     />
+    //   ),
+    //   dataIndex: 'phone',
+    //   key: 'id',
+    //   width: 80,
+    // },
 
     {
       title: (
@@ -251,9 +247,9 @@ export const getColumns = ({
       key: 'status',
       width: 50,
       onHeaderCell: () => onHeaderCellClick('status'),
-      render: (status: string, billing: Billing) => {
+      render: (status: string, plan: Billing) => {
 
-        return <StatusSelect selectItem={status} userId={billing.id} />;
+        return <StatusSelect selectItem={status} userId={plan.id} />;
       },
     },
     // {
@@ -284,9 +280,8 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
   const [value, setValue] = useState(selectItemValue);
   const userStatusChange = async (data: any) => {
     setValue(data)
-    console.log(data)
-    if (data.value == 'Success') {
-      appwriteService.updatePaymentStatus(
+    if (data.value == 'Active') {
+      appwriteService.updatePlan(
         {
           "id": userId,
           payload:
@@ -296,9 +291,9 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
           }
         }
       )
-      toast.success("Payment Success")
-    } else if (data.value == 'Declined') {
-      appwriteService.updatePaymentStatus(
+      toast.success("Plan Activated")
+    } else {
+      appwriteService.updatePlan(
         {
           "id": userId,
           payload:
@@ -308,14 +303,14 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
           }
         }
       )
-      toast.success("Payment Declined")
+      toast.success("Plan Blocked")
     }
   }
   return (
     <Select
       dropdownClassName="!z-10"
       className="min-w-[140px]"
-      // inPortal={false}
+      inPortal={false}
       placeholder="Select Status"
       options={statusOptions}
       value={value}
@@ -330,7 +325,7 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
 
 function renderOptionDisplayValue(value: string) {
   switch (value) {
-    case 'Declined':
+    case 'Blocked':
       return (
         <div className="flex items-center">
           <PiXCircleBold className="shrink-0 fill-red-dark  text-base" />

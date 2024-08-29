@@ -6,9 +6,10 @@ import Loading from '@/components/loading';
 import appwriteService from '@/app/appwrite';
 import BillingTable from '../billing/billing-table';
 import toast from 'react-hot-toast';
+import { AppwriteUsersApi } from '@/app/appwrite_api';
 
 const pageHeader = {
-  title: 'Plans ',
+  title: 'All Billing ',
   breadcrumb: [
     {
       href: '/',
@@ -25,51 +26,69 @@ const pageHeader = {
 
 export default function PlansPage() {
   const [data, setData] = useState(null || {});
+  const [allUser, setAllUser] = useState(null || {});
   const [formattedData, setFormattedData] = useState<object | null>(null);
 
   useEffect(() => {
 
-    async function getPlans() {
-      const rawData = await appwriteService.listPayments("66adf858e2d98ce14727")
+    async function getBilling() {
+
+      const userId = await appwriteService.getCurrentUser()
+
+      const rawData = await appwriteService.listPayments(
+        // userId?.$id!
+        "66adf858e2d98ce14727"
+      )
       console.log(rawData)
-      console.log("2nd")
+      const all_User = await AppwriteUsersApi.list()
+      setAllUser(all_User.users)
+
+      console.log(all_User)
       if (rawData.documents) {
         setData(rawData);
-
-        // Format the data here after setting Data
+      
+        // Define a function to find user by id and return their name
+        const idToUser = (id: string) => {
+          const user = all_User.users.find(user => user.$id === id);
+          return user ? user.name : "Unknown";
+        };
+      
+        // Format the data after setting Data
         const formattedData = rawData.documents.map(item => ({
           id: item.$id,
-          plan_name: item.plan_name,
-          plan_base_price: item.plan_base_price,
-          plan_discount: item.plan_discount,
-          plan_price: item.plan_price,
-          validity: item.validity,
-          payment_pages: item.payment_pages,
-          platform_fees: item.platform_fees,
+          from: idToUser(item.userfrom),
+          purpose: item.purpose,
+          name: item.name,
+          email: item.email,
+          phone: item.phone,
+          payment_mode: item.payment_mode,
+          upi_acc: item.upi_acc,
+          amount: item.amount,
+          screenshot: item.screenshot,
           createdAt: item.$createdAt,
           status: item.status ? 'Active' : 'Blocked',
         }));
-        setFormattedData(formattedData);
-        console.log(formattedData)
-      }
+      setFormattedData(formattedData);
+      console.log(formattedData)
     }
+  }
 
     console.log("first")
 
-    getPlans(); // Call the async function inside useEffect
+    getBilling();
 
-  }, []);
+}, []);
 
-  return (
-    <>
-      <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
-        {/* <ModalButton label="Add New Role" view={<CreateRole />} /> */}
-      </PageHeader>
-      {formattedData === null ? (
-        <Loading />
-      ) : (
-        <BillingTable data={formattedData} />
-      )}
-    </>
-  );
+return (
+  <>
+    <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
+      {/* <ModalButton label="Add New Role" view={<CreateRole />} /> */}
+    </PageHeader>
+    {formattedData === null ? (
+      <Loading />
+    ) : (
+      <BillingTable data={formattedData} />
+    )}
+  </>
+);
 }
