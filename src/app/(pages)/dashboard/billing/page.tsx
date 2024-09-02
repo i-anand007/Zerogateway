@@ -22,8 +22,6 @@ const pageHeader = {
 };
 
 
-
-
 export default function PlansPage() {
   const [data, setData] = useState(null || {});
   const [allUser, setAllUser] = useState(null || {});
@@ -36,11 +34,12 @@ export default function PlansPage() {
       const userId = await appwriteService.getCurrentUser()
 
       const rawData = await appwriteService.listPayments(
-        // userId?.$id!
-        "66adf858e2d98ce14727"
+        userId?.$id!
       )
-      console.log(rawData)
-      const all_User = await AppwriteUsersApi.list()
+      console.log(userId)
+      const all_User = await AppwriteUsersApi.list(
+
+      )
       setAllUser(all_User.users)
 
       console.log(all_User)
@@ -83,9 +82,6 @@ export default function PlansPage() {
         console.log(formattedData)
       }
     }
-
-    console.log("first")
-
     getBilling();
 
   }, []);
