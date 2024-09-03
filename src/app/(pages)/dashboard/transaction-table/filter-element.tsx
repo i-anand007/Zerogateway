@@ -1,14 +1,10 @@
 'use client';
 
 import { PiTrashDuotone, PiMagnifyingGlassBold } from 'react-icons/pi';
-import StatusField from '@/components/controlled-table/status-field';
 import { Badge, Text, Title, Button, Input } from 'rizzui';
 import { STATUSES } from '@/data/users-data';
 import { rolesList } from '@/data/users-management';
 import ModalButton from '@/app/shared/modal-button';
-import CreateUser from '@/app/shared/users-management/create-user';
-import CreateUPI from '../create-bank';
-import CreateBANK from '../create-bank';
 
 type FilterElementProps = {
   isFiltered: boolean;
@@ -36,24 +32,8 @@ export default function FilterElement({
     <>
       <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container ">
         <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
-          All BANKS
+          All Transactions
         </Title>
-
-        {/* <StatusField
-          options={roles}
-          inPortal={true}
-          dropdownClassName="!z-10 w-48"
-          value={filters['role']}
-          placeholder="Filter by Role"
-          className=" @4xl:-auto -order-2 w-full min-w-[160px] @[25rem]:w-[calc(calc(100%_-_10px)_/_2)] @4xl:-order-4 @4xl:w-auto"
-          getOptionValue={(option: { value: any }) => option.value}
-          onChange={(value: string) => {
-            updateFilter('role', value);
-          }}
-          displayValue={(selected: string) =>
-            roles.find((option) => option.value === selected)?.value ?? selected
-          }
-        /> */}
 
         {isFiltered && (
           <Button
@@ -68,7 +48,7 @@ export default function FilterElement({
 
         <Input
           type="search"
-          placeholder="Search for Bank..."
+          placeholder="Search for transactions..."
           value={searchTerm}
           onClear={() => onSearch('')}
           onChange={(event) => onSearch(event.target.value)}
@@ -78,14 +58,7 @@ export default function FilterElement({
           className="-order-4 w-full @xl:-order-5 @xl:ms-auto @xl:w-auto @4xl:-order-2 @4xl:w-[230px] @5xl:w-auto"
         />
 
-        <div className="-order-5 flex basis-auto justify-end @xl:-order-4 @4xl:-order-1">
-          <ModalButton
-            label="Add BANK"
-            view={<CreateBANK />}
-            customSize="600px"
-            className="mt-0"
-          />
-        </div>
+        
       </div>
     </>
   );

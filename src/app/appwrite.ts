@@ -458,6 +458,22 @@ export class AppwriteService {
             throw error
         }
     }
+    
+    async addUserUPI(data: object) {
+        try {
+            const createDocument = await databases.createDocument(
+                DATABASE_ID,
+                USER_UPI_ID,
+                ID.unique(),
+                data
+            );
+            return (createDocument)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
 
     async listUserUPI(userID: string) {
         try {
@@ -476,6 +492,22 @@ export class AppwriteService {
                 status: item.status ? 'Active' : 'Blocked',
             }))
             return (data)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+    
+    async addUserBANK(data: object) {
+        try {
+            const createDocument = await databases.createDocument(
+                DATABASE_ID,
+                USER_BANK_ID,
+                ID.unique(),
+                data
+            );
+            return (createDocument)
         } catch (error: any) {
             let response = error.toString();
             toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
@@ -556,6 +588,20 @@ export class AppwriteService {
                 DATABASE_ID,
                 PAYMENTS_ID,
                 [Query.contains("userto", userId)]
+            );
+            return listDocuments
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+    
+    async listAllPayments() {
+        try {
+            const listDocuments = await databases.listDocuments(
+                DATABASE_ID,
+                PAYMENTS_ID,
             );
             return listDocuments
         } catch (error: any) {

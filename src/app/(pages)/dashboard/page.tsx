@@ -1,84 +1,209 @@
-'use client'
-import { Title } from "rizzui";
+'use client';
+
+import { Button, cn } from 'rizzui';
+// import cn from '@utils/class-names';
+import { useScrollableSlider } from '@/hooks/use-scrollable-slider';
+import {
+  PiBank,
+  PiCaretLeftBold,
+  PiCaretRightBold,
+  PiCube,
+  PiCurrencyBtc,
+  PiCurrencyCircleDollar,
+  PiDotsThreeCircleDuotone,
+  PiFolder,
+  PiMoneyBold,
+  PiMoneyThin,
+  PiXCircleBold,
+} from 'react-icons/pi';
+import TransactionCard, {
+  TransactionType,
+} from '@/components/cards/transaction-card';
+import appwriteService from '@/app/appwrite';
+import { useEffect, useState } from 'react';
+import { AppwriteUsersApi } from '@/app/appwrite_api';
+import PageHeader from '@/app/shared/page-header';
+import Loading from '@/components/loading';
+import BillingTable from './transaction-table';
+
+type FileStatsType = {
+  className?: string;
+};
 
 
+const pageHeader = {
+  title: 'All Billing ',
+  breadcrumb: [
+    {
+      href: '/',
+      name: 'Dashboard',
+    },
+    {
+      name: 'Billing',
+    },
+  ],
+};
 
-export default function Dashboard() {
+const statData: TransactionType[] = 
+[
+  {
+    title: 'Today',
+    amount: '16,085',
+    icon: PiBank,
+  },
+  {
+    title: 'Approved',
+    amount: '38,503',
+    icon: PiMoneyBold,
+  },
+  {
+    title: 'Pending',
+    amount: '25,786',
+    icon: PiDotsThreeCircleDuotone ,
+  },
+  {
+    title: 'Declined',
+    amount: '27,432',
+    icon: PiXCircleBold,
+  },
+];
+
+export function StatGrid() {
+  return (
+    <>
+      {statData.map((stat: any, index: number) => {
+        return (
+          <TransactionCard
+            key={'transaction-card-' + index}
+            transaction={stat}
+            className="min-w-[300px]"
+          />
+        );
+      })}
+    </>
+  );
+}
+
+export default function FileStats({ className }: FileStatsType) {
+  const {
+    sliderEl,
+    sliderPrevBtn,
+    sliderNextBtn,
+    scrollToTheRight,
+    scrollToTheLeft,
+  } = useScrollableSlider();
+
+  const [data, setData] = useState(null || {});
+  const [allUser, setAllUser] = useState(null || {});
+  const [formattedData, setFormattedData] = useState<object | null>(null);
+
+  useEffect(() => {
+
+    async function getBilling() {
+
+      const userId = await appwriteService.getCurrentUser()
+
+      const rawData = await appwriteService.listPayments(
+        userId?.$id!
+      )
 
 
+      
+      console.log(rawData)
+      const all_User = await AppwriteUsersApi.list(
 
+      )
+      setAllUser(all_User.users)
+
+      console.log(all_User)
+      if (rawData.documents) {
+        setData(rawData);
+
+        // Define a function to find user by id and return their name
+        const idToUser = (id: string) => {
+          const user = all_User.users.find(user => user.$id === id);
+          return user ? user.name : "Unknown";
+        };
+
+        const checkStatus = (status: boolean) => {
+          switch (status) {
+            case null:
+              return "Pending";
+            case true:
+              return "Approved";
+            case false:
+              return "Declined"
+          }
+        }
+
+        // Format the data after setting Data
+        const formattedData = rawData.documents.map(item => ({
+          id: item.$id,
+          from: idToUser(item.userfrom),
+          purpose: item.purpose,
+          name: item.name,
+          email: item.email,
+          phone: item.phone,
+          payment_mode: item.payment_mode,
+          upi_acc: item.upi_acc,
+          amount: item.amount,
+          utr: item.utr,
+          screenshot: item.screenshot,
+          createdAt: item.$createdAt,
+          status: checkStatus(item.status),
+        }));
+        setFormattedData(formattedData);
+        console.log(formattedData)
+      }
+    }
+    getBilling();
+
+  }, []);
 
   return (
     <>
-      <div
-  className="relative flex flex-col bg-clip-border rounded-xl bg-gray-900 dark:bg-gray-900 text-white shadow-md w-full max-w-[20rem] p-8">
-  <div
-    className="relative pb-8 m-0 mb-8 overflow-hidden text-center text-gray-700 bg-transparent border-b rounded-none shadow-none bg-clip-border border-white/10">
-    <p className="block font-sans text-sm antialiased font-normal leading-normal text-white uppercase">
-      standard
-    </p>
-    <h1 className="flex justify-center gap-1 mt-6 font-sans antialiased font-normal tracking-normal text-white text-7xl">
-      <span className="mt-2 text-4xl">$</span>29
-      <span className="self-end text-4xl">/mo</span>
-    </h1>
-  </div>
-  <div className="p-0">
-    <ul className="flex flex-col gap-4">
-      <li className="flex items-center gap-4">
-        <span className="p-1 border rounded-full border-white/20 bg-white/20"><svg xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="w-3 h-3">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
-          </svg></span>
-        <p className="block font-sans text-base antialiased font-normal leading-relaxed text-inherit">
-          5 team members
-        </p>
-      </li>
-      <li className="flex items-center gap-4">
-        <span className="p-1 border rounded-full border-white/20 bg-white/20"><svg xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="w-3 h-3">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
-          </svg></span>
-        <p className="block font-sans text-base antialiased font-normal leading-relaxed text-inherit">
-          200+ components
-        </p>
-      </li>
-      <li className="flex items-center gap-4">
-        <span className="p-1 border rounded-full border-white/20 bg-white/20"><svg xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="w-3 h-3">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
-          </svg></span>
-        <p className="block font-sans text-base antialiased font-normal leading-relaxed text-inherit">
-          40+ built-in pages
-        </p>
-      </li>
-      <li className="flex items-center gap-4">
-        <span className="p-1 border rounded-full border-white/20 bg-white/20"><svg xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="w-3 h-3">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
-          </svg></span>
-        <p className="block font-sans text-base antialiased font-normal leading-relaxed text-inherit">
-          1 year free updates
-        </p>
-      </li>
-      <li className="flex items-center gap-4">
-        <span className="p-1 border rounded-full border-white/20 bg-white/20"><svg xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="w-3 h-3">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
-          </svg></span>
-        <p className="block font-sans text-base antialiased font-normal leading-relaxed text-inherit">
-          Life time technical support
-        </p>
-      </li>
-    </ul>
-  </div>
-  <div className="p-0 mt-12">
-    <button
-      className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-sm py-3.5 px-7 rounded-lg bg-white text-blue-gray-900 shadow-md shadow-blue-gray-500/10 hover:shadow-lg hover:shadow-blue-gray-500/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none block w-full hover:scale-[1.02] focus:scale-[1.02] active:scale-100"
-      type="button">
-      Buy Now
-    </button>
-  </div>
-</div> 
+    <div
+      className={cn(
+        'relative flex w-auto items-center overflow-hidden',
+        className
+      )}
+    >
+      <Button
+        title="Prev"
+        variant="text"
+        ref={sliderPrevBtn}
+        onClick={() => scrollToTheLeft()}
+        className="!absolute -left-1 top-0 z-10 !h-full w-20 !justify-start rounded-none bg-gradient-to-r from-gray-0 via-gray-0/70 to-transparent px-0 ps-1 text-gray-500 hover:text-gray-900 dark:from-gray-50 dark:via-gray-50/70 3xl:hidden"
+      >
+        <PiCaretLeftBold className="h-5 w-5" />
+      </Button>
+      <div className="w-full overflow-hidden">
+        <div
+          ref={sliderEl}
+          className="custom-scrollbar-x grid grid-flow-col gap-5 overflow-x-auto scroll-smooth 2xl:gap-6 "
+        >
+          <StatGrid />
+        </div>
+      </div>
+      <Button
+        title="Next"
+        variant="text"
+        ref={sliderNextBtn}
+        onClick={() => scrollToTheRight()}
+        className="dark: !absolute -right-2 top-0 z-10 !h-full w-20 !justify-end rounded-none bg-gradient-to-l from-gray-0 via-gray-0/70 to-transparent px-0 pe-2 text-gray-500 hover:text-gray-900 dark:from-gray-50 dark:via-gray-50/70 3xl:hidden "
+      >
+        <PiCaretRightBold className="h-5 w-5" />
+      </Button>
+    </div>
+
+
+
+
+      {formattedData === null ? (
+        <Loading />
+      ) : (
+        <BillingTable data={formattedData} />
+      )}
     </>
   );
 }

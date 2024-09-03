@@ -36,6 +36,7 @@ export default function PlansPage() {
       const rawData = await appwriteService.listPayments(
         userId?.$id!
       )
+      
       console.log(userId)
       const all_User = await AppwriteUsersApi.list(
 

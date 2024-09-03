@@ -7,8 +7,7 @@ import { STATUSES } from '@/data/users-data';
 import { rolesList } from '@/data/users-management';
 import ModalButton from '@/app/shared/modal-button';
 import CreateUser from '@/app/shared/users-management/create-user';
-import CreateUPI from '../create-bank';
-import CreateBANK from '../create-bank';
+import CreateUPI from '../create-upi';
 
 type FilterElementProps = {
   isFiltered: boolean;
@@ -36,7 +35,7 @@ export default function FilterElement({
     <>
       <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container ">
         <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
-          All BANKS
+          All UPI
         </Title>
 
         {/* <StatusField
@@ -68,7 +67,7 @@ export default function FilterElement({
 
         <Input
           type="search"
-          placeholder="Search for Bank..."
+          placeholder="Search for UPI..."
           value={searchTerm}
           onClear={() => onSearch('')}
           onChange={(event) => onSearch(event.target.value)}
@@ -80,8 +79,8 @@ export default function FilterElement({
 
         <div className="-order-5 flex basis-auto justify-end @xl:-order-4 @4xl:-order-1">
           <ModalButton
-            label="Add BANK"
-            view={<CreateBANK />}
+            label="Add UPI"
+            view={<CreateUPI />}
             customSize="600px"
             className="mt-0"
           />

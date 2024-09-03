@@ -76,7 +76,7 @@ export default function Checkout() {
 
               {data.status == null ? (
                 <Badge color="warning">Pending</Badge>
-              ) : data.status == "Rejected" ? (
+              ) : data.status == false ? (
                 <Badge color="danger">Rejected</Badge>
               ) : (
                 <Badge>Success</Badge>

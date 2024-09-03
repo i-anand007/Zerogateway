@@ -22,7 +22,7 @@ import { checkoutBankSchema, CheckoutBankSchema } from '@/utils/validators/check
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { PiChecksBold, PiFilesBold } from 'react-icons/pi';
 import BankCard from '@/components/cards/bank-card';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import appwriteService from '../appwrite';
 import { AppwriteUsersApi } from '../appwrite_api';
 import axios from 'axios';
@@ -33,6 +33,7 @@ import toast from 'react-hot-toast';
 export default function Checkout(
 ) {
 
+  const router = useRouter();
 
   const searchParams = useSearchParams()
   const [isLoading, setLoading] = useState(true)
@@ -157,8 +158,6 @@ export default function Checkout(
         await updateCounter(bank_counter, allBank, "bank_counter", AdminId);
         await updateCounter(upi_counter, allUPI, "upi_counter", AdminId);
 
-        const data = await appwriteService.listPayments()
-        console.log(data)
 
         setLoading(false)
       }
@@ -210,9 +209,6 @@ export default function Checkout(
         await updateCounter(bank_counter, allBank, "bank_counter", userId);
         await updateCounter(upi_counter, allUPI, "upi_counter", userId);
 
-        const data = await appwriteService.listPayments()
-        console.log(data)
-
       }
 
     }
@@ -258,6 +254,7 @@ export default function Checkout(
         uploadedScreenshot.$id
       )
       toast.success("Payment Completed")
+      router.push(`/invoice?id=`+paymentId);
     } catch (error) {
       console.log(error)
       toast.error("Failed to proceed")
