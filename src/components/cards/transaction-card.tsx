@@ -7,7 +7,7 @@ import { PiArrowDownRight, PiArrowUpRight } from 'react-icons/pi';
 export type TransactionType = {
   icon: IconType;
   title: string;
-  amount: string;
+  amount: number;
   iconWrapperFill?: string;
   className?: string;
 };

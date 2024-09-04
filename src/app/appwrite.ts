@@ -37,6 +37,10 @@ const PLAN_ID = process.env.NEXT_PUBLIC_APPWRITE_PLAN_ID!
 const USER_UPI_ID = process.env.NEXT_PUBLIC_APPWRITE_USER_UPI_ID!
 const USER_BANK_ID = process.env.NEXT_PUBLIC_APPWRITE_USER_BANK_ID!
 
+const CHECKOUT_SETTING_ID = process.env.NEXT_PUBLIC_APPWRITE_CHECKOUT_SETTING_ID!
+
+
+
 const KYC_ID = '66a88fe2000ed1a3d59d'
 const AdminUPI_ID = '669b9e9a0011cfaf2917'
 const AdminBANK_ID = '669ba107001349375425'
@@ -514,6 +518,27 @@ export class AppwriteService {
             throw error
         }
     }
+    
+    async checkout_settings(user_Id:string, data: object) {
+        try {
+            const listUser = await databases.listDocuments(
+                DATABASE_ID,
+                CHECKOUT_SETTING_ID
+            );
+            console.log(listUser)
+            // const createDocument = await databases.createDocument(
+            //     DATABASE_ID,
+            //     CHECKOUT_SETTING_ID,
+            //     ID.unique(),
+            //     data
+            // );
+            return (listUser)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
 
     async listUserBANK(userID: string) {
         try {
@@ -587,7 +612,11 @@ export class AppwriteService {
             const listDocuments = await databases.listDocuments(
                 DATABASE_ID,
                 PAYMENTS_ID,
-                [Query.contains("userto", userId)]
+                [
+                    Query.limit(200000),
+                    Query.contains("userto", userId),
+                    Query.orderDesc('$createdAt')
+                ]
             );
             return listDocuments
         } catch (error: any) {
