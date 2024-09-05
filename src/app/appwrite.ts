@@ -525,6 +525,10 @@ export class AppwriteService {
                 DATABASE_ID,
                 CHECKOUT_SETTING_ID
             );
+            listUser.documents.map(item => {
+                item.$id === user_Id
+                return "found"
+            })
             console.log(listUser)
             // const createDocument = await databases.createDocument(
             //     DATABASE_ID,

@@ -1,29 +1,18 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import { AdvancedCheckbox, Button, CheckboxGroup, Input, Select, Text, Textarea } from 'rizzui';
+import { AdvancedCheckbox, Button, CheckboxGroup, FileInput, Input, Select, Text, Textarea } from 'rizzui';
 import appwriteService from "@/app/appwrite";
 import FormGroup from "@/app/shared/form-group";
 import PageHeader from "@/app/shared/page-header";
-
-const options = [
-  {
-    value: 'single',
-    title: 'Single Payment',
-    description: 'Charge a one-time fee',
-  },
-  {
-    value: 'double',
-    title: 'Single Payment',
-    description: 'Charge a one-time fee',
-  }
-]
+import ImagePreview from "@/app/shared/image-preview";
+import EyeIcon from "@/components/icons/eye";
+import ModalButton from "@/app/shared/modal-button";
 
 export default function App() {
 
   const pageHeader = {
-    title: 'Profile Settings',
+    title: 'Checkout Settings',
     breadcrumb: [
       {
         href: '/dashboard',
@@ -60,7 +49,13 @@ export default function App() {
     "label": "Disabled",
     "value": "false"
   })
+  const [advertisement, setAdvertisement] = useState({
+    "label": "Disabled",
+    "value": "false"
+  })
+
   const [message, setMessage] = useState()
+  const [advertisementImage, setAdvertisementImage] = useState(' ')
 
   useEffect(() => {
     const userInfo = async () => {
@@ -94,7 +89,7 @@ export default function App() {
               onChange={(e: any) => {
                 setPurpose(e)
               }}
-              className="col-span-1"  
+              className="col-span-1"
             />
 
             <Select
@@ -104,7 +99,7 @@ export default function App() {
               onChange={(e: any) => {
                 setName(e)
               }}
-              className="col-span-1" 
+              className="col-span-1"
             />
 
             <Select
@@ -114,7 +109,7 @@ export default function App() {
               onChange={(e: any) => {
                 setPhone(e)
               }}
-              className="col-span-1" 
+              className="col-span-1"
             />
 
             <Select
@@ -130,7 +125,12 @@ export default function App() {
             <Button
               className="w-full col-span-2"  // Button spans the full width of the grid (2 columns)
               onClick={() => {
-                appwriteService.updatePrefs(user_id, { 'gender': gender });
+                appwriteService.checkout_settings(user_id, { 
+                  'purpose': purpose,
+                  name,
+                  phone,
+                  email
+                });
               }}
             >
               Update
@@ -156,7 +156,7 @@ export default function App() {
             <Button
               className="w-full col-span-2"  // Button spans the full width of the grid (2 columns)
               onClick={() => {
-                appwriteService.checkout_settings({ 'gender': gender });
+                appwriteService.checkout_settings(user_id, { 'gender': "sa" });
               }}
             >
               Update
@@ -167,20 +167,44 @@ export default function App() {
             description="The advertisement image you set will be visible to your customers on the checkout page"
             className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11 grid grid-cols-2 gap-4"
           >
-
-            <Textarea
-              label="Email"
-              value={purpose}
+            <Select
+              label="Advertisement Image"
+              options={Options}
+              value={advertisement.label}
               onChange={(e: any) => {
-                setPurpose(e.value)
+                setAdvertisement(e)
               }}
-              className="col-span-1"
+              className="col-span-1"  
             />
+            
+            <div className="flex items-end space-x-4">
+              <FileInput
+                label="Upload Advertisement Image"
+                className="flex-grow"
+                onChange={async (e: any) => {
+                  const response = await appwriteService.uploadFile(e.target.files[0])
+                  setAdvertisementImage(response?.$id!)
+                }}
+              />
+              {advertisementImage === ' ' ?
+                <></>
+                :
+                <ModalButton
+                  label=""
+                  icon={<EyeIcon className="h-4 w-4" />}
+                  view={<ImagePreview id={advertisementImage} />}
+                  customSize="650px"
+                  className="flex-col max-w-4"
+                />
+              }
+            </div>
 
             <Button
               className="w-full col-span-2"  // Button spans the full width of the grid (2 columns)
               onClick={() => {
-                appwriteService.updatePrefs({ 'gender': gender });
+                appwriteService.checkout_settings(user_id, {
+                  'gender': "sa"
+                });
               }}
             >
               Update

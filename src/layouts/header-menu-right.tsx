@@ -9,9 +9,9 @@ import { PiBellSimpleRingingDuotone } from 'react-icons/pi';
 
 export default function HeaderMenuRight() {
   return (
-    <div className="ms-auto grid grid-cols-3 gap-2 text-gray-700 xs:gap-3 xl:gap-4">
+    <div className="ms-auto grid grid-cols-2 gap-2 text-gray-700 xs:gap-3 xl:gap-4">
 
-      <NotificationDropdown>
+      {/* <NotificationDropdown>
         <ActionIcon
           aria-label="Notification"
           variant="text"
@@ -25,7 +25,7 @@ export default function HeaderMenuRight() {
             className="absolute right-2.5 top-2.5 -translate-y-1/3 translate-x-1/2"
           />
         </ActionIcon>
-      </NotificationDropdown>
+      </NotificationDropdown> */}
 
       <SettingsButton />
       <ProfileMenu />

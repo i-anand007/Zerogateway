@@ -163,9 +163,9 @@ export default function SubmitKyc() {
                                     <Button
                                         className="w-full flex-grow col-span-12"
                                         onClick={() => {
-                                            appwriteService.updatePrefs({'gender': gender });
-                                            appwriteService.updatePrefs({'dob': dob });
-                                            appwriteService.updatePrefs({'address': address });
+                                            appwriteService.updatePrefs({ 'gender': gender });
+                                            appwriteService.updatePrefs({ 'dob': dob });
+                                            appwriteService.updatePrefs({ 'address': address });
                                         }}
                                     >
                                         Update Personal Info
