@@ -10,6 +10,9 @@ import {
   PiCurrencyCircleDollar,
   PiHouse,
   PiGridFour,
+  PiMapTrifold,
+  PiNewspaper,
+  PiGearSix,
 } from 'react-icons/pi';
 import { atom } from 'jotai';
 import Cookies from 'js-cookie';
@@ -79,7 +82,7 @@ const baseMenuItems = [
     href: '/',
     menuItems: [
       {
-        name: 'Payment Link',
+        name: 'Dashboard',
         href: '/dashboard/',
         icon: PiFolderLock,
       },
@@ -87,6 +90,50 @@ const baseMenuItems = [
   },
   {
     id: '2',
+    name: 'Plans',
+    title: 'Plans',
+    icon: PiNewspaper,
+    menuItems: [
+      {
+        name: 'Plans',
+        href: '/dashboard/plans',
+        icon: PiNewspaper,
+      },
+    ],
+  },
+  {
+    id: '3',
+    name: 'Smart Route',
+    title: 'Smart Route',
+    icon: PiMapTrifold,
+    menuItems: [
+      {
+        name: 'UPI',
+        href: '/dashboard/smart-route',
+        icon: PiUserGear,
+      },
+      {
+        name: 'BANKS',
+        href: '/dashboard/smart-route/bank',
+        icon: PiGridFour,
+      },
+    ],
+  },
+  {
+    id: '4',
+    name: 'Checkout Setting',
+    title: 'Checkout Setting',
+    icon: PiGearSix ,
+    menuItems: [
+      {
+        name: 'Checkout Setting',
+        href: '/dashboard/checkout-settings',
+        icon: PiGearSix,
+      },
+    ],
+  },
+  {
+    id: '4',
     name: 'Profile',
     title: 'Profile',
     icon: PiUser,

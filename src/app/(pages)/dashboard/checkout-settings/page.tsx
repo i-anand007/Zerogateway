@@ -8,6 +8,7 @@ import PageHeader from "@/app/shared/page-header";
 import ImagePreview from "@/app/shared/image-preview";
 import EyeIcon from "@/components/icons/eye";
 import ModalButton from "@/app/shared/modal-button";
+import toast from "react-hot-toast";
 
 export default function App() {
 
@@ -26,8 +27,8 @@ export default function App() {
 
 
   const Options = [
-    { label: 'Enable', value: 'true' },
-    { label: 'Disabled', value: 'false' },
+    { label: 'Enable', value: true },
+    { label: 'Disabled', value: false },
   ];
 
   const [user_id, setUser_id] = useState('')
@@ -35,38 +36,54 @@ export default function App() {
 
   const [purpose, setPurpose] = useState({
     "label": "Disabled",
-    "value": "false"
+    "value": false
   })
   const [name, setName] = useState({
     "label": "Disabled",
-    "value": "false"
+    "value": false
   })
   const [phone, setPhone] = useState({
     "label": "Disabled",
-    "value": "false"
+    "value": false
   })
   const [email, setEmail] = useState({
     "label": "Disabled",
-    "value": "false"
+    "value": false
   })
   const [advertisement, setAdvertisement] = useState({
     "label": "Disabled",
-    "value": "false"
+    "value": false
   })
 
   const [message, setMessage] = useState()
-  const [advertisementImage, setAdvertisementImage] = useState(' ')
+  const [advertisementImage, setAdvertisementImage] = useState('')
 
   useEffect(() => {
     const userInfo = async () => {
       const data = await appwriteService.getCurrentUser()
       setUser_id(data?.$id!)
+
+      const response = await appwriteService.get_checkout_settings(data?.$id!)
+      console.log(response)
+
+      function dataToOption (setter: any , data: boolean) {
+        if (data === true) {
+          setter({ label: 'Enable', value: true })
+        } else {
+          setter({ label: 'Disabled', value: false })
+        }
+      }
+
+      dataToOption(setPurpose, response.documents[0].purpose)
+      dataToOption(setName, response.documents[0].name)
+      dataToOption(setPhone, response.documents[0].phone)
+      dataToOption(setEmail, response.documents[0].email)
+      dataToOption(setAdvertisement, response.documents[0].advertisement)
+      setMessage(response.documents[0].message)
+      setAdvertisementImage(response.documents[0].advertisementImage)
+
     }
     userInfo()
-    setPurpose({
-      "label": "Enable",
-      "value": "true"
-    })
   }, [])
 
   return (
@@ -122,20 +139,6 @@ export default function App() {
               className="col-span-1"  // Each select takes half the width
             />
 
-            <Button
-              className="w-full col-span-2"  // Button spans the full width of the grid (2 columns)
-              onClick={() => {
-                appwriteService.checkout_settings(user_id, { 
-                  'purpose': purpose,
-                  name,
-                  phone,
-                  email
-                });
-              }}
-            >
-              Update
-            </Button>
-
           </FormGroup>
           <FormGroup
             title="Checkout Message"
@@ -147,20 +150,20 @@ export default function App() {
               label="Message"
               value={message}
               onChange={(e: any) => {
-                console.log(e.target.value)
+                setMessage(e.target.value)
                 // setMessage(e)
               }}
               className="col-span-2"
             />
 
-            <Button
+            {/* <Button
               className="w-full col-span-2"  // Button spans the full width of the grid (2 columns)
               onClick={() => {
                 appwriteService.checkout_settings(user_id, { 'gender': "sa" });
               }}
             >
               Update
-            </Button>
+            </Button> */}
           </FormGroup>
           <FormGroup
             title="Checkout Advertisement"
@@ -180,13 +183,15 @@ export default function App() {
             <div className="flex items-end space-x-4">
               <FileInput
                 label="Upload Advertisement Image"
+                placeholder="dfsgdfg"
                 className="flex-grow"
                 onChange={async (e: any) => {
                   const response = await appwriteService.uploadFile(e.target.files[0])
                   setAdvertisementImage(response?.$id!)
+                  toast.success('Image Loaded')
                 }}
               />
-              {advertisementImage === ' ' ?
+              {advertisementImage === '' ?
                 <></>
                 :
                 <ModalButton
@@ -201,9 +206,16 @@ export default function App() {
 
             <Button
               className="w-full col-span-2"  // Button spans the full width of the grid (2 columns)
-              onClick={() => {
-                appwriteService.checkout_settings(user_id, {
-                  'gender': "sa"
+              onClick={async () => {
+
+               await appwriteService.checkout_settings(user_id, { 
+                  'purpose': purpose.value,
+                  'name': name.value,
+                  'phone': phone.value,
+                  'email': email.value,
+                  'message' : message,
+                  'advertisement' : advertisement.value,
+                  'advertisementImage' : advertisementImage
                 });
               }}
             >

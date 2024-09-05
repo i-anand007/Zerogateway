@@ -1,3 +1,4 @@
+import { itemsEqual } from '@dnd-kit/sortable/dist/utilities';
 import { Client, Account, ID, OAuthProvider, Databases, Storage, Query } from 'appwrite';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
@@ -462,7 +463,7 @@ export class AppwriteService {
             throw error
         }
     }
-    
+
     async addUserUPI(data: object) {
         try {
             const createDocument = await databases.createDocument(
@@ -502,7 +503,7 @@ export class AppwriteService {
             throw error
         }
     }
-    
+
     async addUserBANK(data: object) {
         try {
             const createDocument = await databases.createDocument(
@@ -518,18 +519,57 @@ export class AppwriteService {
             throw error
         }
     }
-    
-    async checkout_settings(user_Id:string, data: object) {
+
+    async checkout_settings(user_Id: string, data: object) {
         try {
+            console.log(data)
             const listUser = await databases.listDocuments(
                 DATABASE_ID,
                 CHECKOUT_SETTING_ID
             );
-            listUser.documents.map(item => {
-                item.$id === user_Id
-                return "found"
-            })
-            console.log(listUser)
+
+            const existingDoc = listUser.documents.find(doc => doc.user_Id === user_Id);
+
+            if (existingDoc) {
+                const update = await databases.updateDocument(
+                    DATABASE_ID,
+                    CHECKOUT_SETTING_ID,
+                    existingDoc.$id,
+                    data
+                );
+                toast.success('Updated')
+                return update
+            } else {
+                // Create a new document if user_Id does not exist
+                const newDoc = await databases.createDocument(
+                    DATABASE_ID,
+                    CHECKOUT_SETTING_ID,
+                    'unique()',
+                    data
+                );
+                toast.success('Updated')
+                return newDoc;
+            }
+
+
+
+
+
+
+            // for (const doc of listUser.documents) {
+            //     // Check if the user_Id matches the given userIdToFind
+            //     if (doc.user_Id === user_Id) {
+            //         // Return the $id if a match is found
+            //         return doc.$id;
+            //     }
+            // }
+            // console.log(listUser)
+            // console.log(listUser.documents.map(item => {
+            //     item.$id === user_Id
+            //     return "found"
+            // }))
+
+
             // const createDocument = await databases.createDocument(
             //     DATABASE_ID,
             //     CHECKOUT_SETTING_ID,
@@ -537,6 +577,23 @@ export class AppwriteService {
             //     data
             // );
             return (listUser)
+        } catch (error: any) {
+            let response = error.toString();
+            toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
+            throw error
+        }
+    }
+
+    async get_checkout_settings(user_Id: string) {
+        try {
+            const listDocuments = await databases.listDocuments(
+                DATABASE_ID,
+                CHECKOUT_SETTING_ID,
+                [
+                    Query.contains("user_Id", user_Id)
+                ]
+            );
+            return (listDocuments)
         } catch (error: any) {
             let response = error.toString();
             toast.error(response.split('AppwriteException: ')[1].split('.')[0] + '.')
@@ -629,7 +686,7 @@ export class AppwriteService {
             throw error
         }
     }
-    
+
     async listAllPayments() {
         try {
             const listDocuments = await databases.listDocuments(

@@ -70,7 +70,7 @@ console.log('first')
       {formattedData === null ? (
         <Loading />
       ) : (
-        <PlansTable data={[formattedData]} />
+        <PlansTable data={formattedData} />
       )}
     </>
   );
