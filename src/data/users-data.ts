@@ -29,30 +29,30 @@ export const STATUSES = {
 export const 
 
 usersData = [
-  {
-      "id": "669632a9369394b79312",
-      "fullName": "Anand Mishra",
-      "email": "anandkmishra007@gmail.com",
-      "role": "Administrator",
-      "createdAt": "2024-07-16T08:43:21.224+00:00",
-      "status": "Active"
-  },
-  {
-      "id": "66966347000939f75b9f",
-      "fullName": "Anand Mishra",
-      "email": "hi@anandmishra.in",
-      "role": "Customer",
-      "createdAt": "2024-07-16T12:10:50.139+00:00",
-      "status": "Active"
-  },
-  {
-      "id": "66975dff34fdabafb874",
-      "fullName": "dfs@gmail.com",
-      "email": "dfs@gmail.com",
-      "role": "Customer",
-      "createdAt": "2024-07-17T06:00:31.971+00:00",
-      "status": "Active"
-  }
+  // {
+  //     "id": "669632a9369394b79312",
+  //     "fullName": "Anand Mishra",
+  //     "email": "anandkmishra007@gmail.com",
+  //     "role": "Administrator",
+  //     "createdAt": "2024-07-16T08:43:21.224+00:00",
+  //     "status": "Active"
+  // },
+  // {
+  //     "id": "66966347000939f75b9f",
+  //     "fullName": "Anand Mishra",
+  //     "email": "hi@anandmishra.in",
+  //     "role": "Customer",
+  //     "createdAt": "2024-07-16T12:10:50.139+00:00",
+  //     "status": "Active"
+  // },
+  // {
+  //     "id": "66975dff34fdabafb874",
+  //     "fullName": "dfs@gmail.com",
+  //     "email": "dfs@gmail.com",
+  //     "role": "Customer",
+  //     "createdAt": "2024-07-17T06:00:31.971+00:00",
+  //     "status": "Active"
+  // }
 ]
 
 

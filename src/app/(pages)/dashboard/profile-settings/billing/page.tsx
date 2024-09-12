@@ -19,8 +19,11 @@ export default function PlansPage() {
     async function getBilling() {
 
       const userId = await appwriteService.getCurrentUser()
+      console.log(userId)
 
-      const rawData = await appwriteService.listPayments(userId?.$id!)
+      const rawData = await appwriteService.listPayments(
+        "userfrom",
+        userId?.$id!)
       console.log(rawData)
       const all_User = await AppwriteUsersApi.list()
       setAllUser(all_User.users)

@@ -218,7 +218,7 @@ export default function Checkout(
     console.log(getpurpose)
 
     dataFetching()
-  }, []);
+  }, [AdminId, getamount, getpurpose, planId, userId]);
 
 
 

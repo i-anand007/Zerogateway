@@ -10,6 +10,7 @@ import SimpleBar from '@/components/ui/simplebar';
 import { berylliumSidebarMenuItems } from '@/layouts/beryllium/beryllium-sidebar-menu-items';
 import Logo from '@/components/logo';
 import StatusBadge from '@/components/get-status-badge';
+import Image from 'next/image'
 
 
 export default function Sidebar({ className }: { className?: string }) {
@@ -27,7 +28,13 @@ export default function Sidebar({ className }: { className?: string }) {
           aria-label="Site Logo"
           className="text-gray-800 hover:text-gray-900"
         >
-          <Logo className="max-w-[155px]" />
+          {/* <Logo className="max-w-[155px]" /> */}
+          <Image
+              src="/logo.png"
+              width={500}
+              height={500}
+              alt="Picture of the author"
+            />
         </Link>
       </div>
 

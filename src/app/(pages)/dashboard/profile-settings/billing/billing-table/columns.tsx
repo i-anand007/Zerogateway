@@ -246,11 +246,11 @@ export const getColumns = ({
       dataIndex: 'status',
       key: 'status',
       width: 50,
-      onHeaderCell: () => onHeaderCellClick('status'),
-      render: (status: string, plan: Billing) => {
+      // onHeaderCell: () => onHeaderCellClick('status'),
+      // render: (status: string, plan: Billing) => {
 
-        return <StatusSelect selectItem={status} userId={plan.id} />;
-      },
+      //   return <StatusSelect selectItem={status} userId={plan.id} />;
+      // },
     },
     // {
     //   title: <></>,
@@ -310,7 +310,6 @@ function StatusSelect({ selectItem, userId }: { selectItem?: string; userId: str
     <Select
       dropdownClassName="!z-10"
       className="min-w-[140px]"
-      inPortal={false}
       placeholder="Select Status"
       options={statusOptions}
       value={value}

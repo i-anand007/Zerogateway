@@ -19,8 +19,8 @@ const menuItems = [
     value: '/dashboard/profile-settings/submit-kyc',
   },
   {
-    label: 'Billing',
-    value: '/dashboard/profile-settings/billing',
+    label: 'Plan Purchased',
+    value: '/dashboard/profile-settings/plan-purchase',
   },
 ];
 

@@ -4,12 +4,12 @@ import PageHeader from '@/app/shared/page-header';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/loading';
 import appwriteService from '@/app/appwrite';
-import BillingTable from '../billing/billing-table';
+import BillingTable from './billing-table';
 import toast from 'react-hot-toast';
 import { AppwriteUsersApi } from '@/app/appwrite_api';
 
 const pageHeader = {
-  title: 'All Billing ',
+  title: 'All Plan Purchases ',
   breadcrumb: [
     {
       href: '/',
@@ -36,8 +36,9 @@ export default function PlansPage() {
       const userId = await appwriteService.getCurrentUser()
 
       const rawData = await appwriteService.listPayments(
-        // userId?.$id!
-        "66adf858e2d98ce14727"
+        "userto",
+        userId?.$id!
+        // "66adf858e2d98ce14727"
       )
       console.log(rawData)
       const all_User = await AppwriteUsersApi.list()

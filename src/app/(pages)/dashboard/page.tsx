@@ -136,6 +136,7 @@ export default function FileStats({ className }: FileStatsType) {
       const userId = await appwriteService.getCurrentUser()
 
       const rawData = await appwriteService.listPayments(
+        "userto",
         userId?.$id!
       )
 

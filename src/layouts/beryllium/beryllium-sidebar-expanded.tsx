@@ -134,11 +134,11 @@ export default function BerylliumLeftSidebarExpandable() {
   return (
     <div
       className={cn(
-        'fixed start-[98px] top-[108px] z-50 hidden h-full w-0 overflow-x-hidden duration-200 xl:flex',
-        !!expandedLeft && 'w-[220px] border-r-2'
+        'fixed start-[100px] top-[108px] z-50 hidden h-full w-0 overflow-x-hidden duration-200 xl:flex',
+        !!expandedLeft && 'w-[200px] border-r-2'
       )}
     >
-      <SimpleBar className="h-[calc(100vh_-_100px)] min-w-[250px] pe-1">
+      <SimpleBar className="h-[calc(100vh_-_100px)] min-w-[200px] pe-1">
         <p className="mb-3 font-lexend text-xs font-normal uppercase tracking-widest text-gray-500">
           {selectedMenu.title}
         </p>

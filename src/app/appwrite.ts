@@ -668,14 +668,14 @@ export class AppwriteService {
         }
     }
 
-    async listPayments(userId: string) {
+    async listPayments(query: string,userId: string) {
         try {
             const listDocuments = await databases.listDocuments(
                 DATABASE_ID,
                 PAYMENTS_ID,
                 [
                     Query.limit(200000),
-                    Query.contains("userto", userId),
+                    Query.contains(query, userId),
                     Query.orderDesc('$createdAt')
                 ]
             );
@@ -692,6 +692,10 @@ export class AppwriteService {
             const listDocuments = await databases.listDocuments(
                 DATABASE_ID,
                 PAYMENTS_ID,
+                [
+                    Query.limit(200000),
+                    Query.orderDesc('$createdAt')
+                ]
             );
             return listDocuments
         } catch (error: any) {

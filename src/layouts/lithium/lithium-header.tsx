@@ -10,6 +10,7 @@ import ProfileMenu from '@/layouts/profile-menu';
 import SettingsButton from '@/components/settings/settings-button';
 import HamburgerButton from '@/layouts/hamburger-button';
 import Logo from '@/components/logo';
+import Image from 'next/image'
 import {
   PiBellSimpleRingingDuotone,
   PiChatsCircleDuotone,
@@ -80,7 +81,13 @@ export default function Header() {
           href={'/'}
           className="me-4 hidden w-[155px] shrink-0 text-gray-800 hover:text-gray-900 lg:me-5 xl:block"
         >
-          <Logo className="max-w-[155px]" />
+          {/* <Logo className="max-w-[155px]" /> */}
+          <Image
+              src="/logo.png"
+              width={1500}
+              height={800}
+              alt="Picture of the author"
+            />
         </Link>
         <HeaderMenuLeft />
       </div>
@@ -94,7 +101,13 @@ export default function Header() {
             href={'/'}
             className="me-4 w-9 shrink-0 text-gray-800 hover:text-gray-900 lg:me-5 xl:hidden"
           >
-            <Logo iconOnly={true} />
+            {/* <Logo iconOnly={true} /> */}
+            <Image
+              src="/logo.png"
+              width={1500}
+              height={800}
+              alt="Picture of the author"
+            />
           </Link>
         </div>
         <HeaderMenuRight />

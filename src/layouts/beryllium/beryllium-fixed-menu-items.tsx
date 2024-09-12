@@ -13,6 +13,7 @@ import {
   PiMapTrifold,
   PiNewspaper,
   PiGearSix,
+  PiCurrencyInrFill,
 } from 'react-icons/pi';
 import { atom } from 'jotai';
 import Cookies from 'js-cookie';
@@ -69,6 +70,11 @@ const adminMenuItems = {
       name: 'Smart Route',
       icon: FileStackIcon,
       href: "/dashboard/admin/smart-route"
+    },
+    {
+      name: 'Plan Purchase',
+      icon: PiCurrencyInrFill,
+      href: "/dashboard/admin/plan-purchase"
     },
   ],
 };
@@ -149,8 +155,8 @@ const baseMenuItems = [
         icon: PiGridFour,
       },
       {
-        name: 'Billing',
-        href: '/dashboard/profile-settings/billing',
+        name: 'Plan Purchases',
+        href: '/dashboard/profile-settings/plan-purchase',
         icon: PiMoney ,
       },
     ],
